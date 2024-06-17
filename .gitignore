@@ -7,3 +7,5 @@ bin
 
 # macOS files
 .DS_Store
+
+.vscode
