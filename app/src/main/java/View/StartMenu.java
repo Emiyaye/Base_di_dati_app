@@ -1,9 +1,9 @@
 package View;
 
+import java.awt.event.ActionListener;
+
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-
-import Controller.MenuControllerImpl;
 
 /**
  * Graphical representation of the start Menu.
@@ -12,8 +12,7 @@ public class StartMenu extends ViewImpl {
 
     private static final String TITLE = "Spotify";
     private static final String QUIT = "Quit";
-    private MenuPanel menu;
-
+    private final MenuPanel menu;
 
     /**
      * Creating the frame for the Menu.
@@ -22,7 +21,7 @@ public class StartMenu extends ViewImpl {
         this.setTitle(TITLE);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.menu = new MenuPanel();
-        this.menu.addQuitListener(e ->{
+        this.menu.addQuitListener(e -> {
             final String[] options = { "Yes", "No" };
             final var result = JOptionPane.showOptionDialog(this, "Do you want to QUIT?",
                     QUIT,
@@ -34,5 +33,9 @@ public class StartMenu extends ViewImpl {
             }
         });
         this.setContentPane(menu);
+    }
+
+    public void addAdminListener(final ActionListener ac) {
+        this.menu.addAdminListener(ac);
     }
 }

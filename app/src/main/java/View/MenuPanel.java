@@ -9,10 +9,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-
-import Controller.MenuController;
 
 /**
  * JPanel used for the StartMenu frame.
@@ -58,15 +55,15 @@ public class MenuPanel extends JPanel {
         this.add(buttonPanel);
     }
 
-    public void addAdminListener(ActionListener ac) {
+    public void addAdminListener(final ActionListener ac) {
         admin.addActionListener(ac);
     }
 
-    public void addUserListener(ActionListener ac) {
+    public void addUserListener(final ActionListener ac) {
         user.addActionListener(ac);
     }
 
-    public void addQuitListener(ActionListener ac) {
+    public void addQuitListener(final ActionListener ac) {
         quit.addActionListener(ac);
     }
 
