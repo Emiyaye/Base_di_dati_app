@@ -1,5 +1,6 @@
 package View;
 
+import java.awt.Container;
 import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
@@ -37,5 +38,9 @@ public class StartMenu extends ViewImpl {
 
     public void addAdminListener(final ActionListener ac) {
         this.menu.addAdminListener(ac);
+    }
+
+    public void addUserListener(final ActionListener ac) {
+        this.menu.addUserListener(ac);
     }
 }

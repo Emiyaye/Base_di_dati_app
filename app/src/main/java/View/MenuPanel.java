@@ -20,8 +20,8 @@ public class MenuPanel extends JPanel {
     private static final String USER = "User";
     private static final String QUIT = "Quit";
     private static final String FONT_STYLE = "Serif";
-    private static final double WIDTH_PERC = 0.5;
-    private static final double HEIGHT_PERC = 0.5;
+    private static final double WIDTH_PERC = 0.8;
+    private static final double HEIGHT_PERC = 0.8;
     private static final double BUTTON_WIDTH_PERC = WIDTH_PERC * 0.2;
     private static final double BUTTON_HEIGHT_PERC = HEIGHT_PERC * 0.1;
     private static final int FONT_SIZE = 24;

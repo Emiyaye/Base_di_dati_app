@@ -1,6 +1,7 @@
 
 import java.sql.SQLException;
 
+import Controller.MenuController;
 import View.StartMenu;
 
 public final class App {
@@ -19,6 +20,7 @@ public final class App {
          * connection.close();
          */
         final StartMenu startMenu = new StartMenu();
+        final MenuController controller = new MenuController(startMenu);
         startMenu.display();
 
     }
