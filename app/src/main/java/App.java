@@ -1,9 +1,10 @@
 
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+
+import View.StartMenu;
 import data.DAOUtils;
 
 public final class App {
@@ -19,5 +20,6 @@ public final class App {
             System.out.println(resultet.getInt(1) + " " + resultet.getString(2));
         }
         connection.close();
+        new StartMenu().display();
     }
 }
