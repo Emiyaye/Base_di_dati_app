@@ -10,8 +10,8 @@ import data.DAOUtils;
 public final class App {
 
     public static void main(String[] args) throws SQLException {
-
-        var connection = DAOUtils.localMySQLConnection("test", "root", "");
+        //TODO: change test to spotify when complete
+        /* var connection = DAOUtils.localMySQLConnection("test", "root", "");
 
         Statement statement = connection.createStatement();
 
@@ -19,7 +19,9 @@ public final class App {
         while (resultet.next()){
             System.out.println(resultet.getInt(1) + " " + resultet.getString(2));
         }
-        connection.close();
-        new StartMenu().display();
+        connection.close(); */
+        StartMenu startMenu = new StartMenu();
+        startMenu.display();
+    
     }
 }

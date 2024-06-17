@@ -6,13 +6,13 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Toolkit;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import Controller.MenuController;
-
 
 /**
  * JPanel used for the StartMenu frame.
@@ -30,50 +30,44 @@ public class MenuPanel extends JPanel {
     private static final int FONT_SIZE = 24;
 
     private final Dimension dimension;
+    private final JButton admin;
+    private final JButton user;
+    private final JButton quit;
 
     /**
-     * The Menu Panel, will show the start, quit and rules buttons.
-     * 
-     * @param controller controller for the Menu
-     * @param frame      frame for the Menu
+     * The Menu Panel, will show admin , user and quit buttons.
      */
-    public MenuPanel(final MenuController controller, final StartMenu frame) {
+    public MenuPanel() {
         this.dimension = Toolkit.getDefaultToolkit().getScreenSize();
         this.setPreferredSize(new Dimension(Double.valueOf(dimension.getWidth() * WIDTH_PERC).intValue(),
                 Double.valueOf(dimension.getHeight() * HEIGHT_PERC).intValue()));
+        admin = createButton(ADMIN, getButtonDimension());
+        user = createButton(USER, getButtonDimension());
+        quit = createButton(QUIT, getButtonDimension());
 
-        final JButton admin = createButton(ADMIN, getButtonDimension());
-        final JButton user = createButton(USER, getButtonDimension());
-        final JButton quit = createButton(QUIT, getButtonDimension());
         final JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new GridBagLayout());
         final GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(10, 10, 10, 10);
-
-        admin.addActionListener(e -> {
-            
-        });
-
-        user.addActionListener(e ->{});
-
-        quit.addActionListener(e -> {
-            final String[] options = { "Yes", "No" };
-            final var result = JOptionPane.showOptionDialog(this, "Do you want to QUIT?",
-                    QUIT,
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.WARNING_MESSAGE,
-                    null, options, 0);
-            if (result == 0) {
-                frame.dispose();
-            }
-        });
         addButton(buttonPanel, admin, gbc);
         addButton(buttonPanel, user, gbc);
         addButton(buttonPanel, quit, gbc);
 
         this.add(buttonPanel);
+    }
+
+    public void addAdminListener(ActionListener ac) {
+        admin.addActionListener(ac);
+    }
+
+    public void addUserListener(ActionListener ac) {
+        user.addActionListener(ac);
+    }
+
+    public void addQuitListener(ActionListener ac) {
+        quit.addActionListener(ac);
     }
 
     /**
