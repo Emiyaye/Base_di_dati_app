@@ -2,7 +2,6 @@
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import Controller.MenuController;
 import View.MainFrame;
 import data.DAOUtils;
 
@@ -18,7 +17,6 @@ public final class App {
             } catch (Exception e) {
             }
         });
-        new MenuController(mainFrame);
         mainFrame.display();
 
     }
