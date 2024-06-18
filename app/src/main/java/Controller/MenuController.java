@@ -3,27 +3,27 @@ package Controller;
 import java.awt.Container;
 
 import View.AdminPanel;
-import View.StartMenu;
+import View.MainFrame;
 import View.UserPanel;
 
 public class MenuController {
 
-    private final StartMenu startMenu;
+    private final MainFrame mainFrame;
     private final AdminPanel adminPanel;
     private final UserPanel userPanel;
 
-    public MenuController(final StartMenu startMenu) {
-        this.startMenu = startMenu;
+    public MenuController(final MainFrame mainFrame) {
+        this.mainFrame = mainFrame;
         this.adminPanel = new AdminPanel();
         this.userPanel = new UserPanel();
-        this.startMenu.addAdminListener(e -> resetContentPane(adminPanel));
-        this.startMenu.addUserListener(e -> resetContentPane(userPanel));
+        this.mainFrame.addAdminListener(e -> resetContentPane(adminPanel));
+        this.mainFrame.addUserListener(e -> resetContentPane(userPanel));
     }
 
     private final void resetContentPane(final Container c) {
-        this.startMenu.setContentPane(c);
-        this.startMenu.revalidate();
-        this.startMenu.repaint();
+        this.mainFrame.setContentPane(c);
+        this.mainFrame.revalidate();
+        this.mainFrame.repaint();
     }
 
 }
