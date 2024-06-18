@@ -1,7 +1,10 @@
 
 import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import Model.UserModel;
 import View.MainFrame;
 import data.DAOUtils;
 
@@ -18,6 +21,8 @@ public final class App {
             }
         });
         mainFrame.display();
-
+        var a = new UserModel(connection);
+        a.test("Poly");
     }
+    
 }

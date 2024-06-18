@@ -57,6 +57,14 @@ public class MainFrame extends JFrame {
         this.setVisible(true);
     }
 
+    public UserPanel getUserPanel() {
+        return this.userPanel;
+    }
+
+    public AdminPanel getAdminPanel() {
+        return this.adminPanel;
+    }
+
     private final void resetContentPane(final Container c) {
         this.setContentPane(c);
         this.revalidate();
