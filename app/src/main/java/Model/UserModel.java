@@ -57,7 +57,7 @@ public class UserModel {
             psCreateAccount.setString(3, password);
             psCreateAccount.setObject(4, dataNascita);
             psCreateAccount.setInt(5, genere);
-            psCreateAccount.setString(6, email); // TODO: link
+            psCreateAccount.setString(6, "link." + email);
             psCreateAccount.setObject(7, LocalDate.now());
             psCreateAccount.setString(8, nazione);
             psCreateAccount.executeUpdate();
@@ -82,7 +82,7 @@ public class UserModel {
             psCreateAbbonamento.setInt(5, tipoAbbonamento);
             psCreateAbbonamento.executeUpdate();
  
-            connection.commit(); // Commit transaction
+            connection.commit();
 
         } catch (SQLException e) {
             if (connection != null) {

@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Optional;
 
+import Controller.UserController;
 import Model.UserModel;
 import View.MainFrame;
 import data.DAOUtils;
@@ -21,8 +22,9 @@ public final class App {
             }
         });
         mainFrame.display();
-        var a = new UserModel(connection);
-        a.OP1_addAccount("Poly", "primoTest.email", "A", LocalDate.of(2000, 10, 1), 0, "IT", 1, Optional.of(1000), Optional.of(2000), 1);
+        final UserModel userModel = new UserModel(connection);
+        final UserController userController = new UserController(userModel, mainFrame.getUserPanel());
+        
     }
     
 }
