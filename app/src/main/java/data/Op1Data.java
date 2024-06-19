@@ -8,7 +8,7 @@ public class Op1Data {
     private final String email;
     private final String password;
     private final LocalDate dataNascita;
-    private final int genere;
+    private final String genere;
     private final String nazione;
     private final int tipoPagamento;
     private final Optional<Integer> numeroCarta;
@@ -16,7 +16,7 @@ public class Op1Data {
     private final int tipoAbbonamento;
 
     public Op1Data(final String nickname, final String email, final String password,
-            final LocalDate dataNascita, final int genere,
+            final LocalDate dataNascita, final String genere,
             final String nazione, final int tipoPagamento, final Optional<Integer> numeroCarta,
             final Optional<Integer> scadenzaCarta,
             final int tipoAbbonamento) {
@@ -48,7 +48,7 @@ public class Op1Data {
         return dataNascita;
     }
 
-    public int getGenere() {
+    public String getGenere() {
         return genere;
     }
 

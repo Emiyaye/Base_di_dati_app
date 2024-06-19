@@ -20,7 +20,7 @@ public class UserModel {
     }
 
     // Optional integer
-    private final void insertOptionalInteger(PreparedStatement ps, Integer index, Optional<Integer> value)
+    private final void insertOptionalInteger(final PreparedStatement ps, final Integer index, final Optional<Integer> value)
             throws SQLException {
         if (value.isPresent()) {
             ps.setInt(index, value.get());
@@ -29,20 +29,20 @@ public class UserModel {
         }
     }
 
-    private final void closePreparedStatement(PreparedStatement st) {
+    private final void closePreparedStatement(final PreparedStatement st) {
         if (st != null) {
             try {
                 st.close();
-            } catch (SQLException e) {
+            } catch (final SQLException e) {
                 e.printStackTrace();
             }
         }
     }
 
     public void OP1_addAccount(
-            String nickname, String email, String password, LocalDate dataNascita, Integer genere, String nazione,
-            Integer tipoPagamento, Optional<Integer> numeroCarta, Optional<Integer> scadenzaCarta,
-            Integer tipoAbbonamento) {
+            final String nickname, final String email, final String password, final LocalDate dataNascita, final String genere, final String nazione,
+            final Integer tipoPagamento, final Optional<Integer> numeroCarta, final Optional<Integer> scadenzaCarta,
+            final Integer tipoAbbonamento) {
         PreparedStatement psCreateAccount = null;
         PreparedStatement psCreateTipoPagamento = null;
         PreparedStatement psCreateAbbonamento = null;
@@ -56,7 +56,7 @@ public class UserModel {
             psCreateAccount.setString(2, email);
             psCreateAccount.setString(3, password);
             psCreateAccount.setObject(4, dataNascita);
-            psCreateAccount.setInt(5, genere);
+            psCreateAccount.setString(5, genere);
             psCreateAccount.setString(6, "link." + email);
             psCreateAccount.setObject(7, LocalDate.now());
             psCreateAccount.setString(8, nazione);
@@ -84,11 +84,11 @@ public class UserModel {
  
             connection.commit();
 
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             if (connection != null) {
                 try {
                     connection.rollback();
-                } catch (SQLException ex) {
+                } catch (final SQLException ex) {
                     ex.printStackTrace();
                 }
             }

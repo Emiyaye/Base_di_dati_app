@@ -28,6 +28,7 @@ public class UserController {
                         data.getDataNascita(), data.getGenere(), data.getNazione(),
                         data.getTipoPagamento(), data.getNumeroCarta(), data.getScadenzaCarta(),
                         data.getTipoAbbonamento());
+            
         });
     }
 }

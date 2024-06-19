@@ -79,7 +79,7 @@ public class Op1Panel extends JPanel {
             emailField.getText(),
             passwordField.getText(),
             LocalDate.parse(dataNascitaField.getText()),
-            Integer.parseInt(genereField.getText()),
+            genereField.getText(),
             nazioneField.getText(),
             Integer.parseInt(tipoPagamentoField.getText()),
             numeroCartaField.getText().isEmpty() ? Optional.empty() : Optional.of(Integer.parseInt(numeroCartaField.getText())),
