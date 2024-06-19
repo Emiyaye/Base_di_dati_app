@@ -69,23 +69,24 @@ public class Op1Panel extends JPanel {
         add(insertButton);
     }
 
-    public void addInsertListener (final ActionListener ac){
+    public void addInsertListener(final ActionListener ac) {
         insertButton.addActionListener(ac);
     }
 
     public Op1Data getOp1Data() {
         return new Op1Data(
-            nicknameField.getText(),
-            emailField.getText(),
-            passwordField.getText(),
-            LocalDate.parse(dataNascitaField.getText()),
-            genereField.getText(),
-            nazioneField.getText(),
-            Integer.parseInt(tipoPagamentoField.getText()),
-            numeroCartaField.getText().isEmpty() ? Optional.empty() : Optional.of(Integer.parseInt(numeroCartaField.getText())),
-            scadenzaCartaField.getText().isEmpty() ? Optional.empty() : Optional.of(Integer.parseInt(scadenzaCartaField.getText())),
-            Integer.parseInt(tipoAbbonamentoField.getText())
-        );
+                nicknameField.getText(),
+                emailField.getText(),
+                passwordField.getText(),
+                LocalDate.parse(dataNascitaField.getText()),
+                genereField.getText(),
+                nazioneField.getText(),
+                Integer.parseInt(tipoPagamentoField.getText()),
+                numeroCartaField.getText().isEmpty() ? Optional.empty()
+                        : Optional.of(Integer.parseInt(numeroCartaField.getText())),
+                scadenzaCartaField.getText().isEmpty() ? Optional.empty()
+                        : Optional.of(Integer.parseInt(scadenzaCartaField.getText())),
+                Integer.parseInt(tipoAbbonamentoField.getText()));
     }
 
     private void clearFields() {

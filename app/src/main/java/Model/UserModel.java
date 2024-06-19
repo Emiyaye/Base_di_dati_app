@@ -20,7 +20,8 @@ public class UserModel {
     }
 
     // Optional integer
-    private final void insertOptionalInteger(final PreparedStatement ps, final Integer index, final Optional<Integer> value)
+    private final void insertOptionalInteger(final PreparedStatement ps, final Integer index,
+            final Optional<Integer> value)
             throws SQLException {
         if (value.isPresent()) {
             ps.setInt(index, value.get());
@@ -40,7 +41,8 @@ public class UserModel {
     }
 
     public void OP1_addAccount(
-            final String nickname, final String email, final String password, final LocalDate dataNascita, final String genere, final String nazione,
+            final String nickname, final String email, final String password, final LocalDate dataNascita,
+            final String genere, final String nazione,
             final Integer tipoPagamento, final Optional<Integer> numeroCarta, final Optional<Integer> scadenzaCarta,
             final Integer tipoAbbonamento) {
         PreparedStatement psCreateAccount = null;
@@ -81,7 +83,7 @@ public class UserModel {
             psCreateAbbonamento.setObject(4, LocalDate.now()); // TODO: Datascadenza da prendere in tipo abbonamento
             psCreateAbbonamento.setInt(5, tipoAbbonamento);
             psCreateAbbonamento.executeUpdate();
- 
+
             connection.commit();
 
         } catch (final SQLException e) {

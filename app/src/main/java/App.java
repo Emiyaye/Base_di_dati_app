@@ -1,8 +1,6 @@
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.util.Optional;
 
 import Controller.UserController;
 import Model.UserModel;
@@ -13,7 +11,7 @@ public final class App {
 
     public static void main(final String[] args) throws SQLException {
         // TODO: change test to spotify when complete
-        
+
         final Connection connection = DAOUtils.localMySQLConnection("test", "root", "");
         final MainFrame mainFrame = new MainFrame(() -> {
             try {
@@ -24,7 +22,7 @@ public final class App {
         mainFrame.display();
         final UserModel userModel = new UserModel(connection);
         final UserController userController = new UserController(userModel, mainFrame.getUserPanel());
-        
+
     }
-    
+
 }
