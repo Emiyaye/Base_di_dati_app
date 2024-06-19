@@ -24,7 +24,7 @@ public class UserController {
         });
         this.Op1Panel.addInsertListener(e ->{
             Op1Data data = this.Op1Panel.getOp1Data();
-            model.OP1_addAccount(data.getNickname(), data.getEmail(), data.getPassword(),
+            this.model.OP1_addAccount(data.getNickname(), data.getEmail(), data.getPassword(),
                         data.getDataNascita(), data.getGenere(), data.getNazione(),
                         data.getTipoPagamento(), data.getNumeroCarta(), data.getScadenzaCarta(),
                         data.getTipoAbbonamento());
