@@ -40,7 +40,7 @@ public class UserModel {
         }
     }
 
-    public void OP1_addAccount(
+    public void Op1_addAccount(
             final String nickname, final String email, final String password, final LocalDate dataNascita,
             final String genere, final String nazione,
             final Integer tipoPagamento, final Optional<Integer> numeroCarta, final Optional<Integer> scadenzaCarta,
@@ -100,6 +100,27 @@ public class UserModel {
             closePreparedStatement(psCreateTipoPagamento);
             closePreparedStatement(psCreateAbbonamento);
         }
+    }
 
+    public void Op3_followArtist(final String accountSeguito, final String accountSeguente) {
+        PreparedStatement ps = null;
+        try {
+            ps = DAOUtils.prepare(connection, Queries.OP3_FOLLOW_ARTIST);
+            ps.setString(1, accountSeguito);
+            ps.setString(2, accountSeguente);
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                } catch (final SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            e.printStackTrace();
+        } finally {
+            closePreparedStatement(ps);
+        }
     }
 }
