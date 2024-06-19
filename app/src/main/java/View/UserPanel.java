@@ -1,12 +1,12 @@
 package View;
 
-import javax.swing.JButton;
-import javax.swing.JPanel;
-
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
 import java.util.Optional;
+
+import javax.swing.JButton;
+import javax.swing.JPanel;
 
 public class UserPanel extends JPanel {
 
@@ -26,16 +26,19 @@ public class UserPanel extends JPanel {
         OP1_CreateAccount = new JButton("OP1 Create account");
         buttonPanel.add(OP1_CreateAccount);
 
-
         westPanel.add(buttonPanel, BorderLayout.CENTER);
         add(westPanel, BorderLayout.WEST);
     }
 
-    public void addBackListener(ActionListener ac) {
+    public void addBackListener(final ActionListener ac) {
         back.addActionListener(ac);
     }
 
-    public void UpdateEastPanel(JPanel panel) {
+    public void addOp1Listener(final ActionListener ac) {
+        OP1_CreateAccount.addActionListener(ac);
+    }
+
+    public void UpdateEastPanel(final JPanel panel) {
         if (LastPanel.isEmpty()) {
             LastPanel = Optional.of(panel);
             add(LastPanel.get(), BorderLayout.EAST);
