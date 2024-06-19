@@ -1,8 +1,8 @@
 
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.Optional;
 
 import Model.UserModel;
 import View.MainFrame;
@@ -22,7 +22,7 @@ public final class App {
         });
         mainFrame.display();
         var a = new UserModel(connection);
-        a.test("Poly");
+        a.OP1_addAccount("Poly", "primoTest.email", "A", LocalDate.of(2000, 10, 1), 0, "IT", 1, Optional.of(1000), Optional.of(2000), 1);
     }
     
 }
