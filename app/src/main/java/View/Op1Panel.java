@@ -10,7 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import data.Op1Data;
+import data.Dati;
 
 public class Op1Panel extends JPanel {
 
@@ -73,8 +73,8 @@ public class Op1Panel extends JPanel {
         insertButton.addActionListener(ac);
     }
 
-    public Op1Data getOp1Data() {
-        return new Op1Data(
+    public Dati.Op1Data getOp1Data() {
+        return new Dati.Op1Data(
                 nicknameField.getText(),
                 emailField.getText(),
                 passwordField.getText(),

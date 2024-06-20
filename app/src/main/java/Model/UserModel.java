@@ -11,7 +11,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import data.DAOUtils;
-import data.Op7Data;
+import data.Dati;
 import data.Queries;
 
 public class UserModel {
@@ -141,10 +141,10 @@ public class UserModel {
         }
     }
 
-    public List<Op7Data> Op7_searchSong(final String name) {
+    public List<Dati.Op7Data> Op7_searchSong(final String name) {
         PreparedStatement ps = null;
         ResultSet rs = null;
-        final List<Op7Data> list = new ArrayList<>();
+        final List<Dati.Op7Data> list = new ArrayList<>();
         try {
             connection.setAutoCommit(false);
             ps = DAOUtils.prepare(connection, Queries.OP7_SEARCH_SONG,'%' + name + '%');
@@ -159,7 +159,7 @@ public class UserModel {
                 final String fileAudio = rs.getString("fileAudio");
                 final int codicePubblicazione = rs.getInt("codicePubblicazione");
                 System.out.println(titolo);
-                list.add(new Op7Data(numero, titolo, numRiproduzioni, durata, esplicito, fonteCrediti, fileAudio,
+                list.add(new Dati.Op7Data(numero, titolo, numRiproduzioni, durata, esplicito, fonteCrediti, fileAudio,
                         codicePubblicazione));
             }
             connection.commit();

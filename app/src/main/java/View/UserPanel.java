@@ -13,6 +13,7 @@ public class UserPanel extends JPanel {
     private final JButton back;
     private final JButton OP1_CreateAccount;
     private final JButton OP3_FollowArtist;
+    private final JButton OP7_SearchSongs;
     private Optional<JPanel> LastPanel;
 
     public UserPanel() {
@@ -26,8 +27,10 @@ public class UserPanel extends JPanel {
         final JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         OP1_CreateAccount = new JButton("OP1 Create account");
         buttonPanel.add(OP1_CreateAccount);
-        OP3_FollowArtist = new JButton("OP2 Follow Artist");
+        OP3_FollowArtist = new JButton("OP3 Follow Artist");
         buttonPanel.add(OP3_FollowArtist);
+        OP7_SearchSongs = new JButton("OP7 Search Songs");
+        buttonPanel.add(OP7_SearchSongs);
 
         westPanel.add(buttonPanel, BorderLayout.CENTER);
         add(westPanel, BorderLayout.WEST);
@@ -43,6 +46,10 @@ public class UserPanel extends JPanel {
 
     public void addOp3Listener(final ActionListener ac) {
         OP3_FollowArtist.addActionListener(ac);
+    }
+
+    public void addOp7Listener(final ActionListener ac) {
+        OP7_SearchSongs.addActionListener(ac);
     }
 
     public void UpdateEastPanel(final JPanel panel) {
