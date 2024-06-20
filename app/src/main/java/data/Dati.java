@@ -11,7 +11,7 @@ public class Dati {
     public record Op3Data(String accountSeguito, String accountSeguente) {
     }
 
-    public record Op7Data(int numero, String titolo, int numRiproduzioni, int durata, boolean esplicito, String fonteCrediti,
+    public record Op7Data(int codiceBrano, int numero, String titolo, int numRiproduzioni, int durata, boolean esplicito, String fonteCrediti,
             String fileAudio, int codicePubblicazione) {
     }
 }

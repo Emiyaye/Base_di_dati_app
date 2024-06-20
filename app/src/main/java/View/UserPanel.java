@@ -52,14 +52,14 @@ public class UserPanel extends JPanel {
         OP7_SearchSongs.addActionListener(ac);
     }
 
-    public void UpdateEastPanel(final JPanel panel) {
+    public void UpdateCenterPanel(final JPanel panel) {
         if (LastPanel.isEmpty()) {
             LastPanel = Optional.of(panel);
-            add(LastPanel.get(), BorderLayout.EAST);
+            add(LastPanel.get(), BorderLayout.CENTER);
         } else {
             remove(LastPanel.get());
             LastPanel = Optional.of(panel);
-            add(LastPanel.get(), BorderLayout.EAST);
+            add(LastPanel.get(), BorderLayout.CENTER);
         }
         revalidate();
         repaint();

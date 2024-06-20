@@ -150,6 +150,7 @@ public class UserModel {
             ps = DAOUtils.prepare(connection, Queries.OP7_SEARCH_SONG,'%' + name + '%');
             rs = ps.executeQuery();
             while (rs.next()) {
+                final int codiceBrano = rs.getInt("codiceBrano");
                 final int numero = rs.getInt("numero");
                 final String titolo = rs.getString("titolo");
                 final int numRiproduzioni = rs.getInt("numRiproduzioni");
@@ -158,8 +159,7 @@ public class UserModel {
                 final String fonteCrediti = rs.getString("fonteCrediti");
                 final String fileAudio = rs.getString("fileAudio");
                 final int codicePubblicazione = rs.getInt("codicePubblicazione");
-                System.out.println(titolo);
-                list.add(new Dati.Op7Data(numero, titolo, numRiproduzioni, durata, esplicito, fonteCrediti, fileAudio,
+                list.add(new Dati.Op7Data(codiceBrano, numero, titolo, numRiproduzioni, durata, esplicito, fonteCrediti, fileAudio,
                         codicePubblicazione));
             }
             connection.commit();
