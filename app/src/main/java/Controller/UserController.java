@@ -40,7 +40,7 @@ public class UserController {
         });
         this.panel.addOp7Listener(e -> panel.UpdateCenterPanel(Op7Panel));
         this.Op7Panel.addSearchListener(e -> {
-            final String data = this.Op7Panel.getOp7Data();
+            final String data = this.Op7Panel.getData();
             this.Op7Panel.updateTable(this.model.Op7_searchSong(data));
         });
     }
