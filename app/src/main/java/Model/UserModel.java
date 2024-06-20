@@ -23,37 +23,6 @@ public class UserModel {
         this.connection = connection;
     }
 
-    // Optional integer
-    private final void insertOptionalInteger(final PreparedStatement ps, final Integer index,
-            final Optional<Integer> value)
-            throws SQLException {
-        if (value.isPresent()) {
-            ps.setInt(index, value.get());
-        } else {
-            ps.setNull(index, java.sql.Types.INTEGER);
-        }
-    }
-
-    private final void closeResultSet(final ResultSet rs) {
-        if (rs != null) {
-            try {
-                rs.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private final void closePreparedStatement(final PreparedStatement st) {
-        if (st != null) {
-            try {
-                st.close();
-            } catch (final SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
     public void Op1_addAccount(
             final String nickname, final String email, final String password, final LocalDate dataNascita,
             final String genere, final String nazione,
@@ -147,7 +116,7 @@ public class UserModel {
         final List<Dati.Op7Data> list = new ArrayList<>();
         try {
             connection.setAutoCommit(false);
-            ps = DAOUtils.prepare(connection, Queries.OP7_SEARCH_SONG,'%' + name + '%');
+            ps = DAOUtils.prepare(connection, Queries.OP7_SEARCH_SONG, '%' + name + '%');
             rs = ps.executeQuery();
             while (rs.next()) {
                 final int codiceBrano = rs.getInt("codiceBrano");
@@ -159,7 +128,8 @@ public class UserModel {
                 final String fonteCrediti = rs.getString("fonteCrediti");
                 final String fileAudio = rs.getString("fileAudio");
                 final int codicePubblicazione = rs.getInt("codicePubblicazione");
-                list.add(new Dati.Op7Data(codiceBrano, numero, titolo, numRiproduzioni, durata, esplicito, fonteCrediti, fileAudio,
+                list.add(new Dati.Op7Data(codiceBrano, numero, titolo, numRiproduzioni, durata, esplicito, fonteCrediti,
+                        fileAudio,
                         codicePubblicazione));
             }
             connection.commit();
@@ -176,7 +146,38 @@ public class UserModel {
             closeResultSet(rs);
             closePreparedStatement(ps);
         }
-        
+
         return list;
+    }
+
+    // Optional integer
+    private final void insertOptionalInteger(final PreparedStatement ps, final Integer index,
+            final Optional<Integer> value)
+            throws SQLException {
+        if (value.isPresent()) {
+            ps.setInt(index, value.get());
+        } else {
+            ps.setNull(index, java.sql.Types.INTEGER);
+        }
+    }
+
+    private final void closeResultSet(final ResultSet rs) {
+        if (rs != null) {
+            try {
+                rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private final void closePreparedStatement(final PreparedStatement st) {
+        if (st != null) {
+            try {
+                st.close();
+            } catch (final SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

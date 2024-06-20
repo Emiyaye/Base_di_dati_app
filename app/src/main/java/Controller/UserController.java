@@ -25,8 +25,8 @@ public class UserController {
         this.panel = panel;
 
         this.panel.addOp1Listener(e -> panel.UpdateCenterPanel(Op1Panel));
-        this.Op1Panel.addInsertListener(e -> {
-            final Dati.Op1Data data = this.Op1Panel.getOp1Data();
+        this.Op1Panel.addSubmitListener(e -> {
+            final Dati.Op1Data data = this.Op1Panel.getData();
             this.model.Op1_addAccount(data.nickname(), data.email(), data.password(),
                     data.dataNascita(), data.genere(), data.nazione(),
                     data.tipoPagamento(), data.numeroCarta(), data.scadenzaCarta(),
@@ -34,8 +34,8 @@ public class UserController {
 
         });
         this.panel.addOp3Listener(e -> panel.UpdateCenterPanel(Op3Panel));
-        this.Op3Panel.addFollowListener(e -> {
-            final Dati.Op3Data data = this.Op3Panel.getOp3Data();
+        this.Op3Panel.addSubmitListener(e -> {
+            final Dati.Op3Data data = this.Op3Panel.getData();
             this.model.Op3_followArtist(data.accountSeguito(), data.accountSeguente());
         });
         this.panel.addOp7Listener(e -> panel.UpdateCenterPanel(Op7Panel));
