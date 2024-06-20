@@ -13,8 +13,8 @@ import data.Op3Data;
 public class Op3Panel extends JPanel {
     private JTextField accountSeguitoField;
     private JTextField accountSeguenteField;
-    private JButton followButton;
     private JButton cancelButton;
+    private JButton followButton;
 
     public Op3Panel() {
 
@@ -29,8 +29,8 @@ public class Op3Panel extends JPanel {
         add(accountSeguitoField);
         add(new JLabel("Account Seguente:"));
         add(accountSeguenteField);
-        add(followButton);
         add(cancelButton);
+        add(followButton);
 
         cancelButton.addActionListener(e -> clearFields());
     }

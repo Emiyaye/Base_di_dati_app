@@ -2,12 +2,16 @@ package Model;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 import data.DAOUtils;
+import data.Op7Data;
 import data.Queries;
 
 public class UserModel {
@@ -27,6 +31,16 @@ public class UserModel {
             ps.setInt(index, value.get());
         } else {
             ps.setNull(index, java.sql.Types.INTEGER);
+        }
+    }
+
+    private final void closeResultSet(final ResultSet rs) {
+        if (rs != null) {
+            try {
+                rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -105,12 +119,15 @@ public class UserModel {
     public void Op3_followArtist(final String accountSeguito, final String accountSeguente) {
         PreparedStatement ps = null;
         try {
+            connection.setAutoCommit(false);
             ps = DAOUtils.prepare(connection, Queries.OP3_FOLLOW_ARTIST);
             ps.setString(1, accountSeguito);
             ps.setString(2, accountSeguente);
             ps.executeUpdate();
 
-        } catch (SQLException e) {
+            connection.commit();
+
+        } catch (final SQLException e) {
             if (connection != null) {
                 try {
                     connection.rollback();
@@ -122,5 +139,44 @@ public class UserModel {
         } finally {
             closePreparedStatement(ps);
         }
+    }
+
+    public List<Op7Data> Op7_searchSong(final String name) {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        final List<Op7Data> list = new ArrayList<>();
+        try {
+            connection.setAutoCommit(false);
+            ps = DAOUtils.prepare(connection, Queries.OP7_SEARCH_SONG,'%' + name + '%');
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                final int numero = rs.getInt("numero");
+                final String titolo = rs.getString("titolo");
+                final int numRiproduzioni = rs.getInt("numRiproduzioni");
+                final int durata = rs.getInt("durata");
+                final boolean esplicito = rs.getBoolean("esplicito");
+                final String fonteCrediti = rs.getString("fonteCrediti");
+                final String fileAudio = rs.getString("fileAudio");
+                final int codicePubblicazione = rs.getInt("codicePubblicazione");
+                System.out.println(titolo);
+                list.add(new Op7Data(numero, titolo, numRiproduzioni, durata, esplicito, fonteCrediti, fileAudio,
+                        codicePubblicazione));
+            }
+            connection.commit();
+        } catch (final SQLException e) {
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                } catch (final SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            e.printStackTrace();
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(ps);
+        }
+        
+        return list;
     }
 }

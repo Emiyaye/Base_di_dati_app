@@ -22,7 +22,7 @@ public final class App {
         mainFrame.display();
         final UserModel userModel = new UserModel(connection);
         final UserController userController = new UserController(userModel, mainFrame.getUserPanel());
-
+        userModel.Op7_searchSong("test");
     }
 
 }

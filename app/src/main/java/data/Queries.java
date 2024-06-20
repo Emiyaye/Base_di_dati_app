@@ -15,9 +15,13 @@ public final class Queries {
     INSERT INTO Abbonamento (codPagamento, codAccount, dataPagamento, dataScadenza, tipoAbbonamento)
     VALUES (?, ?, ?, ?, ?)
     """;
-
     public static final String OP3_FOLLOW_ARTIST = """
     INSERT INTO Follow_Account (accountSeguito, accountSeguente)
     VALUES (?, ?)
+    """;
+    public static final String OP7_SEARCH_SONG = """
+    SELECT *
+    FROM Brano B
+    WHERE B.titolo LIKE ?
     """;
 }
