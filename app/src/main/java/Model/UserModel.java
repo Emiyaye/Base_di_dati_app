@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import com.mysql.cj.QueryInfo;
+
 import data.DAOUtils;
 import data.Dati;
 import data.Queries;
@@ -31,6 +33,8 @@ public class UserModel {
         PreparedStatement psCreateAccount = null;
         PreparedStatement psCreateTipoPagamento = null;
         PreparedStatement psCreateAbbonamento = null;
+        PreparedStatement psUpdateCodAbbonamento = null;
+        ResultSet rsAbbonamento = null;
 
         try {
             connection.setAutoCommit(false);
@@ -49,23 +53,32 @@ public class UserModel {
 
             // Insert into Tipo_Pagamento
             psCreateTipoPagamento = DAOUtils.prepare(connection, Queries.OP1_TIPO_PAGAMENTO);
-            psCreateTipoPagamento.setInt(1, 1);
-            psCreateTipoPagamento.setString(2, email);
-            psCreateTipoPagamento.setInt(3, tipoPagamento);
-            insertOptionalInteger(psCreateTipoPagamento, 4, numeroCarta);
-            insertOptionalInteger(psCreateTipoPagamento, 5, scadenzaCarta);
-            psCreateTipoPagamento.setObject(6, LocalDate.now());
-            psCreateTipoPagamento.setString(7, nazione);
+            psCreateTipoPagamento.setString(1, email);
+            psCreateTipoPagamento.setInt(2, tipoPagamento);
+            insertOptionalInteger(psCreateTipoPagamento, 3, numeroCarta);
+            insertOptionalInteger(psCreateTipoPagamento, 4, scadenzaCarta);
+            psCreateTipoPagamento.setObject(5, LocalDate.now());
+            psCreateTipoPagamento.setString(6, nazione);
             psCreateTipoPagamento.executeUpdate();
 
             // Insert into Abbonamento
             psCreateAbbonamento = DAOUtils.prepare(connection, Queries.OP1_ABBONAMENTO);
-            psCreateAbbonamento.setInt(1, 1);
-            psCreateAbbonamento.setString(2, email);
-            psCreateAbbonamento.setObject(3, LocalDate.now());
-            psCreateAbbonamento.setObject(4, LocalDate.now()); // TODO: Datascadenza da prendere in tipo abbonamento
-            psCreateAbbonamento.setInt(5, tipoAbbonamento);
+            psCreateAbbonamento.setString(1, email);
+            psCreateAbbonamento.setObject(2, LocalDate.now());
+            psCreateAbbonamento.setObject(3, LocalDate.now()); // TODO: Datascadenza da prendere in tipo abbonamento
+            psCreateAbbonamento.setInt(4, tipoAbbonamento);
             psCreateAbbonamento.executeUpdate();
+
+            rsAbbonamento = psCreateAbbonamento.getGeneratedKeys();
+            int codAbbonamento = -1;
+            if (rsAbbonamento.next()){
+                // getGeneratedKeys non da i nomi delle colonne, usare i numero :(
+                codAbbonamento = rsAbbonamento.getInt(1);
+            }
+
+            // Update codAbbonameto
+            psUpdateCodAbbonamento = DAOUtils.prepare(connection, Queries.OP1_UPDATE_CODABBONAMENTO, codAbbonamento, email);
+            psUpdateCodAbbonamento.executeUpdate();
 
             connection.commit();
 
@@ -79,9 +92,11 @@ public class UserModel {
             }
             e.printStackTrace();
         } finally {
+            closeResultSet(rsAbbonamento);
             closePreparedStatement(psCreateAccount);
             closePreparedStatement(psCreateTipoPagamento);
             closePreparedStatement(psCreateAbbonamento);
+            closePreparedStatement(psUpdateCodAbbonamento);
         }
     }
 
@@ -89,6 +104,8 @@ public class UserModel {
         PreparedStatement ps = null;
         try {
             connection.setAutoCommit(false);
+
+            // Insert into Follow account
             ps = DAOUtils.prepare(connection, Queries.OP3_FOLLOW_ARTIST);
             ps.setString(1, accountSeguito);
             ps.setString(2, accountSeguente);
@@ -116,9 +133,11 @@ public class UserModel {
         final List<Dati.Op7Data> list = new ArrayList<>();
         try {
             connection.setAutoCommit(false);
-            ps = DAOUtils.prepare(connection, Queries.OP7_SEARCH_SONG, '%' + name + '%');
+
+            ps = DAOUtils.prepare(connection, Queries.OP7_SEARCH_SONG, name + '%');
             rs = ps.executeQuery();
             while (rs.next()) {
+                // get data from the database
                 final int codiceBrano = rs.getInt("codiceBrano");
                 final int numero = rs.getInt("numero");
                 final String titolo = rs.getString("titolo");

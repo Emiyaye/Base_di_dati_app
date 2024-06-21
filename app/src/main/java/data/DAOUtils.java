@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public final class DAOUtils {
 
@@ -30,7 +31,7 @@ public final class DAOUtils {
     public static PreparedStatement prepare(Connection connection, String query, Object... values) throws SQLException {
         PreparedStatement statement = null;
         try {
-            statement = connection.prepareStatement(query);
+            statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             for (int i = 0; i < values.length; i++) {
                 statement.setObject(i + 1, values[i]);
             }
