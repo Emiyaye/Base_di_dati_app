@@ -102,10 +102,6 @@ public class UserModel {
         PreparedStatement psUpdateCodAbbonamento = null;
         try {
             connection.setAutoCommit(false);
-            if (accountInvitante.equals(accountInvitato)) {
-                rollBackWithCustomMessage("Non puoi invitare te stesso");
-                return;
-            }
 
             // Get codAbbonamento
             psGetCodAbbonamento = DAOUtils.prepare(connection, Queries.OP2_GET_CODABBONAMENTO, accountInvitante);
@@ -113,9 +109,6 @@ public class UserModel {
             int codAbbonamento = -1;
             if (rsCodAbbonamento.next()) {
                 codAbbonamento = rsCodAbbonamento.getInt("codAbbonamentoAttivo");
-            } else {
-                rollBackWithCustomMessage("Il tuo account non esiste");
-                return;
             }
 
             // Insert in invito_Abbonamento
@@ -128,11 +121,7 @@ public class UserModel {
             // Update account codAbbonamentoAttivo
             psUpdateCodAbbonamento = DAOUtils.prepare(connection, Queries.OP1_UPDATE_CODABBONAMENTO, codAbbonamento,
                     accountInvitato);
-            final int result = psUpdateCodAbbonamento.executeUpdate();
-            if (result == 0) {
-                rollBackWithCustomMessage("Account Invitato non esiste");
-                return;
-            }
+
             connection.commit();
             JOptionPane.showMessageDialog(null, "Operation Succeed!", "Success", JOptionPane.INFORMATION_MESSAGE);
 
@@ -153,7 +142,6 @@ public class UserModel {
                 rollBackWithCustomMessage("Non puoi seguire te stesso");
                 return;
             }
-            // TODO: maybe check if the account exist, when the database is complete need some testing
             // Insert into Follow account
             ps = DAOUtils.prepare(connection, Queries.OP3_FOLLOW_ARTIST);
             ps.setString(1, accountSeguito);
