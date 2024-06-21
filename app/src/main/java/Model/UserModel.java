@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import javax.swing.JOptionPane;
+
 import com.mysql.cj.QueryInfo;
 
 import data.DAOUtils;
@@ -46,7 +48,7 @@ public class UserModel {
             psCreateAccount.setString(3, password);
             psCreateAccount.setObject(4, dataNascita);
             psCreateAccount.setString(5, genere);
-            psCreateAccount.setString(6, "link." + email);
+            psCreateAccount.setString(6, "link." + email); // TODO: HOW DO I GENERATE A LINK :D
             psCreateAccount.setObject(7, LocalDate.now());
             psCreateAccount.setString(8, nazione);
             psCreateAccount.executeUpdate();
@@ -71,27 +73,28 @@ public class UserModel {
 
             rsAbbonamento = psCreateAbbonamento.getGeneratedKeys();
             int codAbbonamento = -1;
-            if (rsAbbonamento.next()){
+            if (rsAbbonamento.next()) {
                 // getGeneratedKeys non da i nomi delle colonne, usare i numeri :(
                 codAbbonamento = rsAbbonamento.getInt(1);
             }
 
             // Update codAbbonameto
-            psUpdateCodAbbonamento = DAOUtils.prepare(connection, Queries.OP1_UPDATE_CODABBONAMENTO, codAbbonamento, email);
+            psUpdateCodAbbonamento = DAOUtils.prepare(connection, Queries.OP1_UPDATE_CODABBONAMENTO, codAbbonamento,
+                    email);
             psUpdateCodAbbonamento.executeUpdate();
 
             connection.commit();
 
+            JOptionPane.showMessageDialog(null, "Operation Succeed!", "Success", JOptionPane.INFORMATION_MESSAGE);
+
         } catch (final SQLException e) {
-            if (connection != null) {
-                try {
-                    connection.rollback();
-                } catch (final SQLException ex) {
-                    ex.printStackTrace();
-                }
-            }
-            e.printStackTrace();
+            rollBack(connection, e);
         } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
             closeResultSet(rsAbbonamento);
             closePreparedStatement(psCreateAccount);
             closePreparedStatement(psCreateTipoPagamento);
@@ -103,25 +106,15 @@ public class UserModel {
     public void Op3_followArtist(final String accountSeguito, final String accountSeguente) {
         PreparedStatement ps = null;
         try {
-            connection.setAutoCommit(false);
-
             // Insert into Follow account
             ps = DAOUtils.prepare(connection, Queries.OP3_FOLLOW_ARTIST);
             ps.setString(1, accountSeguito);
             ps.setString(2, accountSeguente);
             ps.executeUpdate();
 
-            connection.commit();
-
+            JOptionPane.showMessageDialog(null, "Operation Succeed!", "Success", JOptionPane.INFORMATION_MESSAGE);
         } catch (final SQLException e) {
-            if (connection != null) {
-                try {
-                    connection.rollback();
-                } catch (final SQLException ex) {
-                    ex.printStackTrace();
-                }
-            }
-            e.printStackTrace();
+            rollBack(connection, e);
         } finally {
             closePreparedStatement(ps);
         }
@@ -132,8 +125,6 @@ public class UserModel {
         ResultSet rs = null;
         final List<Dati.Op7Data> list = new ArrayList<>();
         try {
-            connection.setAutoCommit(false);
-
             ps = DAOUtils.prepare(connection, Queries.OP7_SEARCH_SONG, name + '%');
             rs = ps.executeQuery();
             while (rs.next()) {
@@ -151,16 +142,8 @@ public class UserModel {
                         fileAudio,
                         codicePubblicazione));
             }
-            connection.commit();
         } catch (final SQLException e) {
-            if (connection != null) {
-                try {
-                    connection.rollback();
-                } catch (final SQLException ex) {
-                    ex.printStackTrace();
-                }
-            }
-            e.printStackTrace();
+            rollBack(connection, e);
         } finally {
             closeResultSet(rs);
             closePreparedStatement(ps);
@@ -180,11 +163,23 @@ public class UserModel {
         }
     }
 
+    private final void rollBack(final Connection connection, final SQLException e) {
+        if (connection != null) {
+            try {
+                connection.rollback();
+            } catch (final SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Operation Failed because:" + e.getMessage(), "Fail", JOptionPane.INFORMATION_MESSAGE);
+    }
+
     private final void closeResultSet(final ResultSet rs) {
         if (rs != null) {
             try {
                 rs.close();
-            } catch (SQLException e) {
+            } catch (final SQLException e) {
                 e.printStackTrace();
             }
         }
