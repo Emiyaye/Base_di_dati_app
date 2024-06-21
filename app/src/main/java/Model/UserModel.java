@@ -172,7 +172,7 @@ public class UserModel {
             }
         }
         e.printStackTrace();
-        JOptionPane.showMessageDialog(null, "Operation Failed because:" + e.getMessage(), "Fail", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(null, "Operation Failed because: " + e.getMessage(), "Fail", JOptionPane.ERROR_MESSAGE);
     }
 
     private final void closeResultSet(final ResultSet rs) {
