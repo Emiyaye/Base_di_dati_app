@@ -72,7 +72,7 @@ public class UserModel {
             rsAbbonamento = psCreateAbbonamento.getGeneratedKeys();
             int codAbbonamento = -1;
             if (rsAbbonamento.next()){
-                // getGeneratedKeys non da i nomi delle colonne, usare i numero :(
+                // getGeneratedKeys non da i nomi delle colonne, usare i numeri :(
                 codAbbonamento = rsAbbonamento.getInt(1);
             }
 
