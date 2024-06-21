@@ -19,6 +19,16 @@ public final class Queries {
     SET CodAbbonamentoAttivo = ?
     WHERE Account.email = ?
     """;
+    public static final String OP2_GET_CODABBONAMENTO = """
+    SELECT A.codAbbonamentoAttivo
+    FROM Account A
+    WHERE A.email = ?
+    """;
+    public static final String OP2_INVITE_ABBONAMENTO = """
+    INSERT INTO Invito_abbonamento (codAccount, codAbbonamento)
+    VALUES (?, ?)
+    """;
+    public static final String OP2_UPDATE_CODABBONAMENTO = OP1_UPDATE_CODABBONAMENTO;
     public static final String OP3_FOLLOW_ARTIST = """
     INSERT INTO Follow_Account (accountSeguito, accountSeguente)
     VALUES (?, ?)

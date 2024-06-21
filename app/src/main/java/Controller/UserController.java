@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import Model.UserModel;
 import View.Op1Panel;
+import View.Op2Panel;
 import View.Op3Panel;
 import View.Op7Panel;
 import View.UserPanel;
@@ -14,6 +15,7 @@ public class UserController {
     private final UserModel model;
     private final UserPanel panel;
     private final Op1Panel Op1Panel = new Op1Panel();
+    private final Op2Panel Op2Panel = new Op2Panel();
     private final Op3Panel Op3Panel = new Op3Panel();
     private final Op7Panel Op7Panel = new Op7Panel();
 
@@ -32,6 +34,11 @@ public class UserController {
                     data.tipoPagamento(), data.numeroCarta(), data.scadenzaCarta(),
                     data.tipoAbbonamento());
 
+        });
+        this.panel.addOp2Listener(e -> panel.UpdateCenterPanel(Op2Panel));
+        this.Op2Panel.addSubmitListener(e -> {
+            final Dati.Op2Data data = this.Op2Panel.getData();
+            this.model.Op2_inviteAbbonamento(data.accountInvitato(), data.accountInvitante());
         });
         this.panel.addOp3Listener(e -> panel.UpdateCenterPanel(Op3Panel));
         this.Op3Panel.addSubmitListener(e -> {

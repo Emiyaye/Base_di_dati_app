@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
 import java.util.Optional;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
@@ -12,21 +13,25 @@ public class UserPanel extends JPanel {
 
     private final JButton back;
     private final JButton OP1_CreateAccount;
+    private final JButton OP2_InviteAccount;
     private final JButton OP3_FollowArtist;
     private final JButton OP7_SearchSongs;
-    private Optional<JPanel> LastPanel;
+    private JPanel LastPanel;
 
     public UserPanel() {
         back = new JButton("BACK");
-        LastPanel = Optional.empty();
+        LastPanel = new JPanel();
         setLayout(new BorderLayout());
         final JPanel westPanel = new JPanel(new BorderLayout());
         final JPanel backButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         backButtonPanel.add(back);
         westPanel.add(backButtonPanel, BorderLayout.SOUTH);
-        final JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        OP1_CreateAccount = new JButton("OP1 Create account");
+        final JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+        OP1_CreateAccount = new JButton("OP1 Create Account");
         buttonPanel.add(OP1_CreateAccount);
+        OP2_InviteAccount = new JButton("OP2 Invite Account");
+        buttonPanel.add(OP2_InviteAccount);
         OP3_FollowArtist = new JButton("OP3 Follow Artist");
         buttonPanel.add(OP3_FollowArtist);
         OP7_SearchSongs = new JButton("OP7 Search Songs");
@@ -34,6 +39,7 @@ public class UserPanel extends JPanel {
 
         westPanel.add(buttonPanel, BorderLayout.CENTER);
         add(westPanel, BorderLayout.WEST);
+        add(LastPanel, BorderLayout.CENTER);
     }
 
     public void addBackListener(final ActionListener ac) {
@@ -42,6 +48,10 @@ public class UserPanel extends JPanel {
 
     public void addOp1Listener(final ActionListener ac) {
         OP1_CreateAccount.addActionListener(ac);
+    }
+
+    public void addOp2Listener(final ActionListener ac) {
+        OP2_InviteAccount.addActionListener(ac);
     }
 
     public void addOp3Listener(final ActionListener ac) {
@@ -53,14 +63,10 @@ public class UserPanel extends JPanel {
     }
 
     public void UpdateCenterPanel(final JPanel panel) {
-        if (LastPanel.isEmpty()) {
-            LastPanel = Optional.of(panel);
-            add(LastPanel.get(), BorderLayout.CENTER);
-        } else {
-            remove(LastPanel.get());
-            LastPanel = Optional.of(panel);
-            add(LastPanel.get(), BorderLayout.CENTER);
-        }
+            remove(LastPanel);
+            LastPanel = panel;
+            add(LastPanel, BorderLayout.CENTER);
+        
         revalidate();
         repaint();
     }

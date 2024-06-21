@@ -7,7 +7,8 @@ public class Dati {
     public record Op1Data(String nickname, String email, String password, LocalDate dataNascita, String genere, String nazione,
             int tipoPagamento, Optional<Integer> numeroCarta, Optional<Integer> scadenzaCarta, int tipoAbbonamento) {
     }
-
+    public record Op2Data(String accountInvitante, String accountInvitato) {
+}
     public record Op3Data(String accountSeguito, String accountSeguente) {
     }
 

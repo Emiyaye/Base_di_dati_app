@@ -12,8 +12,6 @@ import java.util.Optional;
 
 import javax.swing.JOptionPane;
 
-import com.mysql.cj.QueryInfo;
-
 import data.DAOUtils;
 import data.Dati;
 import data.Queries;
@@ -84,17 +82,11 @@ public class UserModel {
             psUpdateCodAbbonamento.executeUpdate();
 
             connection.commit();
-
             JOptionPane.showMessageDialog(null, "Operation Succeed!", "Success", JOptionPane.INFORMATION_MESSAGE);
 
         } catch (final SQLException e) {
             rollBack(connection, e);
         } finally {
-            try {
-                connection.setAutoCommit(true);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
             closeResultSet(rsAbbonamento);
             closePreparedStatement(psCreateAccount);
             closePreparedStatement(psCreateTipoPagamento);
@@ -103,9 +95,65 @@ public class UserModel {
         }
     }
 
+    public void Op2_inviteAbbonamento(final String accountInvitato, final String accountInvitante) {
+        PreparedStatement psGetCodAbbonamento = null;
+        ResultSet rsCodAbbonamento = null;
+        PreparedStatement psCreateInvitoAbbonamento = null;
+        PreparedStatement psUpdateCodAbbonamento = null;
+        try {
+            connection.setAutoCommit(false);
+            if (accountInvitante.equals(accountInvitato)) {
+                rollBackWithCustomMessage("Non puoi invitare te stesso");
+                return;
+            }
+
+            // Get codAbbonamento
+            psGetCodAbbonamento = DAOUtils.prepare(connection, Queries.OP2_GET_CODABBONAMENTO, accountInvitante);
+            rsCodAbbonamento = psGetCodAbbonamento.executeQuery();
+            int codAbbonamento = -1;
+            if (rsCodAbbonamento.next()) {
+                codAbbonamento = rsCodAbbonamento.getInt("codAbbonamentoAttivo");
+            } else {
+                rollBackWithCustomMessage("Il tuo account non esiste");
+                return;
+            }
+
+            // Insert in invito_Abbonamento
+            psCreateInvitoAbbonamento = DAOUtils.prepare(connection, Queries.OP2_INVITE_ABBONAMENTO, accountInvitato,
+                    codAbbonamento);
+            psCreateInvitoAbbonamento.setString(1, accountInvitato);
+            psCreateInvitoAbbonamento.setInt(2, codAbbonamento);
+            psCreateInvitoAbbonamento.executeUpdate();
+
+            // Update account codAbbonamentoAttivo
+            psUpdateCodAbbonamento = DAOUtils.prepare(connection, Queries.OP1_UPDATE_CODABBONAMENTO, codAbbonamento,
+                    accountInvitato);
+            final int result = psUpdateCodAbbonamento.executeUpdate();
+            if (result == 0) {
+                rollBackWithCustomMessage("Account Invitato non esiste");
+                return;
+            }
+            connection.commit();
+            JOptionPane.showMessageDialog(null, "Operation Succeed!", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+        } catch (SQLException e) {
+            rollBack(connection, e);
+        } finally {
+            closeResultSet(rsCodAbbonamento);
+            closePreparedStatement(psGetCodAbbonamento);
+            closePreparedStatement(psGetCodAbbonamento);
+            closePreparedStatement(psUpdateCodAbbonamento);
+        }
+    }
+
     public void Op3_followArtist(final String accountSeguito, final String accountSeguente) {
         PreparedStatement ps = null;
         try {
+            if (accountSeguente.equals(accountSeguito)) {
+                rollBackWithCustomMessage("Non puoi seguire te stesso");
+                return;
+            }
+            // TODO: maybe check if the account exist, when the database is complete need some testing
             // Insert into Follow account
             ps = DAOUtils.prepare(connection, Queries.OP3_FOLLOW_ARTIST);
             ps.setString(1, accountSeguito);
@@ -170,9 +218,24 @@ public class UserModel {
             } catch (final SQLException ex) {
                 ex.printStackTrace();
             }
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException exc) {
+                exc.printStackTrace();
+            }
         }
         e.printStackTrace();
-        JOptionPane.showMessageDialog(null, "Operation Failed because: " + e.getMessage(), "Fail", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(null, "Operation Failed because: " + e.getMessage(), "Fail",
+                JOptionPane.ERROR_MESSAGE);
+    }
+
+    private final void rollBackWithCustomMessage(final String s) {
+        rollBack(connection, new SQLException() {
+            @Override
+            public String getMessage() {
+                return s;
+            }
+        });
     }
 
     private final void closeResultSet(final ResultSet rs) {
