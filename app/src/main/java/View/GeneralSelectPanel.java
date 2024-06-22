@@ -1,31 +1,20 @@
 package View;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.List;
-import java.util.function.Function;
-
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.table.DefaultTableModel;
+import java.util.Map;
 
 public class GeneralSelectPanel<T> extends JPanel {
     private final JTextField searchField;
     private final JButton searchButton;
     private final JButton cancelButton;
-    private final JTable resultTable;
-    private final DefaultTableModel tableModel;
-    private final String[] attributeNames;
-    private final Function<T, Object[]> function; //this function must give an Object[] with all the data
+    private final JPanel tablesPanel;
+    private final List<Table<T>> tables;
 
-    public GeneralSelectPanel(final String label, final String[] attributeNames, final Function<T, Object[]> function) {
-        this.attributeNames = attributeNames;
-        this.function = function;
+    public GeneralSelectPanel(final String label, final List<Table<T>> tables) {
         setLayout(new BorderLayout());
 
         final JPanel inputPanel = new JPanel(new FlowLayout());
@@ -39,10 +28,18 @@ public class GeneralSelectPanel<T> extends JPanel {
         inputPanel.add(searchButton);
         add(inputPanel, BorderLayout.NORTH);
 
-        tableModel = new DefaultTableModel(this.attributeNames, 0);
-        resultTable = new JTable(tableModel);
+        // creating table panel
+        tablesPanel = new JPanel(new GridLayout(0, 1));
+        this.tables = tables;
+        for (final var table : this.tables) {
+            final DefaultTableModel tableModel = new DefaultTableModel(table.getAttributeNames(), 0);
+            final JTable jtable = new JTable(tableModel);
+            final JScrollPane scrollPane = new JScrollPane(jtable);
+            tablesPanel.add(scrollPane);
+            table.setTableModel(tableModel);
+        }
 
-        add(new JScrollPane(resultTable), BorderLayout.CENTER);
+        add(new JScrollPane(tablesPanel), BorderLayout.CENTER);
         cancelButton.addActionListener(e -> searchField.setText(""));
     }
 
@@ -54,10 +51,17 @@ public class GeneralSelectPanel<T> extends JPanel {
         return searchField.getText();
     }
 
-    public void updateTable(final List<T> results) {
-        tableModel.setRowCount(0);
-        for (final var rowData : results) {
-            tableModel.addRow(function.apply(rowData));
+    public void updateTable(final Map<String, List<T>> results) {
+        // Iterating through each existing table
+        for (final var table : tables) {
+            final DefaultTableModel tableModel = table.getTableModel();
+            tableModel.setRowCount(0);
+            final List<T> tableData = results.get(table.getTableName());
+            if (tableData != null) {
+                for (final var row : tableData) {
+                    tableModel.addRow(table.getFunction().apply(row));
+                }
+            }
         }
     }
 }

@@ -1,14 +1,20 @@
 package View;
 
+import java.util.List;
+
 import data.Dati;
 
 public class Op7Panel extends GeneralSelectPanel<Dati.Op7Data> {
 
     public Op7Panel() {
         super("Song Name",
-                new String[] { "Numero", "Titolo", "NumRiproduzioni", "Durata", "Esplicito", "FonteCrediti",
-                        "FileAudio", "CodicePubblicazione" },
-                Op7Panel::function);
+                List.of(
+                        new Table<>(
+                                "Songs",
+                                new String[] { "Numero", "Titolo", "NumRiproduzioni", "Durata", "Esplicito",
+                                        "FonteCrediti",
+                                        "FileAudio", "CodicePubblicazione" },
+                                Op7Panel::function)));
     }
 
     // return an array with all the attributes of Op7Data

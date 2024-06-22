@@ -6,7 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -232,9 +234,12 @@ public class UserModel {
         }
     }
 
-    public List<Dati.Op7Data> Op7_searchSong(final String name) {
+    
+
+    public Map<String, List<Dati.Op7Data>> Op7_searchSong(final String name) {
         PreparedStatement ps = null;
         ResultSet rs = null;
+        final Map<String, List<Dati.Op7Data>> result = new HashMap<>();
         final List<Dati.Op7Data> list = new ArrayList<>();
         try {
             ps = DAOUtils.prepare(connection, Queries.OP7_SEARCH_SONG, name + '%');
@@ -260,8 +265,8 @@ public class UserModel {
             closeResultSet(rs);
             closePreparedStatement(ps);
         }
-
-        return list;
+        result.put("Songs", list);
+        return result;
     }
 
     // Optional integer
