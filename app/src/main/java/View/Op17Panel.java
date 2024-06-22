@@ -1,6 +1,6 @@
 package View;
 
-import java.util.Arrays;
+import java.util.List;
 
 import data.Dati;
 
@@ -8,7 +8,7 @@ public class Op17Panel extends GeneralSelectPanel<Dati.Op17Data> {
 
     public Op17Panel() {
         super("Popular Artist",
-                Arrays.asList(new Table<>(
+                List.of(new Table<>(
                         "Popular Artist",
                         new String[]{"Nome Artista", "Num Album", "Num Singoli"},
                         Op17Panel::function)

@@ -74,6 +74,13 @@ public final class Queries {
     FROM Brano B
     WHERE B.titolo LIKE ?
     """;
+    public static final String OP16_VIEW_ACTIVE_ABBONAMENTO = """
+    SELECT T.nome, T.durataMesi, COUNT(AB.tipoAbbonamento) AS NumAbbonamentiAttivi
+    FROM Account AC, Abbonamento AB, Tipo_abbonamento T
+    WHERE AC.codAbbonamentoattivo = AB.codAbbonamento
+    AND AB.tipoAbbonamento = T.codTipoAbbonamento
+    GROUP BY T.nome, T.durataMesi
+    """;
     public static final String OP17_MOST_POPULAR_ARTIST = """
     SELECT AC.nickname, SUM(IF (P.album = True, 1, 0)) AS NumAlbum, SUM(IF (P.album = True, 0, 1)) AS NumSingoli
     FROM Artista AR, Account AC, Pubblicazione P, Brano B
@@ -88,6 +95,6 @@ public final class Queries {
     SELECT SUM(TA.prezzo) AS Fatturato_Annuo
     FROM Abbonamento A, Tipo_Abbonamento TA
     WHERE year(A.dataPagamento) = ?
-    AND A.tipoAbbonamento = TA.codAbbonamento
+    AND A.tipoAbbonamento = TA.codTipoAbbonamento
     """;
 }

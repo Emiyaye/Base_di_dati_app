@@ -30,6 +30,9 @@ public class Dati {
                         String fileAudio, int codicePubblicazione) {
         }
 
+        public record Op16Data(String nome, int durataMesi, int NumAbbonamentiAttivi) {
+        }
+
         public record Op17Data(String NomeArtista, int NumeroAlbum, int NumeroSingoli) {
         }
 

@@ -120,7 +120,7 @@ public class Model {
             // If i can find any result that mean that the account has already an
             // abbonamento
             if (rsCodAbbonamento.next()) {
-                rollBackWithCustomMessage("L'account invitato ha già un abbonanamento");
+                rollBackWithCustomMessage("L'account invitato ha gia' un abbonanamento");
                 return;
             }
 
@@ -300,7 +300,7 @@ public class Model {
             final List<Dati.Op7Data> list = new ArrayList<>();
             while (rs.next()) {
                 // get data from the database
-                final int codiceBrano = rs.getInt("codiceBrano");
+                final int codiceBrano = rs.getInt("codBrano");
                 final int numero = rs.getInt("numero");
                 final String titolo = rs.getString("titolo");
                 final int numRiproduzioni = rs.getInt("numRiproduzioni");
@@ -308,7 +308,7 @@ public class Model {
                 final boolean esplicito = rs.getBoolean("esplicito");
                 final String fonteCrediti = rs.getString("fonteCrediti");
                 final String fileAudio = rs.getString("fileAudio");
-                final int codicePubblicazione = rs.getInt("codicePubblicazione");
+                final int codicePubblicazione = rs.getInt("codPubblicazione");
                 list.add(new Dati.Op7Data(codiceBrano, numero, titolo, numRiproduzioni, durata, esplicito, fonteCrediti,
                         fileAudio,
                         codicePubblicazione));
@@ -323,22 +323,46 @@ public class Model {
         return result;
     }
 
+    public Map<String, List<Dati.Op16Data>> Op16_viewActiveAbbonamento() {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        final Map<String, List<Dati.Op16Data>> result = new HashMap<>();
+        final List<Dati.Op16Data> list = new ArrayList<>();
+        try {
+            ps = DAOUtils.prepare(connection, Queries.OP16_VIEW_ACTIVE_ABBONAMENTO);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                final String nome = rs.getString("nome");
+                final int durataMesi = rs.getInt("durataMesi");
+                final int numAbbonamentiAttivi = rs.getInt("NumAbbonamentiAttivi");
+                list.add(new Dati.Op16Data(nome, durataMesi, numAbbonamentiAttivi));
+            }
+            result.put("Abbonamenti Attivi", list);
+        } catch (final SQLException e) {
+            rollBack(connection, e);
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(ps);
+        }
+        return result;
+    }
+
     public Map<String, List<Dati.Op17Data>> Op17_mostPopularArtist() {
         PreparedStatement ps = null;
         ResultSet rs = null;
-        Map<String, List<Dati.Op17Data>> result = new HashMap<>();
+        final Map<String, List<Dati.Op17Data>> result = new HashMap<>();
+        final List<Dati.Op17Data> list = new ArrayList<>();
         try {
-            ps = DAOUtils.prepare(connection, Queries.OP18_SERVICE_TURNOVER);
+            ps = DAOUtils.prepare(connection, Queries.OP17_MOST_POPULAR_ARTIST);
             rs = ps.executeQuery();
-            List<Dati.Op17Data> list = new ArrayList<>();
             while (rs.next()) {
-                String nomeArtista = rs.getString("nickname");
-                int numAlbum = rs.getInt("NumAlbum");
-                int numSingoli = rs.getInt("NumSingoli");
+                final String nomeArtista = rs.getString("nickname");
+                final int numAlbum = rs.getInt("NumAlbum");
+                final int numSingoli = rs.getInt("NumSingoli");
                 list.add(new Dati.Op17Data(nomeArtista, numAlbum, numSingoli));
             }
             result.put("Popular Artist", list);
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             rollBack(connection, e);
         } finally {
             closeResultSet(rs);
@@ -348,20 +372,20 @@ public class Model {
         return result;
     }
 
-    public Map<String, List<Dati.Op18Data>> Op18_serviceTurnover(int year) {
+    public Map<String, List<Dati.Op18Data>> Op18_serviceTurnover(final int year) {
         PreparedStatement ps = null;
         ResultSet rs = null;
-        Map<String, List<Dati.Op18Data>> result = new HashMap<>();
+        final Map<String, List<Dati.Op18Data>> result = new HashMap<>();
         try {
             ps = DAOUtils.prepare(connection, Queries.OP18_SERVICE_TURNOVER, year);
             rs = ps.executeQuery();
-            List<Dati.Op18Data> list = new ArrayList<>();
+            final List<Dati.Op18Data> list = new ArrayList<>();
             while (rs.next()) {
-                double fatturatoAnnuo = rs.getDouble("Fatturato_Annuo");
+                final double fatturatoAnnuo = rs.getDouble("Fatturato_Annuo");
                 list.add(new Dati.Op18Data(fatturatoAnnuo));
             }
             result.put("Fatturato Annuo", list);
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             rollBack(connection, e);
         } finally {
             closeResultSet(rs);

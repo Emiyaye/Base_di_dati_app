@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 public class AdminPanel extends JPanel {
 
     private final JButton back;
+    private final JButton OP16_viewActiveAbbonamento;
     private final JButton OP17_PopularArtist;
     private final JButton OP18_ServiceTurnover;
     private JPanel LastPanel;
@@ -26,6 +27,9 @@ public class AdminPanel extends JPanel {
         final JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
 
+        OP16_viewActiveAbbonamento = new JButton("OP16 View Active Abbonamento");
+        buttonPanel.add(OP16_viewActiveAbbonamento);
+
         OP17_PopularArtist = new JButton("OP17 Top 5 most popular Artist");
         buttonPanel.add(OP17_PopularArtist);
 
@@ -35,6 +39,10 @@ public class AdminPanel extends JPanel {
         westPanel.add(buttonPanel, BorderLayout.CENTER);
         add(westPanel, BorderLayout.WEST);
         add(LastPanel, BorderLayout.CENTER);
+    }
+
+    public void addOp16Listener (final ActionListener ac) {
+        OP16_viewActiveAbbonamento.addActionListener(ac);
     }
 
     public void addOp17Listener (final ActionListener ac) {
