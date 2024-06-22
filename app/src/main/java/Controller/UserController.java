@@ -6,6 +6,7 @@ import Model.UserModel;
 import View.Op1Panel;
 import View.Op2Panel;
 import View.Op3Panel;
+import View.Op4Panel;
 import View.Op7Panel;
 import View.UserPanel;
 import data.Dati;
@@ -17,8 +18,8 @@ public class UserController {
     private final Op1Panel Op1Panel = new Op1Panel();
     private final Op2Panel Op2Panel = new Op2Panel();
     private final Op3Panel Op3Panel = new Op3Panel();
+    private final Op4Panel Op4Panel = new Op4Panel();
     private final Op7Panel Op7Panel = new Op7Panel();
-
 
     public UserController(final UserModel model, final UserPanel panel) {
         Objects.requireNonNull(model);
@@ -26,7 +27,7 @@ public class UserController {
         this.model = model;
         this.panel = panel;
 
-        this.panel.addOp1Listener(e -> panel.UpdateCenterPanel(Op1Panel));
+        this.panel.addOp1Listener(e -> panel.updateCenterPanel(Op1Panel));
         this.Op1Panel.addSubmitListener(e -> {
             final Dati.Op1Data data = this.Op1Panel.getData();
             this.model.Op1_addAccount(data.nickname(), data.email(), data.password(),
@@ -35,17 +36,26 @@ public class UserController {
                     data.tipoAbbonamento());
 
         });
-        this.panel.addOp2Listener(e -> panel.UpdateCenterPanel(Op2Panel));
+        this.panel.addOp2Listener(e -> panel.updateCenterPanel(Op2Panel));
         this.Op2Panel.addSubmitListener(e -> {
             final Dati.Op2Data data = this.Op2Panel.getData();
             this.model.Op2_inviteAbbonamento(data.accountInvitato(), data.accountInvitante());
         });
-        this.panel.addOp3Listener(e -> panel.UpdateCenterPanel(Op3Panel));
+
+        this.panel.addOp3Listener(e -> panel.updateCenterPanel(Op3Panel));
         this.Op3Panel.addSubmitListener(e -> {
             final Dati.Op3Data data = this.Op3Panel.getData();
             this.model.Op3_followArtist(data.accountSeguito(), data.accountSeguente());
         });
-        this.panel.addOp7Listener(e -> panel.UpdateCenterPanel(Op7Panel));
+
+        this.panel.addOp4Listener(e -> panel.updateCenterPanel(Op4Panel));
+        this.Op4Panel.addSubmitListener(e -> {
+            final Dati.Op4Data data = this.Op4Panel.getData();
+            this.model.Op4_createPlaylist(data.nome(), data.descrizione(), data.immagine(), data.privato(),
+                    data.account(), data.collaboratore());
+        });
+
+        this.panel.addOp7Listener(e -> panel.updateCenterPanel(Op7Panel));
         this.Op7Panel.addSearchListener(e -> {
             final String data = this.Op7Panel.getData();
             this.Op7Panel.updateTable(this.model.Op7_searchSong(data));

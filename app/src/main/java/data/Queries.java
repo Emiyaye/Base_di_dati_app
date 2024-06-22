@@ -10,7 +10,7 @@ public final class Queries {
     INSERT INTO Tipo_Pagamento (codPagamento, codAccount, tipo, numeroCarta, scadenzaCarta, dataCreazione, nazione)
     VALUES (1, ?, ?, ?, ?, ?, ?)
     """;
-    public static final String OP1_ABBONAMENTO = """
+    public static final String OP1_INSERT_ABBONAMENTO = """
     INSERT INTO Abbonamento (codPagamento, codAccount, dataPagamento, dataScadenza, tipoAbbonamento)
     VALUES (1, ?, ?, ?, ?)
     """;
@@ -32,6 +32,19 @@ public final class Queries {
     public static final String OP3_FOLLOW_ARTIST = """
     INSERT INTO Follow_Account (accountSeguito, accountSeguente)
     VALUES (?, ?)
+    """;
+    public static final String OP4_CREATE_PLAYLIST = """
+    INSERT INTO Playlist (nome, descrizione, immagine, admin, privato, radio, accountCreatore)
+    VALUES (?, ?, ?, False, ?, False, ?)
+    """;
+    public static final String OP4_INSERT_COLLABORATOR = """
+    INSERT INTO Collaborazione_Playlist (CodAccount, CodPlaylist)
+    VALUES (?, ?)
+    """;
+    public static final String OP5_DELETE_SONG = """
+    DELETE FROM Dettaglio_Playlist D
+    WHERE D.cod_Playlist = ?
+    AND D.numero = ?
     """;
     public static final String OP7_SEARCH_SONG = """
     SELECT *

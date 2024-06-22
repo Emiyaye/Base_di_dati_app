@@ -3,7 +3,6 @@ package View;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
-import java.util.Optional;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -15,6 +14,7 @@ public class UserPanel extends JPanel {
     private final JButton OP1_CreateAccount;
     private final JButton OP2_InviteAccount;
     private final JButton OP3_FollowArtist;
+    private final JButton OP4_CreatePlaylist;
     private final JButton OP7_SearchSongs;
     private JPanel LastPanel;
 
@@ -34,6 +34,8 @@ public class UserPanel extends JPanel {
         buttonPanel.add(OP2_InviteAccount);
         OP3_FollowArtist = new JButton("OP3 Follow Artist");
         buttonPanel.add(OP3_FollowArtist);
+        OP4_CreatePlaylist = new JButton("Op4 Create Playlist and add a Collaborator");
+        buttonPanel.add(OP4_CreatePlaylist);
         OP7_SearchSongs = new JButton("OP7 Search Songs");
         buttonPanel.add(OP7_SearchSongs);
 
@@ -58,11 +60,15 @@ public class UserPanel extends JPanel {
         OP3_FollowArtist.addActionListener(ac);
     }
 
+    public void addOp4Listener(final ActionListener ac) {
+        OP4_CreatePlaylist.addActionListener(ac);
+    }
+
     public void addOp7Listener(final ActionListener ac) {
         OP7_SearchSongs.addActionListener(ac);
     }
 
-    public void UpdateCenterPanel(final JPanel panel) {
+    public void updateCenterPanel(final JPanel panel) {
             remove(LastPanel);
             LastPanel = panel;
             add(LastPanel, BorderLayout.CENTER);

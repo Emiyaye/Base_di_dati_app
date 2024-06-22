@@ -62,7 +62,7 @@ public class UserModel {
             psCreateTipoPagamento.executeUpdate();
 
             // Insert into Abbonamento
-            psCreateAbbonamento = DAOUtils.prepare(connection, Queries.OP1_ABBONAMENTO);
+            psCreateAbbonamento = DAOUtils.prepare(connection, Queries.OP1_INSERT_ABBONAMENTO);
             psCreateAbbonamento.setString(1, email);
             psCreateAbbonamento.setObject(2, LocalDate.now());
             psCreateAbbonamento.setObject(3, LocalDate.now()); // TODO: Datascadenza da prendere in tipo abbonamento
@@ -97,6 +97,7 @@ public class UserModel {
 
     public void Op2_inviteAbbonamento(final String accountInvitato, final String accountInvitante) {
         PreparedStatement psGetCodAbbonamento = null;
+        final PreparedStatement psGetCodAbbonamentoInvitato = null;
         ResultSet rsCodAbbonamento = null;
         PreparedStatement psCreateInvitoAbbonamento = null;
         PreparedStatement psUpdateCodAbbonamento = null;
@@ -111,6 +112,14 @@ public class UserModel {
                 codAbbonamento = rsCodAbbonamento.getInt("codAbbonamentoAttivo");
             }
 
+            psGetCodAbbonamento = DAOUtils.prepare(connection, Queries.OP2_GET_CODABBONAMENTO, accountInvitato);
+            rsCodAbbonamento = psGetCodAbbonamento.executeQuery();
+            // If i can find any result that mean that the account has already an
+            // abbonamento
+            if (rsCodAbbonamento.next()) {
+                rollBackWithCustomMessage("L'account invitato ha già un abbonanamento");
+            }
+
             // Insert in invito_Abbonamento
             psCreateInvitoAbbonamento = DAOUtils.prepare(connection, Queries.OP2_INVITE_ABBONAMENTO, accountInvitato,
                     codAbbonamento);
@@ -119,13 +128,13 @@ public class UserModel {
             psCreateInvitoAbbonamento.executeUpdate();
 
             // Update account codAbbonamentoAttivo
-            psUpdateCodAbbonamento = DAOUtils.prepare(connection, Queries.OP1_UPDATE_CODABBONAMENTO, codAbbonamento,
+            psUpdateCodAbbonamento = DAOUtils.prepare(connection, Queries.OP2_UPDATE_CODABBONAMENTO, codAbbonamento,
                     accountInvitato);
 
             connection.commit();
             JOptionPane.showMessageDialog(null, "Operation Succeed!", "Success", JOptionPane.INFORMATION_MESSAGE);
 
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             rollBack(connection, e);
         } finally {
             closeResultSet(rsCodAbbonamento);
@@ -153,6 +162,52 @@ public class UserModel {
             rollBack(connection, e);
         } finally {
             closePreparedStatement(ps);
+        }
+    }
+
+    public void Op4_createPlaylist(final String nome, final String descrizione, final String immagine,
+            final boolean privato,
+            final String accountCreatore, final String accountCollaboratore) {
+        PreparedStatement psCreatePlaylist = null;
+        PreparedStatement psInsertCollaborator = null;
+        ResultSet rs = null;
+        try {
+            connection.setAutoCommit(false);
+
+            // Create a new Playlist
+            psCreatePlaylist = DAOUtils.prepare(connection, Queries.OP4_CREATE_PLAYLIST);
+            psCreatePlaylist.setString(1, nome);
+            psCreatePlaylist.setString(2, descrizione);
+            psCreatePlaylist.setString(3, immagine);
+            psCreatePlaylist.setBoolean(4, privato);
+            psCreatePlaylist.setString(5, accountCreatore);
+            psCreatePlaylist.executeUpdate();
+
+            // get the playlist id
+            rs = psCreatePlaylist.getGeneratedKeys();
+            int playlistId = -1;
+            if (rs.next()) {
+                playlistId = rs.getInt(1);
+            }
+
+            psInsertCollaborator = DAOUtils.prepare(connection, Queries.OP4_INSERT_COLLABORATOR);
+            psInsertCollaborator.setString(1, accountCollaboratore);
+            psInsertCollaborator.setInt(2, playlistId);
+            psInsertCollaborator.executeUpdate();
+
+            connection.commit();
+            JOptionPane.showMessageDialog(null, "Operation Succeed!", "Success", JOptionPane.INFORMATION_MESSAGE);
+        } catch (final SQLException e) {
+            rollBack(connection, e);
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            closeResultSet(rs);
+            closePreparedStatement(psCreatePlaylist);
+            closePreparedStatement(psInsertCollaborator);
         }
     }
 
@@ -208,7 +263,7 @@ public class UserModel {
             }
             try {
                 connection.setAutoCommit(true);
-            } catch (SQLException exc) {
+            } catch (final SQLException exc) {
                 exc.printStackTrace();
             }
         }
