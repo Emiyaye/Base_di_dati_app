@@ -293,10 +293,11 @@ public class Model {
         PreparedStatement ps = null;
         ResultSet rs = null;
         final Map<String, List<Dati.Op7Data>> result = new HashMap<>();
-        final List<Dati.Op7Data> list = new ArrayList<>();
+        
         try {
             ps = DAOUtils.prepare(connection, Queries.OP7_SEARCH_SONG, name + '%');
             rs = ps.executeQuery();
+            final List<Dati.Op7Data> list = new ArrayList<>();
             while (rs.next()) {
                 // get data from the database
                 final int codiceBrano = rs.getInt("codiceBrano");
@@ -312,13 +313,36 @@ public class Model {
                         fileAudio,
                         codicePubblicazione));
             }
+            result.put("Songs", new ArrayList<>(list));
         } catch (final SQLException e) {
             rollBack(connection, e);
         } finally {
             closeResultSet(rs);
             closePreparedStatement(ps);
         }
-        result.put("Songs", new ArrayList<>(list));
+        return result;
+    }
+
+    public Map<String, List<Dati.Op18Data>> Op18_serviceTurnover(int year) {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Map<String, List<Dati.Op18Data>> result = new HashMap<>();
+        try {
+            ps = DAOUtils.prepare(connection, Queries.OP18_SERVICE_TURNOVER, year);
+            rs = ps.executeQuery();
+            List<Dati.Op18Data> list = new ArrayList<>();
+            while (rs.next()) {
+                double fatturatoAnnuo = rs.getDouble("Fatturato_Annuo");
+                list.add(new Dati.Op18Data(fatturatoAnnuo));
+            }
+            result.put("Fatturato_Annuo", list);
+        } catch (SQLException e) {
+            rollBack(connection, e);
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(ps);
+        }
+
         return result;
     }
 

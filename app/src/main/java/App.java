@@ -20,9 +20,9 @@ public final class App {
             }
         });
         mainFrame.display();
-        final Model userModel = new Model(connection);
-        final Controller userController = new Controller(userModel, mainFrame.getUserPanel());
-        userModel.Op7_searchSong("test");
+        final Model model = new Model(connection);
+        final Controller controller = new Controller(model, mainFrame.getUserPanel(), mainFrame.getAdminPanel());
+        model.Op7_searchSong("test");
     }
 
 }

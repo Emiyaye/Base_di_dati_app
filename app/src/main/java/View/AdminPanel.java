@@ -8,9 +8,12 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import data.Dati.Op18Data;
+
 public class AdminPanel extends JPanel {
 
     private final JButton back;
+    private final JButton OP18_ServiceTurnover;
     private JPanel LastPanel;
 
     public AdminPanel() {
@@ -24,11 +27,18 @@ public class AdminPanel extends JPanel {
         final JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
 
+        OP18_ServiceTurnover = new JButton("OP18 Service Turnover by year");
+        buttonPanel.add(OP18_ServiceTurnover);
+
         westPanel.add(buttonPanel, BorderLayout.CENTER);
         add(westPanel, BorderLayout.WEST);
         add(LastPanel, BorderLayout.CENTER);
     }
 
+    public void addOp18Listener (final ActionListener ac) {
+        OP18_ServiceTurnover.addActionListener(ac);
+    }
+ 
     public void addBackListener(final ActionListener ac) {
         back.addActionListener(ac);
     }

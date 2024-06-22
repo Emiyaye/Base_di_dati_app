@@ -29,4 +29,7 @@ public class Dati {
                         boolean esplicito, String fonteCrediti,
                         String fileAudio, int codicePubblicazione) {
         }
+
+        public record Op18Data(double fatturatoAnnuo) {
+        }
 }

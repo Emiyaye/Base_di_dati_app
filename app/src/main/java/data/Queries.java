@@ -74,4 +74,10 @@ public final class Queries {
     FROM Brano B
     WHERE B.titolo LIKE ?
     """;
+    public static final String OP18_SERVICE_TURNOVER = """
+    SELECT SUM(TA.prezzo) AS Fatturato_Annuo
+    FROM Abbonamento A, Tipo_Abbonamento TA
+    WHERE year(A.dataPagamento) = ?
+    AND A.tipoAbbonamento = TA.codAbbonamento
+    """;
 }

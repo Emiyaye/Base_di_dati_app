@@ -37,6 +37,7 @@ public class MainFrame extends JFrame {
         this.menuPanel.addAdminListener(e -> resetContentPane(adminPanel));
         this.menuPanel.addUserListener(e -> resetContentPane(userPanel));
         this.userPanel.addBackListener(e -> resetContentPane(menuPanel));
+        this.adminPanel.addBackListener(e -> resetContentPane(menuPanel));
 
         // close connection
         this.addWindowListener(new WindowAdapter() {
