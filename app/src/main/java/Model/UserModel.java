@@ -97,7 +97,7 @@ public class UserModel {
 
     public void Op2_inviteAbbonamento(final String accountInvitato, final String accountInvitante) {
         PreparedStatement psGetCodAbbonamento = null;
-        final PreparedStatement psGetCodAbbonamentoInvitato = null;
+        PreparedStatement psGetCodAbbonamentoInvitato = null;
         ResultSet rsCodAbbonamento = null;
         PreparedStatement psCreateInvitoAbbonamento = null;
         PreparedStatement psUpdateCodAbbonamento = null;
@@ -112,24 +112,25 @@ public class UserModel {
                 codAbbonamento = rsCodAbbonamento.getInt("codAbbonamentoAttivo");
             }
 
-            psGetCodAbbonamento = DAOUtils.prepare(connection, Queries.OP2_GET_CODABBONAMENTO, accountInvitato);
-            rsCodAbbonamento = psGetCodAbbonamento.executeQuery();
+            // CHECK
+            psGetCodAbbonamentoInvitato = DAOUtils.prepare(connection, Queries.OP2_GET_CODABBONAMENTO, accountInvitato);
+            rsCodAbbonamento = psGetCodAbbonamentoInvitato.executeQuery();
             // If i can find any result that mean that the account has already an
             // abbonamento
             if (rsCodAbbonamento.next()) {
                 rollBackWithCustomMessage("L'account invitato ha già un abbonanamento");
+                return;
             }
 
             // Insert in invito_Abbonamento
             psCreateInvitoAbbonamento = DAOUtils.prepare(connection, Queries.OP2_INVITE_ABBONAMENTO, accountInvitato,
                     codAbbonamento);
-            psCreateInvitoAbbonamento.setString(1, accountInvitato);
-            psCreateInvitoAbbonamento.setInt(2, codAbbonamento);
             psCreateInvitoAbbonamento.executeUpdate();
 
             // Update account codAbbonamentoAttivo
             psUpdateCodAbbonamento = DAOUtils.prepare(connection, Queries.OP2_UPDATE_CODABBONAMENTO, codAbbonamento,
                     accountInvitato);
+            psUpdateCodAbbonamento.executeUpdate();
 
             connection.commit();
             JOptionPane.showMessageDialog(null, "Operation Succeed!", "Success", JOptionPane.INFORMATION_MESSAGE);
@@ -137,6 +138,11 @@ public class UserModel {
         } catch (final SQLException e) {
             rollBack(connection, e);
         } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
             closeResultSet(rsCodAbbonamento);
             closePreparedStatement(psGetCodAbbonamento);
             closePreparedStatement(psGetCodAbbonamento);
@@ -152,9 +158,7 @@ public class UserModel {
                 return;
             }
             // Insert into Follow account
-            ps = DAOUtils.prepare(connection, Queries.OP3_FOLLOW_ARTIST);
-            ps.setString(1, accountSeguito);
-            ps.setString(2, accountSeguente);
+            ps = DAOUtils.prepare(connection, Queries.OP3_FOLLOW_ARTIST, accountSeguito, accountSeguente);
             ps.executeUpdate();
 
             JOptionPane.showMessageDialog(null, "Operation Succeed!", "Success", JOptionPane.INFORMATION_MESSAGE);
@@ -190,9 +194,8 @@ public class UserModel {
                 playlistId = rs.getInt(1);
             }
 
-            psInsertCollaborator = DAOUtils.prepare(connection, Queries.OP4_INSERT_COLLABORATOR);
-            psInsertCollaborator.setString(1, accountCollaboratore);
-            psInsertCollaborator.setInt(2, playlistId);
+            psInsertCollaborator = DAOUtils.prepare(connection, Queries.OP4_INSERT_COLLABORATOR, accountCollaboratore,
+                    playlistId);
             psInsertCollaborator.executeUpdate();
 
             connection.commit();
