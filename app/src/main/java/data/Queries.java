@@ -74,6 +74,16 @@ public final class Queries {
     FROM Brano B
     WHERE B.titolo LIKE ?
     """;
+    public static final String OP17_MOST_POPULAR_ARTIST = """
+    SELECT AC.nickname, SUM(IF (P.album = True, 1, 0)) AS NumAlbum, SUM(IF (P.album = True, 0, 1)) AS NumSingoli
+    FROM Artista AR, Account AC, Pubblicazione P, Brano B
+    WHERE AR.email = AC.email
+    AND P.codArtista = AR.email
+    AND B.codPubblicazione = P.codPubblicazione
+    GROUP BY AC.email, AC.nickname
+    ORDER BY SUM(B.numRiproduzioni) DESC
+    LIMIT 5
+    """;
     public static final String OP18_SERVICE_TURNOVER = """
     SELECT SUM(TA.prezzo) AS Fatturato_Annuo
     FROM Abbonamento A, Tipo_Abbonamento TA

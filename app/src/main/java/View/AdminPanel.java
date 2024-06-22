@@ -8,11 +8,10 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import data.Dati.Op18Data;
-
 public class AdminPanel extends JPanel {
 
     private final JButton back;
+    private final JButton OP17_PopularArtist;
     private final JButton OP18_ServiceTurnover;
     private JPanel LastPanel;
 
@@ -27,12 +26,19 @@ public class AdminPanel extends JPanel {
         final JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
 
+        OP17_PopularArtist = new JButton("OP17 Top 5 most popular Artist");
+        buttonPanel.add(OP17_PopularArtist);
+
         OP18_ServiceTurnover = new JButton("OP18 Service Turnover by year");
         buttonPanel.add(OP18_ServiceTurnover);
 
         westPanel.add(buttonPanel, BorderLayout.CENTER);
         add(westPanel, BorderLayout.WEST);
         add(LastPanel, BorderLayout.CENTER);
+    }
+
+    public void addOp17Listener (final ActionListener ac) {
+        OP17_PopularArtist.addActionListener(ac);
     }
 
     public void addOp18Listener (final ActionListener ac) {

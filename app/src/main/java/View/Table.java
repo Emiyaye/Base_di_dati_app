@@ -1,9 +1,8 @@
 package View;
 
-import javax.swing.table.DefaultTableModel;
-
-import java.awt.Dimension;
 import java.util.function.Function;
+
+import javax.swing.table.DefaultTableModel;
 
 public class Table<T> {
     private final String tableName;

@@ -11,10 +11,10 @@ import View.Op4Panel;
 import View.Op5Panel;
 import View.Op6Panel;
 import View.Op7Panel;
+import View.Op17Panel;
 import View.Op18Panel;
 import View.UserPanel;
 import data.Dati;
-import data.Dati.Op18Data;
 
 public class Controller {
 
@@ -28,6 +28,7 @@ public class Controller {
     private final Op5Panel Op5Panel = new Op5Panel();
     private final Op6Panel Op6Panel = new Op6Panel();
     private final Op7Panel Op7Panel = new Op7Panel();
+    private final Op17Panel Op17Panel = new Op17Panel();
     private final Op18Panel Op18Panel = new Op18Panel();
     
 
@@ -82,6 +83,11 @@ public class Controller {
         this.Op7Panel.addSearchListener(e -> {
             final String data = this.Op7Panel.getData();
             this.Op7Panel.updateTable(this.model.Op7_searchSong(data));
+        });
+
+        this.adminPanel.addOp17Listener(e -> {
+            this.adminPanel.updateCenterPanel(Op17Panel);
+            this.Op17Panel.updateTable(this.model.Op17_mostPopularArtist());
         });
 
         this.adminPanel.addOp18Listener(e -> adminPanel.updateCenterPanel(Op18Panel));

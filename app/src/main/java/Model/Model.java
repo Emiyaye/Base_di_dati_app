@@ -323,6 +323,31 @@ public class Model {
         return result;
     }
 
+    public Map<String, List<Dati.Op17Data>> Op17_mostPopularArtist() {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Map<String, List<Dati.Op17Data>> result = new HashMap<>();
+        try {
+            ps = DAOUtils.prepare(connection, Queries.OP18_SERVICE_TURNOVER);
+            rs = ps.executeQuery();
+            List<Dati.Op17Data> list = new ArrayList<>();
+            while (rs.next()) {
+                String nomeArtista = rs.getString("nickname");
+                int numAlbum = rs.getInt("NumAlbum");
+                int numSingoli = rs.getInt("NumSingoli");
+                list.add(new Dati.Op17Data(nomeArtista, numAlbum, numSingoli));
+            }
+            result.put("Popular Artist", list);
+        } catch (SQLException e) {
+            rollBack(connection, e);
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(ps);
+        }
+
+        return result;
+    }
+
     public Map<String, List<Dati.Op18Data>> Op18_serviceTurnover(int year) {
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -335,7 +360,7 @@ public class Model {
                 double fatturatoAnnuo = rs.getDouble("Fatturato_Annuo");
                 list.add(new Dati.Op18Data(fatturatoAnnuo));
             }
-            result.put("Fatturato_Annuo", list);
+            result.put("Fatturato Annuo", list);
         } catch (SQLException e) {
             rollBack(connection, e);
         } finally {

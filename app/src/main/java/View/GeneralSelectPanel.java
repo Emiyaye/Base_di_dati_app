@@ -11,13 +11,14 @@ public class GeneralSelectPanel<T> extends JPanel {
     private final JTextField searchField;
     private final JButton searchButton;
     private final JButton cancelButton;
+    private final JPanel inputPanel;
     private final JPanel tablesPanel;
     private final List<Table<T>> tables;
 
     public GeneralSelectPanel(final String label, final List<Table<T>> tables) {
         setLayout(new BorderLayout());
 
-        final JPanel inputPanel = new JPanel(new FlowLayout());
+        inputPanel = new JPanel(new FlowLayout());
         searchField = new JTextField(20);
         searchButton = new JButton("Search");
         cancelButton = new JButton("Cancel");
@@ -45,6 +46,18 @@ public class GeneralSelectPanel<T> extends JPanel {
 
     public void addSearchListener(final ActionListener ac) {
         searchButton.addActionListener(ac);
+    }
+
+    protected void removeSearchField () {
+        inputPanel.remove(searchField);
+    }
+
+    protected void removeSearchButton() {
+        inputPanel.remove(searchButton);
+    }
+
+    protected void removeCancelButton() {
+        inputPanel.remove(cancelButton);
     }
 
     public String getData() {
