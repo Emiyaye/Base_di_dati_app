@@ -2,7 +2,7 @@ package Controller;
 
 import java.util.Objects;
 
-import Model.UserModel;
+import Model.Model;
 import View.Op1Panel;
 import View.Op2Panel;
 import View.Op3Panel;
@@ -15,7 +15,7 @@ import data.Dati;
 
 public class UserController {
 
-    private final UserModel model;
+    private final Model model;
     private final UserPanel panel;
     private final Op1Panel Op1Panel = new Op1Panel();
     private final Op2Panel Op2Panel = new Op2Panel();
@@ -25,7 +25,7 @@ public class UserController {
     private final Op6Panel Op6Panel = new Op6Panel();
     private final Op7Panel Op7Panel = new Op7Panel();
 
-    public UserController(final UserModel model, final UserPanel panel) {
+    public UserController(final Model model, final UserPanel panel) {
         Objects.requireNonNull(model);
         Objects.requireNonNull(panel);
         this.model = model;

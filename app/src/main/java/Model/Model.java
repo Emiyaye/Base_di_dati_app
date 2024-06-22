@@ -14,17 +14,15 @@ import java.util.Optional;
 
 import javax.swing.JOptionPane;
 
-import com.mysql.cj.x.protobuf.MysqlxPrepare.Prepare;
-
 import data.DAOUtils;
 import data.Dati;
 import data.Queries;
 
-public class UserModel {
+public class Model {
 
     private final Connection connection;
 
-    public UserModel(final Connection connection) {
+    public Model(final Connection connection) {
         Objects.requireNonNull(connection);
         this.connection = connection;
     }
