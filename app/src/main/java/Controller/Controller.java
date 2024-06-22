@@ -13,7 +13,7 @@ import View.Op7Panel;
 import View.UserPanel;
 import data.Dati;
 
-public class UserController {
+public class Controller {
 
     private final Model model;
     private final UserPanel panel;
@@ -25,7 +25,7 @@ public class UserController {
     private final Op6Panel Op6Panel = new Op6Panel();
     private final Op7Panel Op7Panel = new Op7Panel();
 
-    public UserController(final Model model, final UserPanel panel) {
+    public Controller(final Model model, final UserPanel panel) {
         Objects.requireNonNull(model);
         Objects.requireNonNull(panel);
         this.model = model;

@@ -2,7 +2,7 @@
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import Controller.UserController;
+import Controller.Controller;
 import Model.Model;
 import View.MainFrame;
 import data.DAOUtils;
@@ -21,7 +21,7 @@ public final class App {
         });
         mainFrame.display();
         final Model userModel = new Model(connection);
-        final UserController userController = new UserController(userModel, mainFrame.getUserPanel());
+        final Controller userController = new Controller(userModel, mainFrame.getUserPanel());
         userModel.Op7_searchSong("test");
     }
 
