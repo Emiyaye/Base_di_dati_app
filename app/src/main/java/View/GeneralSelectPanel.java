@@ -39,7 +39,7 @@ public class GeneralSelectPanel<T> extends JPanel {
             table.setTableModel(tableModel);
         }
 
-        add(new JScrollPane(tablesPanel), BorderLayout.CENTER);
+        add(tablesPanel, BorderLayout.CENTER);
         cancelButton.addActionListener(e -> searchField.setText(""));
     }
 
