@@ -19,6 +19,9 @@ public class Dati {
         public record Op4Data(String account, String collaboratore, String nome, String descrizione, String immagine, boolean privato) {
         }
 
+        public record Op5Data(Integer codPlaylist, Integer numero) {
+        }
+
         public record Op7Data(int codiceBrano, int numero, String titolo, int numRiproduzioni, int durata,
                         boolean esplicito, String fonteCrediti,
                         String fileAudio, int codicePubblicazione) {

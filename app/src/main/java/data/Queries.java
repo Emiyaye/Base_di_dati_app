@@ -42,9 +42,9 @@ public final class Queries {
     VALUES (?, ?)
     """;
     public static final String OP5_DELETE_SONG = """
-    DELETE FROM Dettaglio_Playlist D
-    WHERE D.cod_Playlist = ?
-    AND D.numero = ?
+    DELETE FROM Dettaglio_Playlist
+    WHERE codPlaylist = ?   
+    AND numero = ?
     """;
     public static final String OP7_SEARCH_SONG = """
     SELECT *

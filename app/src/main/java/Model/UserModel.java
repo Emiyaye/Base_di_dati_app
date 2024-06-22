@@ -202,12 +202,30 @@ public class UserModel {
         } finally {
             try {
                 connection.setAutoCommit(true);
-            } catch (SQLException e) {
+            } catch (final SQLException e) {
                 e.printStackTrace();
             }
             closeResultSet(rs);
             closePreparedStatement(psCreatePlaylist);
             closePreparedStatement(psInsertCollaborator);
+        }
+    }
+
+    public void Op5_DeleteSong(final int codPlaylist, final int numero) {
+        PreparedStatement ps = null;
+        try {
+            ps = DAOUtils.prepare(connection, Queries.OP5_DELETE_SONG, codPlaylist, numero);
+            final int rows = ps.executeUpdate();
+
+            if (rows > 0) {
+                JOptionPane.showMessageDialog(null, "Operation Succeed!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "Could not find the Song", "Fail", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (final SQLException e) {
+            rollBack(connection, e);
+        } finally {
+            closePreparedStatement(ps);
         }
     }
 
