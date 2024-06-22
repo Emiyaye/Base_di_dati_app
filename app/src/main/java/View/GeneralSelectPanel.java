@@ -29,7 +29,7 @@ public class GeneralSelectPanel<T> extends JPanel {
         add(inputPanel, BorderLayout.NORTH);
 
         // creating table panel
-        tablesPanel = new JPanel(new GridLayout(0, 1));
+        tablesPanel = new JPanel(new GridLayout(1, 0)); // rows adj 
         this.tables = tables;
         for (final var table : this.tables) {
             final DefaultTableModel tableModel = new DefaultTableModel(table.getAttributeNames(), 0);

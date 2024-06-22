@@ -22,6 +22,9 @@ public class Dati {
         public record Op5Data(Integer codPlaylist, Integer numero) {
         }
 
+        public record  Op6Data(String NomeArtista, String NomeAlbum, String NomeAutore, String NomePlaylist, String AutorePlaylist) {
+        }
+
         public record Op7Data(int codiceBrano, int numero, String titolo, int numRiproduzioni, int durata,
                         boolean esplicito, String fonteCrediti,
                         String fileAudio, int codicePubblicazione) {

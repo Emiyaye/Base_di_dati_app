@@ -47,6 +47,28 @@ public final class Queries {
     WHERE codPlaylist = ?
     AND numero = ?
     """;
+    public static final String OP6_GET_ARTIST = """
+    SELECT AC.nickname AS ArtistiSeguiti
+    FROM Account AC, Artista AR, Follow_Account F
+    WHERE F.accountSeguito = AC.email
+    AND AR.email = AC.email
+    AND F.AccountSeguente = ?
+    """;
+    public static final String OP6_GET_ALBUM = """
+    SELECT P.nome AS AlbumSeguiti, AC.nickname AS AutoreAlbum
+    FROM Pubblicazione P, Follow_Pubblicazione FP, Artista AR, Account AC
+    WHERE P.codPubblicazione = FP.codPubblicazione
+    AND P.codArtista = AR.email
+    AND AC.email = AR.email
+    AND FP.codAccount = ?        
+    """;
+    public static final String OP6_GET_PLAYLIST = """
+    SELECT P.nome AS PlaylistSeguiti,  A.nickname
+    FROM Playlist P, Follow_Playlist FP, Account A
+    WHERE P.codPlaylist = FP.codPlaylist
+    AND P.accountCreatore = A.email
+    AND FP.codAccount = ?    
+    """;
     public static final String OP7_SEARCH_SONG = """
     SELECT *
     FROM Brano B

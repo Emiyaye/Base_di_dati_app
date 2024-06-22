@@ -16,6 +16,7 @@ public class UserPanel extends JPanel {
     private final JButton OP3_FollowArtist;
     private final JButton OP4_CreatePlaylist;
     private final JButton OP5_DeleteSong;
+    private final JButton Op6_ViewUserLibrary;
     private final JButton OP7_SearchSongs;
     private JPanel LastPanel;
 
@@ -31,14 +32,22 @@ public class UserPanel extends JPanel {
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
         OP1_CreateAccount = new JButton("OP1 Create Account");
         buttonPanel.add(OP1_CreateAccount);
+
         OP2_InviteAccount = new JButton("OP2 Invite Account");
         buttonPanel.add(OP2_InviteAccount);
+
         OP3_FollowArtist = new JButton("OP3 Follow Artist");
         buttonPanel.add(OP3_FollowArtist);
+
         OP4_CreatePlaylist = new JButton("Op4 Create Playlist and add a Collaborator");
         buttonPanel.add(OP4_CreatePlaylist);
+        
         OP5_DeleteSong = new JButton("Op5 Delete Song");
         buttonPanel.add(OP5_DeleteSong);
+        
+        Op6_ViewUserLibrary = new JButton("Op6 View User Library");
+        buttonPanel.add(Op6_ViewUserLibrary);
+
         OP7_SearchSongs = new JButton("OP7 Search Songs");
         buttonPanel.add(OP7_SearchSongs);
 
@@ -69,6 +78,10 @@ public class UserPanel extends JPanel {
 
     public void addOp5Listener(final ActionListener ac) {
         OP5_DeleteSong.addActionListener(ac);
+    }
+
+    public void addOp6Listener(final ActionListener ac) {
+        Op6_ViewUserLibrary.addActionListener(ac);
     }
 
     public void addOp7Listener(final ActionListener ac) {

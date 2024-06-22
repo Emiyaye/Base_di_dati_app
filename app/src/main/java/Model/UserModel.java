@@ -14,6 +14,8 @@ import java.util.Optional;
 
 import javax.swing.JOptionPane;
 
+import com.mysql.cj.x.protobuf.MysqlxPrepare.Prepare;
+
 import data.DAOUtils;
 import data.Dati;
 import data.Queries;
@@ -142,7 +144,7 @@ public class UserModel {
         } finally {
             try {
                 connection.setAutoCommit(true);
-            } catch (SQLException e) {
+            } catch (final SQLException e) {
                 e.printStackTrace();
             }
             closeResultSet(rsCodAbbonamento);
@@ -234,7 +236,60 @@ public class UserModel {
         }
     }
 
-    
+    public Map<String, List<Dati.Op6Data>> Op6_viewUserLibrary(final String account) {
+        PreparedStatement psGetArtist = null;
+        ResultSet rsArtist = null;
+        PreparedStatement psGetAlbum = null;
+        ResultSet rsAlbum = null;
+        PreparedStatement psGetPlaylist = null;
+        ResultSet rsPlaylist = null;
+        final Map<String, List<Dati.Op6Data>> result = new HashMap<>();
+
+        try {
+            // getArtist
+            psGetArtist = DAOUtils.prepare(connection, Queries.OP6_GET_ARTIST, account);
+            rsArtist = psGetArtist.executeQuery();
+            final List<Dati.Op6Data> artistList = new ArrayList<>();
+            while (rsArtist.next()) {
+                final String nomeArtista = rsArtist.getString("ArtistiSeguiti");
+                artistList.add(new Dati.Op6Data(nomeArtista, "", "", "", ""));
+            }
+            result.put("Artist", artistList);
+
+            // getAlbum
+            psGetAlbum = DAOUtils.prepare(connection, Queries.OP6_GET_ALBUM, account);
+            rsAlbum = psGetAlbum.executeQuery();
+            final List<Dati.Op6Data> albumList = new ArrayList<>();
+            while (rsAlbum.next()) {
+                final String nomeAlbum = rsAlbum.getString("AlbumSeguiti");
+                final String autoreAlbum = rsAlbum.getString("AutoreAlbum");
+                albumList.add(new Dati.Op6Data("", nomeAlbum, autoreAlbum, "", ""));
+            }
+            result.put("Album", albumList);
+
+            // getPlaylist
+            psGetPlaylist = DAOUtils.prepare(connection, Queries.OP6_GET_PLAYLIST, account);
+            rsPlaylist = psGetPlaylist.executeQuery();
+            final List<Dati.Op6Data> playlistList = new ArrayList<>();
+            while (rsPlaylist.next()) {
+                final String nomePlaylist = rsPlaylist.getString("PlaylistSeguiti");
+                final String autorePlaylist = rsPlaylist.getString("nickname");
+                playlistList.add(new Dati.Op6Data("", "", "", nomePlaylist, autorePlaylist));
+            }
+            result.put("Playlist", playlistList);
+        } catch (final SQLException e) {
+            rollBack(connection, e);
+        } finally {
+            closeResultSet(rsArtist);
+            closeResultSet(rsAlbum);
+            closeResultSet(rsPlaylist);
+            closePreparedStatement(psGetArtist);
+            closePreparedStatement(psGetAlbum);
+            closePreparedStatement(psGetPlaylist);
+        }
+
+        return result;
+    }
 
     public Map<String, List<Dati.Op7Data>> Op7_searchSong(final String name) {
         PreparedStatement ps = null;
@@ -265,7 +320,7 @@ public class UserModel {
             closeResultSet(rs);
             closePreparedStatement(ps);
         }
-        result.put("Songs", list);
+        result.put("Songs", new ArrayList<>(list));
         return result;
     }
 

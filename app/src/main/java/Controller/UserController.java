@@ -8,6 +8,7 @@ import View.Op2Panel;
 import View.Op3Panel;
 import View.Op4Panel;
 import View.Op5Panel;
+import View.Op6Panel;
 import View.Op7Panel;
 import View.UserPanel;
 import data.Dati;
@@ -21,6 +22,7 @@ public class UserController {
     private final Op3Panel Op3Panel = new Op3Panel();
     private final Op4Panel Op4Panel = new Op4Panel();
     private final Op5Panel Op5Panel = new Op5Panel();
+    private final Op6Panel Op6Panel = new Op6Panel();
     private final Op7Panel Op7Panel = new Op7Panel();
 
     public UserController(final UserModel model, final UserPanel panel) {
@@ -61,6 +63,12 @@ public class UserController {
         this.Op5Panel.addSubmitListener(e -> {
             final Dati.Op5Data data = this.Op5Panel.getData();
             this.model.Op5_DeleteSong(data.codPlaylist(), data.numero());
+        });
+
+        this.panel.addOp6Listener(e -> panel.updateCenterPanel(Op6Panel));
+        this.Op6Panel.addSearchListener(e -> {
+            final String data = this.Op6Panel.getData();
+            this.Op6Panel.updateTable(this.model.Op6_viewUserLibrary(data));
         });
 
         this.panel.addOp7Listener(e -> panel.updateCenterPanel(Op7Panel));
