@@ -396,6 +396,48 @@ public class Model {
         return result;
     }
 
+    public void OP10_ReproduceTrack(final int brano, final String account, final int msRiprodotti) {
+        PreparedStatement psInsertRip = null;
+        PreparedStatement psUpdateNumRip = null;
+        PreparedStatement psCheckLength = null;
+        ResultSet rsCheckLength = null;
+
+        try {
+            connection.setAutoCommit(false);
+
+            //CHECK
+            psCheckLength = DAOUtils.prepare(connection, Queries.OP_10_GET_LENGTH, brano);
+            rsCheckLength = psCheckLength.executeQuery();
+            rsCheckLength.next();
+            if(rsCheckLength.getInt(1) < msRiprodotti) {
+                rollBackWithCustomMessage("Errore nella riproduzione");
+                return;
+            }
+
+            // Insert in Riproduzione
+            psInsertRip = DAOUtils.prepare(connection, Queries.OP_10_INSERT_RIP, account, account, msRiprodotti, brano, account);
+            psInsertRip.executeUpdate();
+
+            // Update brano numRiproduzioni
+            psUpdateNumRip = DAOUtils.prepare(connection, Queries.OP_10_UPDATE_NUM_RIP, brano);
+            psUpdateNumRip.executeUpdate();
+
+            connection.commit();
+            JOptionPane.showMessageDialog(null, "Operation Succeed!", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+        } catch (final SQLException e) {
+            rollBack(connection, e);
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (final SQLException e) {
+                e.printStackTrace();
+            }
+            closePreparedStatement(psInsertRip);
+            closePreparedStatement(psUpdateNumRip);
+        }
+    }
+
     public Map<String, List<Dati.Op16Data>> Op16_viewActiveAbbonamento() {
         PreparedStatement ps = null;
         ResultSet rs = null;

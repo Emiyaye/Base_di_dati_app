@@ -96,7 +96,7 @@ public final class Queries {
     """;
 
     public static final String OP_9_VIEW_SUB_HISTORY = """
-    SELECT TA.nome AS TipoAbbonamento, TA.durataMesi, A.dataPagamento, A.dataScadenza, A.codAccount AS AccountPagante
+    SELECT DISTINCT TA.nome AS TipoAbbonamento, TA.durataMesi, A.dataPagamento, A.dataScadenza, A.codAccount AS AccountPagante
     FROM Tipo_abbonamento TA, Tipo_pagamento TP, Abbonamento A LEFT OUTER JOIN Invito_abbonamento I ON (I.codAbbonamento = A.codAbbonamento)
     WHERE A.tipoAbbonamento = TA.codTipoAbbonamento
     AND A.codAccount = TP.codAccount
@@ -104,6 +104,36 @@ public final class Queries {
     AND (A.codAccount = ? OR I.codAccount =?)
     ORDER BY dataPagamento   
     """;
+
+    public static final String OP_10_GET_LENGTH = """
+    SELECT B.durata
+    FROM brano B
+    WHERE B.codBrano = ?     
+    """;
+
+    public static final String OP_10_UPDATE_NUM_RIP = """
+    UPDATE Brano B
+    SET B.numRiproduzioni = B.numRiproduzioni + 1
+    WHERE B.codBrano = ?
+    """;
+
+    public static final String OP_10_INSERT_RIP = """
+    INSERT INTO Riproduzione (codAccount, data, ora, numero, msRiprodotti, codBrano, nazione)
+    VALUES(
+    ?,
+    CURDATE(),
+    CURRENT_TIME(),
+    (SELECT COUNT(*)+1
+    FROM Riproduzione R 
+    WHERE R.codAccount = ?
+    AND R.data = CURDATE()),
+    ?,
+    ?,
+    (SELECT A.nazione
+    FROM Account A
+    WHERE A.email = ?))
+    """;
+
     public static final String OP16_VIEW_ACTIVE_ABBONAMENTO = """
     SELECT T.nome, T.durataMesi, COUNT(AB.tipoAbbonamento) AS NumAbbonamentiAttivi
     FROM Account AC, Abbonamento AB, Tipo_abbonamento T
