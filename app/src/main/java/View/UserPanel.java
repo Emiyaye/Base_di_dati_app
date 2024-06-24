@@ -18,6 +18,7 @@ public class UserPanel extends JPanel {
     private final JButton OP5_DeleteSong;
     private final JButton OP6_ViewUserLibrary;
     private final JButton OP7_SearchSongs;
+    private final JButton OP9_SubHistory;
     private JPanel LastPanel;
 
     public UserPanel() {
@@ -50,6 +51,9 @@ public class UserPanel extends JPanel {
 
         OP7_SearchSongs = new JButton("OP7 Search Songs");
         buttonPanel.add(OP7_SearchSongs);
+
+        OP9_SubHistory = new JButton("OP9 Sub History");
+        buttonPanel.add(OP9_SubHistory);
 
         westPanel.add(buttonPanel, BorderLayout.CENTER);
         add(westPanel, BorderLayout.WEST);
@@ -86,6 +90,10 @@ public class UserPanel extends JPanel {
 
     public void addOp7Listener(final ActionListener ac) {
         OP7_SearchSongs.addActionListener(ac);
+    }
+
+    public void addOp9Listener(final ActionListener ac){
+        OP9_SubHistory.addActionListener(ac);
     }
 
     public void updateCenterPanel(final JPanel panel) {

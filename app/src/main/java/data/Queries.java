@@ -74,6 +74,15 @@ public final class Queries {
     FROM Brano B
     WHERE B.titolo LIKE ?
     """;
+    public static final String OP_9_VIEW_SUB_HISTORY = """
+    SELECT TA.nome AS TipoAbbonamento, TA.durataMesi, A.dataPagamento, A.dataScadenza, A.codAccount AS AccountPagante
+    FROM Tipo_abbonamento TA, Tipo_pagamento TP, Abbonamento A LEFT OUTER JOIN Invito_abbonamento I ON (I.codAbbonamento = A.codAbbonamento)
+    WHERE A.tipoAbbonamento = TA.codTipoAbbonamento
+    AND A.codAccount = TP.codAccount
+    AND A.codPagamento = TP.codPagamento
+    AND (A.codAccount = ? OR I.codAccount =?)
+    ORDER BY dataPagamento   
+    """;
     public static final String OP16_VIEW_ACTIVE_ABBONAMENTO = """
     SELECT T.nome, T.durataMesi, COUNT(AB.tipoAbbonamento) AS NumAbbonamentiAttivi
     FROM Account AC, Abbonamento AB, Tipo_abbonamento T

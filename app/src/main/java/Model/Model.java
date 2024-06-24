@@ -323,6 +323,33 @@ public class Model {
         return result;
     }
 
+    public Map<String, List<Dati.Op9Data>> Op9_subHistory(final String email) {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        final Map<String, List<Dati.Op9Data>> result = new HashMap<>();
+        try {
+            ps = DAOUtils.prepare(connection, Queries.OP_9_VIEW_SUB_HISTORY, email, email);
+            rs = ps.executeQuery();
+            final List<Dati.Op9Data> list = new ArrayList<>();
+            while (rs.next()) {
+                final String tipoAbbonamento = rs.getString("TipoAbbonamento");
+                final int durataMesi = rs.getInt("durataMesi");
+                final LocalDate dataPagamento = rs.getDate("dataPagamento").toLocalDate();
+                final LocalDate dataScadenza = rs.getDate("dataScadenza").toLocalDate();
+                final String accountPagante = rs.getString("AccountPagante");
+                list.add(new Dati.Op9Data(tipoAbbonamento, durataMesi, dataPagamento, dataScadenza, accountPagante));
+            }
+            result.put("Subscription history", list);
+        } catch (final SQLException e) {
+            rollBack(connection, e);
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(ps);
+        }
+
+        return result;
+    }
+
     public Map<String, List<Dati.Op16Data>> Op16_viewActiveAbbonamento() {
         PreparedStatement ps = null;
         ResultSet rs = null;

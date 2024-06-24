@@ -29,6 +29,9 @@ public class Dati {
                         boolean esplicito, String fonteCrediti,
                         String fileAudio, int codicePubblicazione) {
         }
+        
+        public record Op9Data(String tipoAbbonamento, int durataMesi, LocalDate dataPagamento, LocalDate dataScadenza, String accountPagante){  
+        }
 
         public record Op16Data(String nome, int durataMesi, int NumAbbonamentiAttivi) {
         }
