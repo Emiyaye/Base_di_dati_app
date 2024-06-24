@@ -435,6 +435,32 @@ public class Model {
             }
             closePreparedStatement(psInsertRip);
             closePreparedStatement(psUpdateNumRip);
+            closePreparedStatement(psCheckLength);
+            closeResultSet(rsCheckLength);
+        }
+    }
+
+    public void OP12_DisableEnableAccount(final boolean sospensione, final String account) {
+        PreparedStatement psEnableDisable = null;
+
+        try {
+            connection.setAutoCommit(false);
+
+            psEnableDisable = DAOUtils.prepare(connection, Queries.OP12_DISABLE_OR_ENABLE_ACCOUNT, sospensione, account);
+            psEnableDisable.executeUpdate();
+
+            connection.commit();
+            JOptionPane.showMessageDialog(null, "Operation Succeed! Set ACCOUNT.sospeso to "+ sospensione, "Success", JOptionPane.INFORMATION_MESSAGE);
+
+        } catch (final SQLException e) {
+            rollBack(connection, e);
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (final SQLException e) {
+                e.printStackTrace();
+            }
+            closePreparedStatement(psEnableDisable);
         }
     }
 

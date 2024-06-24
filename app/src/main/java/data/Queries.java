@@ -134,6 +134,12 @@ public final class Queries {
     WHERE A.email = ?))
     """;
 
+    public static final String OP12_DISABLE_OR_ENABLE_ACCOUNT = """
+    UPDATE Account
+    SET sospeso = ?
+    WHERE Account.email = ?
+    """;
+
     public static final String OP16_VIEW_ACTIVE_ABBONAMENTO = """
     SELECT T.nome, T.durataMesi, COUNT(AB.tipoAbbonamento) AS NumAbbonamentiAttivi
     FROM Account AC, Abbonamento AB, Tipo_abbonamento T

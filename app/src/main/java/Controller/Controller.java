@@ -14,6 +14,7 @@ import View.Op7Panel;
 import View.Op8Panel;
 import View.Op9Panel;
 import View.Op10Panel;
+import View.Op12Panel;
 import View.Op16Panel;
 import View.Op17Panel;
 import View.Op18Panel;
@@ -35,6 +36,7 @@ public class Controller {
     private final Op8Panel Op8Panel = new Op8Panel();
     private final Op9Panel Op9Panel = new Op9Panel();
     private final Op10Panel Op10Panel = new Op10Panel();
+    private final Op12Panel Op12Panel = new Op12Panel();
     private final Op16Panel Op16Panel = new Op16Panel();
     private final Op17Panel Op17Panel = new Op17Panel();
     private final Op18Panel Op18Panel = new Op18Panel();
@@ -109,6 +111,12 @@ public class Controller {
         this.Op10Panel.addSubmitListener(e -> {
             final Dati.Op10Data data = this.Op10Panel.getData();
             this.model.OP10_ReproduceTrack(data.codBrano(), data.email(), data.msRiprodotti());
+        });
+
+        this.adminPanel.addOp12Listener(e -> adminPanel.updateCenterPanel(Op12Panel));
+        this.Op12Panel.addSubmitListener(e -> {
+            final Dati.Op12Data data = this.Op12Panel.getData();
+            this.model.OP12_DisableEnableAccount(data.disable(), data.account());
         });
 
         this.adminPanel.addOp16Listener(e -> {
