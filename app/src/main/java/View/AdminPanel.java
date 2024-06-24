@@ -12,6 +12,7 @@ public class AdminPanel extends JPanel {
 
     private final JButton back;
     private final JButton OP12_DisableEnableAccount;
+    private final JButton OP13_TrackAnalysis;
     private final JButton OP16_viewActiveAbbonamento;
     private final JButton OP17_PopularArtist;
     private final JButton OP18_ServiceTurnover;
@@ -28,8 +29,11 @@ public class AdminPanel extends JPanel {
         final JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
 
-        OP12_DisableEnableAccount = new JButton("OP12_DisableEnableAccount");
+        OP12_DisableEnableAccount = new JButton("OP12 DisableEnableAccount");
         buttonPanel.add(OP12_DisableEnableAccount);
+
+        OP13_TrackAnalysis = new JButton("OP13 TrackAnalysis");
+        buttonPanel.add(OP13_TrackAnalysis);
 
         OP16_viewActiveAbbonamento = new JButton("OP16 View Active Abbonamento");
         buttonPanel.add(OP16_viewActiveAbbonamento);
@@ -47,6 +51,10 @@ public class AdminPanel extends JPanel {
 
     public void addOp12Listener (final ActionListener ac) {
         OP12_DisableEnableAccount.addActionListener(ac);
+    }
+
+    public void addOp13Listener (final ActionListener ac) {
+        OP13_TrackAnalysis.addActionListener(ac);
     }
 
     public void addOp16Listener (final ActionListener ac) {

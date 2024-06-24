@@ -140,6 +140,66 @@ public final class Queries {
     WHERE Account.email = ?
     """;
 
+    public static final String OP_13_GET_TRACK_NAME = """
+    SELECT B.titolo
+    from brano B
+    where B.codBrano = ?
+    """;
+
+    public static final String OP_13_CHECK_ANALISYS = """
+    SELECT *
+    FROM Analisi_brano
+    WHERE codBrano = ?        
+    """;
+
+    public static final String OP_13_CREATE_PLAYLIST_ADMIN = """
+    INSERT INTO Playlist (nome, descrizione, immagine, admin, privato, radio, accountCreatore)
+    VALUES (?, ?, ?, True, False, True, "admin@spotify.com")   
+    """;
+
+    public static final String OP_13_ANALISYS = """
+    INSERT INTO Analisi_Brano
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)   
+    """;
+
+    public static final String OP_13_GET_RADIO_TRACKS = """
+    SELECT B.codBrano
+    FROM brano B
+    ORDER BY RAND()
+    LIMIT ?        
+    """;
+
+    public static final String OP_13_FILL_PLAYLIST = """
+    INSERT INTO Dettaglio_Playlist (codPlaylist, numero, dataAggiunta, codBrano, codAccount)
+    VALUES (?, ?, CURDATE(), ?, "admin@spotify.com")  
+    """;
+
+    public static final String OP_13_GET_ADVISED_PLAYLISTS = """
+    SELECT P.codPlaylist
+    FROM Playlist P
+    WHERE P.admin = true
+    AND P.codPlaylist <> ?
+    ORDER BY RAND()
+    LIMIT ?
+    """;
+
+    public static final String OP_13_PLAYLIST_ADVISE = """
+    INSERT INTO Consiglio_Playlist
+    VALUES (?,?)
+    """;
+
+    public static final String OP_13_GET_GENRES = """
+    SELECT codSottogenere
+    FROM Sottogenere
+    ORDER BY RAND()
+    LIMIT 2
+    """;
+
+    public static final String OP_13_TRACK_GENRE = """
+    INSERT INTO Genere_Brano
+    VALUES(?,?)   
+    """;
+
     public static final String OP16_VIEW_ACTIVE_ABBONAMENTO = """
     SELECT T.nome, T.durataMesi, COUNT(AB.tipoAbbonamento) AS NumAbbonamentiAttivi
     FROM Account AC, Abbonamento AB, Tipo_abbonamento T

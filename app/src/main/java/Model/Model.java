@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Random;
 
 import javax.swing.JOptionPane;
 
@@ -21,6 +22,8 @@ import data.Queries;
 public class Model {
 
     private final Connection connection;
+    private static final int PLAYLIST_LENGTH = 25;
+    private static final int N_ADVISED_PLAYLISTS = 5;
 
     public Model(final Connection connection) {
         Objects.requireNonNull(connection);
@@ -461,6 +464,106 @@ public class Model {
                 e.printStackTrace();
             }
             closePreparedStatement(psEnableDisable);
+        }
+    }
+
+    public void OP13_TrackAnalysis(final int brano, final String radioImage) {
+        PreparedStatement psCheckAnalysis = null;
+        PreparedStatement psCreateAdminPlaylist = null;
+        PreparedStatement psGetTrackName = null;
+        PreparedStatement psAnalysis = null;
+        PreparedStatement psFillPlaylist = null;
+        PreparedStatement psGetRadioTracks = null;
+        PreparedStatement psGetAdvisedPlaylists = null;
+        PreparedStatement psInsertAdvisedPlaylists = null;
+        PreparedStatement psGetTrackGenre = null;
+        PreparedStatement psInsertTrackGenre = null;
+        ResultSet rsCheckAnalysis = null;
+        ResultSet rsGetTrackName = null;
+        ResultSet rsCreateAdminPlaylist = null;
+        ResultSet rsGetRadioTracks = null;
+        ResultSet rsGetAdvisedPlaylists = null;
+        ResultSet rsGetTrackGenre = null;
+
+        try {
+            connection.setAutoCommit(false);
+
+            //CHECK
+            psCheckAnalysis = DAOUtils.prepare(connection, Queries.OP_13_CHECK_ANALISYS, brano);
+            rsCheckAnalysis = psCheckAnalysis.executeQuery();
+            if(rsCheckAnalysis.next()) {
+                rollBackWithCustomMessage("Il brano è già stato analizzato");
+                return;
+            }
+
+            psGetTrackName = DAOUtils.prepare(connection, Queries.OP_13_GET_TRACK_NAME, brano);
+            rsGetTrackName = psGetTrackName.executeQuery();
+            rsGetTrackName.next();
+
+            String trackTitle = rsGetTrackName.getString(1);
+
+            psCreateAdminPlaylist = DAOUtils.prepare(connection, Queries.OP_13_CREATE_PLAYLIST_ADMIN, "Radio di "+trackTitle, "", radioImage);
+            psCreateAdminPlaylist.executeUpdate();
+
+            rsCreateAdminPlaylist = psCreateAdminPlaylist.getGeneratedKeys();
+            int codRadio = -1;
+            if (rsCreateAdminPlaylist.next()) {
+                codRadio = rsCreateAdminPlaylist.getInt(1);
+            }
+
+            final Object[] analysisValues = new Object[12];
+            Random random = new Random();
+
+            analysisValues[0]=brano;
+            analysisValues[1]=codRadio;
+
+            for (int i=2; i<analysisValues.length; i++) {
+                analysisValues[i] = random.nextInt(256);
+            }
+
+            psAnalysis = DAOUtils.prepare(connection, Queries.OP_13_ANALISYS, analysisValues);
+            psAnalysis.executeUpdate();
+
+            psGetRadioTracks = DAOUtils.prepare(connection, Queries.OP_13_GET_RADIO_TRACKS, PLAYLIST_LENGTH);
+            rsGetRadioTracks = psGetRadioTracks.executeQuery();
+
+            int i = 1;
+            while(rsGetRadioTracks.next()) {
+                final int codBrano = rsGetRadioTracks.getInt(1);
+                psFillPlaylist = DAOUtils.prepare(connection, Queries.OP_13_FILL_PLAYLIST, codRadio, i++, codBrano);
+                psFillPlaylist.executeUpdate();
+            }
+
+            psGetAdvisedPlaylists = DAOUtils.prepare(connection, Queries.OP_13_GET_ADVISED_PLAYLISTS, codRadio, N_ADVISED_PLAYLISTS);
+            rsGetAdvisedPlaylists = psGetAdvisedPlaylists.executeQuery();
+
+            while(rsGetAdvisedPlaylists.next()) {
+                final int codPlaylist = rsGetAdvisedPlaylists.getInt(1);
+                psInsertAdvisedPlaylists = DAOUtils.prepare(connection, Queries.OP_13_PLAYLIST_ADVISE, codPlaylist, codRadio);
+                psInsertAdvisedPlaylists.executeUpdate();
+            }
+
+            psGetTrackGenre = DAOUtils.prepare(connection, Queries.OP_13_GET_GENRES);
+            rsGetTrackGenre = psGetTrackGenre.executeQuery();
+
+            while(rsGetTrackGenre.next()) {
+                final int codSottogenere = rsGetTrackGenre.getInt(1);
+                psInsertTrackGenre = DAOUtils.prepare(connection, Queries.OP_13_TRACK_GENRE, brano, codSottogenere);
+                psInsertTrackGenre.executeUpdate();
+            }
+
+            connection.commit();
+            JOptionPane.showMessageDialog(null, "Analysis Succeed!", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+        } catch (final SQLException e) {
+            rollBack(connection, e);
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (final SQLException e) {
+                e.printStackTrace();
+            }
+            closePreparedStatement(psCreateAdminPlaylist);
         }
     }
 

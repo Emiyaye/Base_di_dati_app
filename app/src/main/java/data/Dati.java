@@ -37,10 +37,13 @@ public class Dati {
         public record Op9Data(String tipoAbbonamento, int durataMesi, LocalDate dataPagamento, LocalDate dataScadenza, String accountPagante){  
         }
 
-        public record Op10Data (int codBrano, String email, int msRiprodotti){
+        public record Op10Data(int codBrano, String email, int msRiprodotti){
         }
 
-        public record Op12Data (boolean disable, String account){
+        public record Op12Data(boolean disable, String account){
+        }
+
+        public record Op13Data(int codBrano, String linkImage){
         }
 
         public record Op16Data(String nome, int durataMesi, int NumAbbonamentiAttivi) {
