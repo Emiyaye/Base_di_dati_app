@@ -74,6 +74,27 @@ public final class Queries {
     FROM Brano B
     WHERE B.titolo LIKE ?
     """;
+
+    public static final String OP_8_VIEW_ALBUM = """
+    SELECT P.nome, AC.nickname AS Artista, ROUND(SUM(B.durata)/60000) AS DurataMinuti, ROUND((SUM(B.durata)/1000)%60) AS DurataSecondi, COUNT(codBrano) AS NumeroBrani, P.numFollowers
+    FROM Pubblicazione P, Artista AR, Account AC, Brano B
+    WHERE B.codPubblicazione = P.codPubblicazione
+    AND P.codArtista = AR.email
+    AND AR.email = AC.email
+    AND P.codPubblicazione = ?
+    GROUP BY P.nome, AC.nickname, P.numFollowers        
+    """;
+
+    public static final String OP_8_VIEW_ALBUM_DETAILS = """
+    SELECT B.titolo, B.numRiproduzioni, AC.nickname AS Cantante
+    FROM Brano B, Account AC, Artista AR, Esecuzione_brano E
+    WHERE AC.email = AR.email
+    AND E.codArtista = AR.email
+    AND E.codBrano = B.codBrano
+    AND B.codPubblicazione = ?
+    order by B.numero
+    """;
+
     public static final String OP_9_VIEW_SUB_HISTORY = """
     SELECT TA.nome AS TipoAbbonamento, TA.durataMesi, A.dataPagamento, A.dataScadenza, A.codAccount AS AccountPagante
     FROM Tipo_abbonamento TA, Tipo_pagamento TP, Abbonamento A LEFT OUTER JOIN Invito_abbonamento I ON (I.codAbbonamento = A.codAbbonamento)

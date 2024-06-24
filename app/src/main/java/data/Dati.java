@@ -29,6 +29,10 @@ public class Dati {
                         boolean esplicito, String fonteCrediti,
                         String fileAudio, int codicePubblicazione) {
         }
+
+        public record Op8Data(String nome, String artista, int durataMin, int durataSec, int numBrani, int numFollowers,
+                        String titolo, int numRiproduzioni, String cantante) {
+        }
         
         public record Op9Data(String tipoAbbonamento, int durataMesi, LocalDate dataPagamento, LocalDate dataScadenza, String accountPagante){  
         }

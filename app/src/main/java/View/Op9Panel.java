@@ -9,7 +9,7 @@ public class Op9Panel extends GeneralSelectPanel<Dati.Op9Data>{
     public Op9Panel() {
         super("Subscription history",
                 List.of(new Table<>("Subscription history",
-                        new String[]{"Tipo Abbonamento", "durataMesi", "Data Pagamento", "Data Scadenza", "Account Pagante"},
+                        new String[]{"Tipo Abbonamento", "DurataMesi", "Data Pagamento", "Data Scadenza", "Account Pagante"},
                         Op9Panel::function)));
     }
 

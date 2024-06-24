@@ -323,6 +323,52 @@ public class Model {
         return result;
     }
 
+    public Map<String, List<Dati.Op8Data>> Op8_viewAlbum (final int codPubblicazione) {
+        PreparedStatement psViewAlbum = null;
+        ResultSet rsAlbum = null;
+        PreparedStatement psViewDetail = null;
+        ResultSet rsDetail = null;
+        final Map<String, List<Dati.Op8Data>> result = new HashMap<>();
+        try {
+
+            //view Album
+            psViewAlbum = DAOUtils.prepare(connection, Queries.OP_8_VIEW_ALBUM, codPubblicazione);
+            rsAlbum = psViewAlbum.executeQuery();
+            final List<Dati.Op8Data> albumList = new ArrayList<>();
+            while(rsAlbum.next()) {
+                final String nome = rsAlbum.getString("nome");
+                final String artista = rsAlbum.getString("Artista");
+                final int durataMin = rsAlbum.getInt("DurataMinuti");
+                final int durataSecondi = rsAlbum.getInt("DurataSecondi");
+                final int numeroBrani = rsAlbum.getInt("NumeroBrani");
+                final int numFollowers = rsAlbum.getInt("numFollowers");
+                albumList.add(new Dati.Op8Data(nome, artista, durataMin, durataSecondi, numeroBrani, numFollowers, "", 0, ""));
+            }
+            result.put("Visualizza album", albumList);
+
+            //view details album
+            psViewDetail = DAOUtils.prepare(connection, Queries.OP_8_VIEW_ALBUM_DETAILS, codPubblicazione);
+            rsDetail = psViewDetail.executeQuery();
+            final List<Dati.Op8Data> detailList = new ArrayList<>();
+            while(rsDetail.next()) {
+                final String titolo = rsDetail.getString("titolo");
+                final int numRiproduzioni = rsDetail.getInt("NumRiproduzioni");
+                final String cantante = rsDetail.getString("Cantante");
+                detailList.add(new Dati.Op8Data("","",0,0,0,0,titolo,numRiproduzioni,cantante));
+            }
+            result.put("Visualizza brani", detailList);
+        } catch (final SQLException e) {
+            rollBack(connection, e);
+        } finally {
+            closeResultSet(rsAlbum);
+            closePreparedStatement(psViewAlbum);
+            closeResultSet(rsDetail);
+            closePreparedStatement(psViewDetail);
+        }
+
+        return result;
+    }
+
     public Map<String, List<Dati.Op9Data>> Op9_subHistory(final String email) {
         PreparedStatement ps = null;
         ResultSet rs = null;
