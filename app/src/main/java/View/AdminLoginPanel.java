@@ -16,6 +16,9 @@ public class AdminLoginPanel extends AbstractInsertPanel<Dati.AdminLogin> {
         super(new String[] { FIELD1, FIELD2 }, "Insert", "Cancel");
         this.backButton = new JButton("Back");
         addComponent(backButton, getGbc(), 2, 2, GridBagConstraints.WEST);
+        final var data = getTextFieldMap();
+        data.get("Email").setText("admin@spotify.com");
+        data.get("Password").setText("password");
     }
 
     public void addBackListener(final ActionListener ac) {
