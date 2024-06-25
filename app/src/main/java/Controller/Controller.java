@@ -16,11 +16,8 @@ import View.Op9Panel;
 import View.Op10Panel;
 import View.Op12Panel;
 import View.Op13Panel;
-<<<<<<< HEAD
 import View.Op14Panel;
-=======
 import View.Op15Panel;
->>>>>>> 2da4b70b0344be7ebfdefba1278a4bf6a0f78ae8
 import View.Op16Panel;
 import View.Op17Panel;
 import View.Op18Panel;
@@ -44,11 +41,8 @@ public class Controller {
     private final Op10Panel Op10Panel = new Op10Panel();
     private final Op12Panel Op12Panel = new Op12Panel();
     private final Op13Panel Op13Panel = new Op13Panel();
-<<<<<<< HEAD
     private final Op14Panel Op14Panel = new Op14Panel();
-=======
     private final Op15Panel Op15Panel = new Op15Panel();
->>>>>>> 2da4b70b0344be7ebfdefba1278a4bf6a0f78ae8
     private final Op16Panel Op16Panel = new Op16Panel();
     private final Op17Panel Op17Panel = new Op17Panel();
     private final Op18Panel Op18Panel = new Op18Panel();
@@ -137,17 +131,16 @@ public class Controller {
             this.model.OP13_TrackAnalysis(data.codBrano(), data.linkImage());
         });
 
-<<<<<<< HEAD
         this.adminPanel.addOp14Listener(e -> adminPanel.updateCenterPanel(Op14Panel));
         this.Op14Panel.addSearchListener(e -> {
             final String data = this.Op14Panel.getData();
             this.Op14Panel.updateTable(this.model.OP14_Top50(data));
-=======
-        this.adminPanel.addOp15Listener(e -> adminPanel.updateCenterPanel(Op15Panel));
+        });
+        
+        this.userPanel.addOp15Listener(e -> userPanel.updateCenterPanel(Op15Panel));
         this.Op15Panel.addSearchListener(e -> {
             final String data = this.Op15Panel.getData();
             this.Op15Panel.updateTable(this.model.Op15_artistSongs(data));
->>>>>>> 2da4b70b0344be7ebfdefba1278a4bf6a0f78ae8
         });
 
         this.adminPanel.addOp16Listener(e -> {

@@ -237,13 +237,20 @@ public final class Queries {
     ORDER BY D.numero
     """;
 
+    public static final String OP15_GET_ARTIST = """
+    SELECT AC.nickname, AR.verificato
+    FROM Account AC, Artista AR
+    WHERE AC.email = AR.email
+    AND AR.email = ?      
+    """;
+
     public static final String OP15_VIEW_TOP5MOSTPOPULAR_SONG = """
-    SELECT AC.nickname, AR.verificato, B.titolo, B.durata, B.numRiproduzioni
-    FROM Brano B, Artista AR, Account AC, Esecuzione_Brano E
+    SELECT B.titolo, B.numRiproduzioni
+    FROM brano B, esecuzione_brano E
     WHERE E.codBrano = B.codBrano
-    AND AR.email = AC.email
     AND E.codArtista = ?
-    ORDER BY COUNT(B.numRiproduzioni) DESC
+    ORDER BY B.numRiproduzioni DESC
+    LIMIT 5
     """;
 
     public static final String OP16_VIEW_ACTIVE_ABBONAMENTO = """

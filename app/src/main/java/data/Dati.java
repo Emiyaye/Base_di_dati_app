@@ -52,8 +52,7 @@ public class Dati {
         public record Op13Data(int codBrano, String linkImage) {
         }
 
-        public record Op15Data(String nickname, boolean verificato, String titolo, Integer durata,
-                        Integer numRiproduzioni) {
+        public record Op15Data(String nickname, boolean verificato, String titolo, int numRiproduzioni) {
         }
 
         public record Op14Data(String titolo, String artista, int numRiproduzioni, int durataMinuti, int durataSecondi, boolean esplicito){
