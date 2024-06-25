@@ -119,6 +119,7 @@ public class Model {
         PreparedStatement psGetCodAbbonamento = null;
         PreparedStatement psGetCodAbbonamentoInvitato = null;
         ResultSet rsCodAbbonamento = null;
+        ResultSet rsCodAbbonamentoInvitato = null;
         PreparedStatement psCreateInvitoAbbonamento = null;
         PreparedStatement psUpdateCodAbbonamento = null;
         try {
@@ -134,10 +135,10 @@ public class Model {
 
             // CHECK
             psGetCodAbbonamentoInvitato = DAOUtils.prepare(connection, Queries.OP2_GET_CODABBONAMENTO, accountInvitato);
-            rsCodAbbonamento = psGetCodAbbonamentoInvitato.executeQuery();
+            rsCodAbbonamentoInvitato = psGetCodAbbonamentoInvitato.executeQuery();
             // If i can find any result that mean that the account has already an
             // abbonamento
-            if (rsCodAbbonamento.next()) {
+            if (rsCodAbbonamentoInvitato.next() && rsCodAbbonamentoInvitato.getInt(1) != 0) {
                 rollBackWithCustomMessage("L'account invitato ha gia' un abbonanamento");
                 return;
             }
@@ -164,6 +165,7 @@ public class Model {
                 e.printStackTrace();
             }
             closeResultSet(rsCodAbbonamento);
+            closeResultSet(rsCodAbbonamentoInvitato);
             closePreparedStatement(psGetCodAbbonamento);
             closePreparedStatement(psGetCodAbbonamento);
             closePreparedStatement(psUpdateCodAbbonamento);
