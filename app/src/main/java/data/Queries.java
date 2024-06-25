@@ -50,6 +50,12 @@ public final class Queries {
     INSERT INTO Follow_Playlist
     VALUES (?, ?)        
     """;
+    public static final String OP5_CHECK_UTENTE = """
+    SELECT codPlaylist
+    FROM Playlist
+    WHERE admin = true
+    AND codPlaylist = ?
+    """;
     public static final String OP5_DELETE_SONG =
     """
     DELETE FROM Dettaglio_Playlist

@@ -241,14 +241,25 @@ public class Model {
 
     public void Op5_DeleteSong(final int codPlaylist, final int numero) {
         PreparedStatement ps = null;
+        PreparedStatement psCheck = null;
+        ResultSet rsCheck = null;
         try {
+
+            psCheck = DAOUtils.prepare(connection, Queries.OP5_CHECK_UTENTE, codPlaylist);
+            rsCheck = psCheck.executeQuery();
+
+            if(rsCheck.next() && rsCheck.getInt(1) != 0) {
+                rollBackWithCustomMessage("Cannot modify, admin Playlist!");
+                return;
+            }
+
             ps = DAOUtils.prepare(connection, Queries.OP5_DELETE_SONG, codPlaylist, numero);
             final int rows = ps.executeUpdate();
 
             if (rows > 0) {
                 JOptionPane.showMessageDialog(null, "Operation Succeed!", "Success", JOptionPane.INFORMATION_MESSAGE);
             } else {
-                JOptionPane.showMessageDialog(null, "Could not find the Song", "Fail", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Could not find the Song or Playlist", "Fail", JOptionPane.ERROR_MESSAGE);
             }
         } catch (final SQLException e) {
             rollBack(connection, e);
