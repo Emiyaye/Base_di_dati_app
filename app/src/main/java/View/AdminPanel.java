@@ -36,7 +36,7 @@ public class AdminPanel extends JPanel {
         OP13_TrackAnalysis = new JButton("OP13 TrackAnalysis");
         buttonPanel.add(OP13_TrackAnalysis);
 
-        OP15_PopularArtistSongs = new JButton("OP!5 Top 5 most popular songs by artist");
+        OP15_PopularArtistSongs = new JButton("OP15 Top 5 most popular songs by artist");
         buttonPanel.add(OP15_PopularArtistSongs);
 
         OP16_viewActiveAbbonamento = new JButton("OP16 View Active Abbonamento");
