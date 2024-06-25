@@ -175,10 +175,7 @@ public class Model {
     public void Op3_followArtist(final String accountSeguito, final String accountSeguente) {
         PreparedStatement ps = null;
         try {
-            if (accountSeguente.equals(accountSeguito)) {
-                rollBackWithCustomMessage("Non puoi seguire te stesso");
-                return;
-            }
+
             // Insert into Follow account
             ps = DAOUtils.prepare(connection, Queries.OP3_FOLLOW_ARTIST, accountSeguito, accountSeguente);
             ps.executeUpdate();
