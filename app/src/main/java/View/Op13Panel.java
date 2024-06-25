@@ -13,7 +13,7 @@ public class Op13Panel extends AbstractInsertPanel<Dati.Op13Data> {
     }
 
     @Override
-    public Op13Data getData() {
+    public Op13Data data() {
         final var data = getTextFieldMap();
         return new Dati.Op13Data(Integer.parseInt(data.get(FIELD1).getText()),
                 data.get(FIELD2).getText());

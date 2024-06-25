@@ -23,7 +23,7 @@ public class AdminLoginPanel extends AbstractInsertPanel<Dati.AdminLogin> {
     }
 
     @Override
-    public Dati.AdminLogin getData() {
+    public Dati.AdminLogin data() {
         final var data = getTextFieldMap();
         return new Dati.AdminLogin(data.get(FIELD1).getText(), data.get(FIELD2).getText());
     }

@@ -24,7 +24,7 @@ public class Op1Panel extends AbstractInsertPanel<Dati.Op1Data> {
     }
 
     @Override
-    public Op1Data getData() {
+    public Op1Data data() {
         final var textFieldMap = getTextFieldMap();
         return new Dati.Op1Data(
                 textFieldMap.get(FIELD1).getText(),

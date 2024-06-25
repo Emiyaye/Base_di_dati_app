@@ -10,6 +10,7 @@ import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -56,7 +57,16 @@ public abstract class AbstractInsertPanel<T> extends JPanel {
         return gbc;
     }
 
-    public abstract T getData();
+    protected abstract T data();
+
+    public T getData() {
+        try {
+            return data();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error on inserted data", "Operation failed", JOptionPane.ERROR_MESSAGE);
+            throw new IllegalArgumentException(e);
+        }
+    }
 
     protected void addComponent(final Component component, final GridBagConstraints gbc,
             final int gridx, final int gridy, final int anchor) {

@@ -12,7 +12,7 @@ public class Op12Panel extends AbstractInsertPanel<Dati.Op12Data> {
     }
 
     @Override
-    public Dati.Op12Data getData() {
+    public Dati.Op12Data data() {
         final var data = getTextFieldMap();
         return new Dati.Op12Data(Boolean.parseBoolean(data.get(FIELD1).getText()),
                 data.get(FIELD2).getText());

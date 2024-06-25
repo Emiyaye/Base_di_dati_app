@@ -12,7 +12,7 @@ public class Op10Panel extends AbstractInsertPanel<Dati.Op10Data> {
         super(new String[] {FIELD1, FIELD2, FIELD3}, "Reproduce", "Cancel");
     }
 
-    public Dati.Op10Data getData() {
+    public Dati.Op10Data data() {
         final var data = getTextFieldMap();
         return new Dati.Op10Data(Integer.parseInt(data.get(FIELD1).getText()),
                 data.get(FIELD2).getText(),

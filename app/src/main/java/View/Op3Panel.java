@@ -13,7 +13,7 @@ public class Op3Panel extends AbstractInsertPanel<Dati.Op3Data> {
     }
 
     @Override
-    public Dati.Op3Data getData() {
+    public Dati.Op3Data data() {
         final var data = getTextFieldMap();
         return new Dati.Op3Data(data.get(FIELD1).getText(), data.get(FIELD2).getText());
     }

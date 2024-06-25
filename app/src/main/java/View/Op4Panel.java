@@ -17,7 +17,7 @@ public class Op4Panel extends AbstractInsertPanel<Dati.Op4Data> {
     }
 
     @Override
-    public Dati.Op4Data getData() {
+    public Dati.Op4Data data() {
         final var data = getTextFieldMap();
         return new Dati.Op4Data(data.get(FIELD1).getText(), data.get(FIELD2).getText(), data.get(FIELD3).getText(),
                 data.get(FIELD4).getText(), data.get(FIELD5).getText(),
