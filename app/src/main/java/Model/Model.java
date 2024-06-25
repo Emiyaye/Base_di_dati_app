@@ -563,7 +563,22 @@ public class Model {
             } catch (final SQLException e) {
                 e.printStackTrace();
             }
+            closePreparedStatement(psCheckAnalysis);
             closePreparedStatement(psCreateAdminPlaylist);
+            closePreparedStatement(psGetTrackName);
+            closePreparedStatement(psAnalysis);
+            closePreparedStatement(psFillPlaylist);
+            closePreparedStatement(psGetRadioTracks);
+            closePreparedStatement(psGetAdvisedPlaylists);
+            closePreparedStatement(psInsertAdvisedPlaylists);
+            closePreparedStatement(psGetTrackGenre);
+            closePreparedStatement(psInsertTrackGenre);
+            closeResultSet(rsCheckAnalysis);
+            closeResultSet(rsGetTrackName);
+            closeResultSet(rsCreateAdminPlaylist);
+            closeResultSet(rsGetRadioTracks);
+            closeResultSet(rsGetAdvisedPlaylists);
+            closeResultSet(rsGetTrackGenre);
         }
     }
 
