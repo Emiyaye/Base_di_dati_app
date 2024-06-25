@@ -21,11 +21,8 @@ public class UserPanel extends JPanel {
     private final JButton OP8_ViewAlbum;
     private final JButton OP9_SubHistory;
     private final JButton OP10_ReproduceTrack;
-<<<<<<< HEAD
     private final JButton OP11_AddTextSong;
-=======
-    private final JButton Op15_artistSongs;
->>>>>>> 20aeced973bb6a9addcb55242a446df4c0f647d0
+    private final JButton OP15_ArtistSongs;
     private JPanel LastPanel;
 
     public UserPanel() {
@@ -68,13 +65,11 @@ public class UserPanel extends JPanel {
         OP10_ReproduceTrack = new JButton("OP10 Reproduce Track");
         buttonPanel.add(OP10_ReproduceTrack);
 
-<<<<<<< HEAD
-        OP11_AddTextSong = new JButton("OP11 Add Text to a song");
+        OP11_AddTextSong = new JButton("Add text to a song");
         buttonPanel.add(OP11_AddTextSong);
-=======
-        Op15_artistSongs = new JButton("Op15_artistSongs");
-        buttonPanel.add(Op15_artistSongs);
->>>>>>> 20aeced973bb6a9addcb55242a446df4c0f647d0
+
+        OP15_ArtistSongs = new JButton("Top 5 most popular songs by artis");
+        buttonPanel.add(OP15_ArtistSongs);
 
         westPanel.add(buttonPanel, BorderLayout.CENTER);
         add(westPanel, BorderLayout.WEST);
@@ -125,14 +120,14 @@ public class UserPanel extends JPanel {
         OP10_ReproduceTrack.addActionListener(ac);
     }
 
-<<<<<<< HEAD
     public void addOp11Listener(final ActionListener ac){
         OP11_AddTextSong.addActionListener(ac);
-=======
-    public void addOp15Listener(final ActionListener ac){
-        Op15_artistSongs.addActionListener(ac);
->>>>>>> 20aeced973bb6a9addcb55242a446df4c0f647d0
     }
+
+    public void addOp15Listener(final ActionListener ac){
+        OP15_ArtistSongs.addActionListener(ac);
+    }
+
 
     public void updateCenterPanel(final JPanel panel) {
             remove(LastPanel);
@@ -142,5 +137,4 @@ public class UserPanel extends JPanel {
         revalidate();
         repaint();
     }
-
 }

@@ -359,8 +359,8 @@ public class Model {
             rollBack(connection, e);
         } finally {
             closeResultSet(rsAlbum);
-            closePreparedStatement(psViewAlbum);
             closeResultSet(rsDetail);
+            closePreparedStatement(psViewAlbum);
             closePreparedStatement(psViewDetail);
         }
 
@@ -406,8 +406,8 @@ public class Model {
             //CHECK
             psCheckLength = DAOUtils.prepare(connection, Queries.OP_10_GET_LENGTH, brano);
             rsCheckLength = psCheckLength.executeQuery();
-            rsCheckLength.next();
-            if(rsCheckLength.getInt(1) < msRiprodotti) {
+            
+            if(!rsCheckLength.next() || rsCheckLength.getInt(1) < msRiprodotti) {
                 rollBackWithCustomMessage("Errore nella riproduzione");
                 return;
             }
@@ -433,6 +433,7 @@ public class Model {
             } catch (final SQLException e) {
                 e.printStackTrace();
             }
+            closeResultSet(rsCheckLength);
             closePreparedStatement(psInsertRip);
             closePreparedStatement(psUpdateNumRip);
             closePreparedStatement(psCheckLength);
@@ -527,9 +528,11 @@ public class Model {
 
             psGetTrackName = DAOUtils.prepare(connection, Queries.OP_13_GET_TRACK_NAME, brano);
             rsGetTrackName = psGetTrackName.executeQuery();
-            rsGetTrackName.next();
 
-            final String trackTitle = rsGetTrackName.getString(1);
+            String trackTitle = "";
+            if(rsGetTrackName.next()){
+                trackTitle = rsGetTrackName.getString(1);
+            }
 
             psCreateAdminPlaylist = DAOUtils.prepare(connection, Queries.OP_13_CREATE_PLAYLIST_ADMIN, "Radio di "+trackTitle, "", radioImage);
             psCreateAdminPlaylist.executeUpdate();
@@ -592,6 +595,12 @@ public class Model {
             } catch (final SQLException e) {
                 e.printStackTrace();
             }
+            closeResultSet(rsCheckAnalysis);
+            closeResultSet(rsGetTrackName);
+            closeResultSet(rsCreateAdminPlaylist);
+            closeResultSet(rsGetRadioTracks);
+            closeResultSet(rsGetAdvisedPlaylists);
+            closeResultSet(rsGetTrackGenre);
             closePreparedStatement(psCheckAnalysis);
             closePreparedStatement(psCreateAdminPlaylist);
             closePreparedStatement(psGetTrackName);
@@ -602,12 +611,6 @@ public class Model {
             closePreparedStatement(psInsertAdvisedPlaylists);
             closePreparedStatement(psGetTrackGenre);
             closePreparedStatement(psInsertTrackGenre);
-            closeResultSet(rsCheckAnalysis);
-            closeResultSet(rsGetTrackName);
-            closeResultSet(rsCreateAdminPlaylist);
-            closeResultSet(rsGetRadioTracks);
-            closeResultSet(rsGetAdvisedPlaylists);
-            closeResultSet(rsGetTrackGenre);
         }
     }
 
@@ -630,15 +633,21 @@ public class Model {
 
             psgetCountry = DAOUtils.prepare(connection, Queries.OP_14_GET_COUNTRY_NAME, nazione);
             rsGetCountry = psgetCountry.executeQuery();
-            rsGetCountry.next();
-            final String nomeNazione = rsGetCountry.getString(1);
+
+            String nomeNazione = "";
+            if(rsGetCountry.next()) {
+                nomeNazione = rsGetCountry.getString(1);
+            }
 
             psCreatePlaylist = DAOUtils.prepare(connection, Queries.OP_14_CREATE_TOP_50, "Top 50 "+ nomeNazione,
                         "I brani più ascoltati in "+nomeNazione, "image/"+nomeNazione+".jpg");
             psCreatePlaylist.executeUpdate();
             rsCreatePlaylist = psCreatePlaylist.getGeneratedKeys();
-            rsCreatePlaylist.next();
-            final int codTop50 = rsCreatePlaylist.getInt(1);
+
+            int codTop50 = -1;
+            if(rsCreatePlaylist.next()){
+                codTop50 = rsCreatePlaylist.getInt(1);
+            }
 
             psPopulatePlaylist = DAOUtils.prepare(connection, Queries.OP_14_INSERT_TOP_50, codTop50, nazione);
             psPopulatePlaylist.executeUpdate();
@@ -668,8 +677,59 @@ public class Model {
         } catch (final SQLException e) {
             rollBack(connection, e);
         } finally {
+            closeResultSet(rsGetAdvisedPlaylists);
+            closeResultSet(rsCreatePlaylist);
+            closeResultSet(rsGetCountry);
             closeResultSet(rsShow);
+            closePreparedStatement(psCreatePlaylist);
+            closePreparedStatement(psPopulatePlaylist);
+            closePreparedStatement(psInsertAdvisedPlaylists);
+            closePreparedStatement(psgetCountry);
+            closePreparedStatement(psGetAdvisedPlaylists);
             closePreparedStatement(psShow);
+        }
+        return result;
+    }
+    
+    public Map<String, List<Dati.Op15Data>> Op15_artistSongs(final String artistId) {
+        PreparedStatement psGetArtist = null;
+        PreparedStatement psGetTracks = null;
+        ResultSet rsGetTracks = null;
+        ResultSet rsGetArtist = null;
+        final Map<String, List<Dati.Op15Data>> result = new HashMap<>();
+        try {
+            
+            psGetArtist = DAOUtils.prepare(connection, Queries.OP15_GET_ARTIST, artistId);
+            rsGetArtist = psGetArtist.executeQuery();
+            
+            final List<Dati.Op15Data> listArtistInfo = new ArrayList<>();
+
+            if(rsGetArtist.next()) {
+                final String nickname = rsGetArtist.getString("nickname");
+                final boolean verificato = rsGetArtist.getBoolean("verificato");
+                listArtistInfo.add(new Dati.Op15Data(nickname, verificato, "", 0));
+            }
+
+            psGetTracks = DAOUtils.prepare(connection, Queries.OP15_VIEW_TOP5MOSTPOPULAR_SONG, artistId);
+            rsGetTracks = psGetTracks.executeQuery();
+
+            final List<Dati.Op15Data> listSongsInfo = new ArrayList<>();
+
+                while (rsGetTracks.next()) {
+                    final String titolo = rsGetTracks.getString("titolo");
+                    final int numRiproduzioni = rsGetTracks.getInt("numRiproduzioni");
+                    listSongsInfo.add(new Dati.Op15Data("", false, titolo, numRiproduzioni));
+                }
+
+            result.put("Artist", listArtistInfo);
+            result.put("Songs", listSongsInfo);
+        } catch (final SQLException e) {
+            rollBack(connection, e);
+        } finally {
+            closeResultSet(rsGetTracks);
+            closeResultSet(rsGetArtist);
+            closePreparedStatement(psGetTracks);
+            closePreparedStatement(psGetArtist);
         }
         return result;
     }
