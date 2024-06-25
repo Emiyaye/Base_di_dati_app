@@ -48,10 +48,6 @@ public abstract class AbstractInsertPanel<T> extends JPanel {
         submitButton.addActionListener(ac);
     }
 
-    public void modCancelListener(final ActionListener ac) {
-        cancelButton.addActionListener(ac);
-    }
-
     protected Map<String, JTextField> getTextFieldMap() {
         return new HashMap<>(textFieldMap);
     }
