@@ -13,6 +13,7 @@ public class AdminPanel extends JPanel {
     private final JButton back;
     private final JButton OP12_DisableEnableAccount;
     private final JButton OP13_TrackAnalysis;
+    private final JButton OP14_Top50;
     private final JButton OP15_PopularArtistSongs;
     private final JButton OP16_viewActiveAbbonamento;
     private final JButton OP17_PopularArtist;
@@ -36,6 +37,9 @@ public class AdminPanel extends JPanel {
         OP13_TrackAnalysis = new JButton("OP13 TrackAnalysis");
         buttonPanel.add(OP13_TrackAnalysis);
 
+        OP14_Top50 = new JButton("OP14_Top50");
+        buttonPanel.add(OP14_Top50);
+        
         OP15_PopularArtistSongs = new JButton("OP15 Top 5 most popular songs by artist");
         buttonPanel.add(OP15_PopularArtistSongs);
 
@@ -61,6 +65,9 @@ public class AdminPanel extends JPanel {
         OP13_TrackAnalysis.addActionListener(ac);
     }
 
+    public void addOp14Listener (final ActionListener ac) {
+        OP14_Top50.addActionListener(ac);
+    }
     public void addOp15Listener(final ActionListener ac) {
         OP15_PopularArtistSongs.addActionListener(ac);
     }
