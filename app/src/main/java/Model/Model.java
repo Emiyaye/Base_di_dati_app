@@ -73,7 +73,7 @@ public class Model {
             psCreateAbbonamento.setObject(3, LocalDate.now()); // TODO: Datascadenza da prendere in tipo abbonamento
             psCreateAbbonamento.setInt(4, tipoAbbonamento);
             psCreateAbbonamento.executeUpdate();
-                
+
 
             rsAbbonamento = psCreateAbbonamento.getGeneratedKeys();
             int codAbbonamento = -1;
@@ -611,7 +611,6 @@ public class Model {
         }
     }
 
-<<<<<<< HEAD
     public Map<String, List<Dati.Op14Data>> OP14_Top50(final String nazione) {
         PreparedStatement psCreatePlaylist = null;
         PreparedStatement psPopulatePlaylist = null;
@@ -671,33 +670,6 @@ public class Model {
         } finally {
             closeResultSet(rsShow);
             closePreparedStatement(psShow);
-=======
-    public Map<String, List<Dati.Op15Data>> Op15_artistSongs(final String artistId) {
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        final Map<String, List<Dati.Op15Data>> result = new HashMap<>();
-        try {
-            ps = DAOUtils.prepare(connection, Queries.OP15_VIEW_TOP5MOSTPOPULAR_SONG, artistId);
-            rs = ps.executeQuery();
-            final List<Dati.Op15Data> listArtistInfo = new ArrayList<>();
-            final List<Dati.Op15Data> listSongsInfo = new ArrayList<>();
-            while (rs.next()) {
-                final String nickname = rs.getString("nickname");
-                final boolean verificato = rs.getBoolean("verificato");
-                final String titolo = rs.getString("titolo");
-                final int durata = rs.getInt("durata");
-                final int numRiproduzioni = rs.getInt("numRiproduzioni");
-                listArtistInfo.add(new Dati.Op15Data(nickname, verificato, "", 0, 0));
-                listSongsInfo.add(new Dati.Op15Data("", false, titolo, durata, numRiproduzioni));
-            }
-            result.put("Artist", listArtistInfo);
-            result.put("Songs", listSongsInfo);
-        } catch (final SQLException e) {
-            rollBack(connection, e);
-        } finally {
-            closeResultSet(rs);
-            closePreparedStatement(ps);
->>>>>>> 2da4b70b0344be7ebfdefba1278a4bf6a0f78ae8
         }
         return result;
     }
