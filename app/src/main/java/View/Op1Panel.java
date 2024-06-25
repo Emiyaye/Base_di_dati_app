@@ -37,7 +37,7 @@ public class Op1Panel extends AbstractInsertPanel<Dati.Op1Data> {
                 textFieldMap.get(FIELD8).getText().isEmpty() ? Optional.empty()
                         : Optional.of(Integer.parseInt(textFieldMap.get(FIELD8).getText())),
                 textFieldMap.get(FIELD9).getText().isEmpty() ? Optional.empty()
-                        : Optional.of(Integer.parseInt(textFieldMap.get(FIELD9).getText())),
+                        : Optional.of(LocalDate.parse(textFieldMap.get(FIELD9).getText())),
                 Integer.parseInt(textFieldMap.get(FIELD10).getText()));
     }
 

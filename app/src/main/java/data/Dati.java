@@ -9,7 +9,7 @@ public class Dati {
 
         public record Op1Data(String nickname, String email, String password, LocalDate dataNascita, String genere,
                         String nazione,
-                        int tipoPagamento, Optional<Integer> numeroCarta, Optional<Integer> scadenzaCarta,
+                        int tipoPagamento, Optional<Integer> numeroCarta, Optional<LocalDate> scadenzaCarta,
                         int tipoAbbonamento) {
         }
 
@@ -54,7 +54,6 @@ public class Dati {
         }
 
         public record Op14Data(String titolo, String artista, int numRiproduzioni, int durataMinuti, int durataSecondi, boolean esplicito){
-
         }
 
         public record Op15Data(String nickname, boolean verificato, String titolo, int numRiproduzioni) {

@@ -1,6 +1,7 @@
 package Model;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -33,13 +34,15 @@ public class Model {
     public void Op1_addAccount(
             final String nickname, final String email, final String password, final LocalDate dataNascita,
             final String genere, final String nazione,
-            final Integer tipoPagamento, final Optional<Integer> numeroCarta, final Optional<Integer> scadenzaCarta,
+            final Integer tipoPagamento, final Optional<Integer> numeroCarta, final Optional<LocalDate> scadenzaCarta,
             final Integer tipoAbbonamento) {
         PreparedStatement psCreateAccount = null;
         PreparedStatement psCreateTipoPagamento = null;
         PreparedStatement psCreateAbbonamento = null;
         PreparedStatement psUpdateCodAbbonamento = null;
+        PreparedStatement psGetSubLength = null;
         ResultSet rsAbbonamento = null;
+        ResultSet rsGetSubLength = null;
 
         try {
             connection.setAutoCommit(false);
@@ -61,16 +64,25 @@ public class Model {
             psCreateTipoPagamento.setString(1, email);
             psCreateTipoPagamento.setInt(2, tipoPagamento);
             insertOptionalInteger(psCreateTipoPagamento, 3, numeroCarta);
-            insertOptionalInteger(psCreateTipoPagamento, 4, scadenzaCarta);
+            insertOptionalDate(psCreateTipoPagamento, 4, scadenzaCarta);
             psCreateTipoPagamento.setObject(5, LocalDate.now());
             psCreateTipoPagamento.setString(6, nazione);
             psCreateTipoPagamento.executeUpdate();
+
+            // Leggo durata abbonamento
+            psGetSubLength = DAOUtils.prepare(connection, Queries.OP1_DURATA_ABBONAMENTO, tipoAbbonamento);
+            rsGetSubLength = psGetSubLength.executeQuery();
+
+            int durataMesi = -1;
+            if(rsGetSubLength.next()) {
+                durataMesi = rsGetSubLength.getInt(1);
+            }
 
             // Insert into Abbonamento
             psCreateAbbonamento = DAOUtils.prepare(connection, Queries.OP1_INSERT_ABBONAMENTO);
             psCreateAbbonamento.setString(1, email);
             psCreateAbbonamento.setObject(2, LocalDate.now());
-            psCreateAbbonamento.setObject(3, LocalDate.now()); // TODO: Datascadenza da prendere in tipo abbonamento
+            psCreateAbbonamento.setObject(3, LocalDate.now().plusMonths(durataMesi));
             psCreateAbbonamento.setInt(4, tipoAbbonamento);
             psCreateAbbonamento.executeUpdate();
 
@@ -94,6 +106,8 @@ public class Model {
             rollBack(connection, e);
         } finally {
             closeResultSet(rsAbbonamento);
+            closeResultSet(rsGetSubLength);
+            closePreparedStatement(psGetSubLength);
             closePreparedStatement(psCreateAccount);
             closePreparedStatement(psCreateTipoPagamento);
             closePreparedStatement(psCreateAbbonamento);
@@ -814,6 +828,16 @@ public class Model {
             ps.setInt(index, value.get());
         } else {
             ps.setNull(index, java.sql.Types.INTEGER);
+        }
+    }
+
+    private final void insertOptionalDate(final PreparedStatement ps, final Integer index,
+            final Optional<LocalDate> value)
+            throws SQLException {
+        if (value.isPresent()) {
+            ps.setDate(index, Date.valueOf(value.get()));
+        } else {
+            ps.setNull(index, java.sql.Types.DATE);
         }
     }
 

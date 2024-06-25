@@ -10,6 +10,11 @@ public final class Queries {
     INSERT INTO Tipo_Pagamento (codPagamento, codAccount, tipo, numeroCarta, scadenzaCarta, dataCreazione, nazione)
     VALUES (1, ?, ?, ?, ?, ?, ?)
     """;
+    public static final String OP1_DURATA_ABBONAMENTO = """
+    SELECT durataMesi
+    FROM Tipo_abbonamento
+    WHERE codTipoAbbonamento = ?     
+    """;
     public static final String OP1_INSERT_ABBONAMENTO = """
     INSERT INTO Abbonamento (codPagamento, codAccount, dataPagamento, dataScadenza, tipoAbbonamento)
     VALUES (1, ?, ?, ?, ?)
