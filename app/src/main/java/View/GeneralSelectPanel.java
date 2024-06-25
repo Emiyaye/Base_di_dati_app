@@ -68,6 +68,7 @@ public class GeneralSelectPanel<T> extends JPanel {
         searchButton.setText(text);
     }
 
+    // String is the name of the table, each table has a name
     public void updateTable(final Map<String, List<T>> results) {
         // Iterating through each existing table
         for (final var table : tables) {

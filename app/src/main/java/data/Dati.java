@@ -4,6 +4,9 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 public class Dati {
+        public record AdminLogin(String adminEmail, String password) {
+        }
+
         public record Op1Data(String nickname, String email, String password, LocalDate dataNascita, String genere,
                         String nazione,
                         int tipoPagamento, Optional<Integer> numeroCarta, Optional<Integer> scadenzaCarta,
@@ -16,13 +19,15 @@ public class Dati {
         public record Op3Data(String accountSeguito, String accountSeguente) {
         }
 
-        public record Op4Data(String account, String collaboratore, String nome, String descrizione, String immagine, boolean privato) {
+        public record Op4Data(String account, String collaboratore, String nome, String descrizione, String immagine,
+                        boolean privato) {
         }
 
         public record Op5Data(Integer codPlaylist, Integer numero) {
         }
 
-        public record  Op6Data(String NomeArtista, String NomeAlbum, String NomeAutore, String NomePlaylist, String AutorePlaylist) {
+        public record Op6Data(String NomeArtista, String NomeAlbum, String NomeAutore, String NomePlaylist,
+                        String AutorePlaylist) {
         }
 
         public record Op7Data(int codiceBrano, int numero, String titolo, int numRiproduzioni, int durata,
@@ -33,17 +38,22 @@ public class Dati {
         public record Op8Data(String nome, String artista, int durataMin, int durataSec, int numBrani, int numFollowers,
                         String titolo, int numRiproduzioni, String cantante) {
         }
-        
-        public record Op9Data(String tipoAbbonamento, int durataMesi, LocalDate dataPagamento, LocalDate dataScadenza, String accountPagante){  
+
+        public record Op9Data(String tipoAbbonamento, int durataMesi, LocalDate dataPagamento, LocalDate dataScadenza,
+                        String accountPagante) {
         }
 
-        public record Op10Data(int codBrano, String email, int msRiprodotti){
+        public record Op10Data(int codBrano, String email, int msRiprodotti) {
         }
 
-        public record Op12Data(boolean disable, String account){
+        public record Op12Data(boolean disable, String account) {
         }
 
-        public record Op13Data(int codBrano, String linkImage){
+        public record Op13Data(int codBrano, String linkImage) {
+        }
+
+        public record Op15Data(String nickname, boolean verificato, String titolo, Integer durata,
+                        Integer numRiproduzioni) {
         }
 
         public record Op14Data(String titolo, String artista, int numRiproduzioni, int durataMinuti, int durataSecondi, boolean esplicito){

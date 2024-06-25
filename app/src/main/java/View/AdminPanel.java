@@ -14,6 +14,7 @@ public class AdminPanel extends JPanel {
     private final JButton OP12_DisableEnableAccount;
     private final JButton OP13_TrackAnalysis;
     private final JButton OP14_Top50;
+    private final JButton OP15_PopularArtistSongs;
     private final JButton OP16_viewActiveAbbonamento;
     private final JButton OP17_PopularArtist;
     private final JButton OP18_ServiceTurnover;
@@ -38,6 +39,9 @@ public class AdminPanel extends JPanel {
 
         OP14_Top50 = new JButton("OP14_Top50");
         buttonPanel.add(OP14_Top50);
+        
+        OP15_PopularArtistSongs = new JButton("OP15 Top 5 most popular songs by artist");
+        buttonPanel.add(OP15_PopularArtistSongs);
 
         OP16_viewActiveAbbonamento = new JButton("OP16 View Active Abbonamento");
         buttonPanel.add(OP16_viewActiveAbbonamento);
@@ -53,30 +57,33 @@ public class AdminPanel extends JPanel {
         add(LastPanel, BorderLayout.CENTER);
     }
 
-    public void addOp12Listener (final ActionListener ac) {
+    public void addOp12Listener(final ActionListener ac) {
         OP12_DisableEnableAccount.addActionListener(ac);
     }
 
-    public void addOp13Listener (final ActionListener ac) {
+    public void addOp13Listener(final ActionListener ac) {
         OP13_TrackAnalysis.addActionListener(ac);
     }
 
     public void addOp14Listener (final ActionListener ac) {
         OP14_Top50.addActionListener(ac);
     }
+    public void addOp15Listener(final ActionListener ac) {
+        OP15_PopularArtistSongs.addActionListener(ac);
+    }
 
-    public void addOp16Listener (final ActionListener ac) {
+    public void addOp16Listener(final ActionListener ac) {
         OP16_viewActiveAbbonamento.addActionListener(ac);
     }
 
-    public void addOp17Listener (final ActionListener ac) {
+    public void addOp17Listener(final ActionListener ac) {
         OP17_PopularArtist.addActionListener(ac);
     }
 
-    public void addOp18Listener (final ActionListener ac) {
+    public void addOp18Listener(final ActionListener ac) {
         OP18_ServiceTurnover.addActionListener(ac);
     }
- 
+
     public void addBackListener(final ActionListener ac) {
         back.addActionListener(ac);
     }

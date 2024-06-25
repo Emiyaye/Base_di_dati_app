@@ -237,6 +237,15 @@ public final class Queries {
     ORDER BY D.numero
     """;
 
+    public static final String OP15_VIEW_TOP5MOSTPOPULAR_SONG = """
+    SELECT AC.nickname, AR.verificato, B.titolo, B.durata, B.numRiproduzioni
+    FROM Brano B, Artista AR, Account AC, Esecuzione_Brano E
+    WHERE E.codBrano = B.codBrano
+    AND AR.email = AC.email
+    AND E.codArtista = ?
+    ORDER BY COUNT(B.numRiproduzioni) DESC
+    """;
+
     public static final String OP16_VIEW_ACTIVE_ABBONAMENTO = """
     SELECT T.nome, T.durataMesi, COUNT(AB.tipoAbbonamento) AS NumAbbonamentiAttivi
     FROM Account AC, Abbonamento AB, Tipo_abbonamento T
