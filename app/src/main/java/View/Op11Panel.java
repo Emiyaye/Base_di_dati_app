@@ -39,7 +39,7 @@ public class Op11Panel extends AbstractInsertPanel<Dati.Op11Data> {
     }
 
     @Override
-    public Dati.Op11Data getData() {
+    public Dati.Op11Data data() {
         final Map<String, JTextField> textFieldMap = getTextFieldMap();
         final int codiceBrano = Integer.parseInt(textFieldMap.get("Codice Brano").getText());
         final String testo = testoArea.getText();
