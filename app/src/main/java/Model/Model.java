@@ -422,8 +422,10 @@ public class Model {
             psInsertRip.executeUpdate();
 
             // Update brano numRiproduzioni
-            psUpdateNumRip = DAOUtils.prepare(connection, Queries.OP_10_UPDATE_NUM_RIP, brano);
-            psUpdateNumRip.executeUpdate();
+            if(msRiprodotti >= 30000) {
+                psUpdateNumRip = DAOUtils.prepare(connection, Queries.OP_10_UPDATE_NUM_RIP, brano);
+                psUpdateNumRip.executeUpdate();
+            }
 
             connection.commit();
             JOptionPane.showMessageDialog(null, "Operation Succeed!", "Success", JOptionPane.INFORMATION_MESSAGE);
@@ -580,6 +582,69 @@ public class Model {
             closeResultSet(rsGetAdvisedPlaylists);
             closeResultSet(rsGetTrackGenre);
         }
+    }
+
+    public Map<String, List<Dati.Op14Data>> OP14_Top50(final String nazione) {
+        PreparedStatement psCreatePlaylist = null;
+        PreparedStatement psPopulatePlaylist = null;
+        PreparedStatement psInsertAdvisedPlaylists = null;
+        PreparedStatement psgetCountry = null;
+        PreparedStatement psGetAdvisedPlaylists = null;
+        PreparedStatement psShow = null;
+        ResultSet rsGetAdvisedPlaylists = null;
+        ResultSet rsCreatePlaylist = null;
+        ResultSet rsGetCountry = null;
+        ResultSet rsShow = null;
+
+        final Map<String, List<Dati.Op14Data>> result = new HashMap<>();
+        final List<Dati.Op14Data> list = new ArrayList<>();
+
+        try {
+
+            psgetCountry = DAOUtils.prepare(connection, Queries.OP_14_GET_COUNTRY_NAME, nazione);
+            rsGetCountry = psgetCountry.executeQuery();
+            rsGetCountry.next();
+            final String nomeNazione = rsGetCountry.getString(1);
+
+            psCreatePlaylist = DAOUtils.prepare(connection, Queries.OP_14_CREATE_TOP_50, "Top 50 "+ nomeNazione,
+                        "I brani più ascoltati in "+nomeNazione, "image/"+nomeNazione+".jpg");
+            psCreatePlaylist.executeUpdate();
+            rsCreatePlaylist = psCreatePlaylist.getGeneratedKeys();
+            rsCreatePlaylist.next();
+            final int codTop50 = rsCreatePlaylist.getInt(1);
+
+            psPopulatePlaylist = DAOUtils.prepare(connection, Queries.OP_14_INSERT_TOP_50, codTop50, nazione);
+            psPopulatePlaylist.executeUpdate();
+
+            psGetAdvisedPlaylists = DAOUtils.prepare(connection, Queries.OP_14_GET_ADVISED_PLAYLISTS, codTop50, N_ADVISED_PLAYLISTS);
+            rsGetAdvisedPlaylists = psGetAdvisedPlaylists.executeQuery();
+
+            while(rsGetAdvisedPlaylists.next()) {
+                final int codPlaylist = rsGetAdvisedPlaylists.getInt(1);
+                psInsertAdvisedPlaylists = DAOUtils.prepare(connection, Queries.OP_14_PLAYLIST_ADVISE, codPlaylist, codTop50);
+                psInsertAdvisedPlaylists.executeUpdate();
+            }
+
+            psShow = DAOUtils.prepare(connection, Queries.OP_14_SHOW_TOP50, codTop50);
+            rsShow = psShow.executeQuery();
+            while(rsShow.next()) {
+                final String titolo = rsShow.getString(1);
+                final String artista = rsShow.getString(2);
+                final int numRiproduzioni = rsShow.getInt(3);
+                final int durataMinuti = rsShow.getInt(4);
+                final int durataSecondi = rsShow.getInt(5);
+                final boolean esplicito = rsShow.getBoolean(6);
+                list.add(new Dati.Op14Data(titolo, artista, numRiproduzioni, durataMinuti, durataSecondi, esplicito));
+
+            }
+            result.put("Top50 per nazione", list);
+        } catch (final SQLException e) {
+            rollBack(connection, e);
+        } finally {
+            closeResultSet(rsShow);
+            closePreparedStatement(psShow);
+        }
+        return result;
     }
 
     public Map<String, List<Dati.Op16Data>> Op16_viewActiveAbbonamento() {

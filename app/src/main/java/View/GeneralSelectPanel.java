@@ -63,6 +63,10 @@ public class GeneralSelectPanel<T> extends JPanel {
     public String getData() {
         return searchField.getText();
     }
+    
+    protected void setTextButtonSearch(String text) {
+        searchButton.setText(text);
+    }
 
     public void updateTable(final Map<String, List<T>> results) {
         // Iterating through each existing table

@@ -200,32 +200,41 @@ public final class Queries {
     VALUES(?,?)   
     """;
 
+    public static final String OP_14_GET_COUNTRY_NAME = """
+    SELECT nome
+    FROM Nazione
+    WHERE sigla = ?
+    """;
+
     public static final String OP_14_CREATE_TOP_50 = """
     INSERT INTO Playlist (nome, descrizione, immagine, admin, privato, radio, accountCreatore)
     VALUES (?, ?, ?, True, False, False, "admin@spotify.com")
     """;
 
     public static final String OP_14_INSERT_TOP_50 = """
-    INSERT INTO Dettaglio_Playlist (codPlaylist, numero, codBrano, codAccount)
-    SELECT ?, ROW_NUMBER() OVER (), R.codBrano, ?
+    INSERT INTO Dettaglio_Playlist (codPlaylist, numero, dataAggiunta, codBrano, codAccount)
+    SELECT ?, ROW_NUMBER() OVER (), CURDATE(), R.codBrano, "admin@spotify.com"
     FROM Riproduzione R
     WHERE R.nazione = ?
+    AND R.data = DATE_SUB(CURDATE(), INTERVAL 1 DAY)
     GROUP BY R.codBrano
-    ORDER BY COUNT (R.codBrano) DESC
+    ORDER BY COUNT(R.codBrano) DESC
     LIMIT 50 
     """;
+
+    public static final String OP_14_GET_ADVISED_PLAYLISTS = OP_13_GET_ADVISED_PLAYLISTS;
 
     public static final String OP_14_PLAYLIST_ADVISE = OP_13_PLAYLIST_ADVISE;
 
     public static final String OP_14_SHOW_TOP50 = """
-    SELECT B.titolo, B.numRiproduzioni, B.durata, B.esplicito, AC.nickname
+    SELECT B.titolo, AC.nickname, B.numRiproduzioni AS NumRiproduzioniTotali, ROUND(B.durata/60000) AS DurataMinuti, ROUND((B.durata/1000)%60) AS DurataSecondi, B.esplicito
     FROM Brano B, Account AC, Artista AR, Esecuzione_brano E, Dettaglio_playlist D
     WHERE AC.email = AR.email
     AND E.codArtista = AR.email
     AND E.codBrano = B.codBrano
     AND B.codBrano = D.codBrano
     AND D.codPlaylist = ?
-    ORDER BY B.numero
+    ORDER BY D.numero
     """;
 
     public static final String OP16_VIEW_ACTIVE_ABBONAMENTO = """
