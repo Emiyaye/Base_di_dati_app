@@ -16,6 +16,7 @@ import View.Op9Panel;
 import View.Op10Panel;
 import View.Op12Panel;
 import View.Op13Panel;
+import View.Op15Panel;
 import View.Op16Panel;
 import View.Op17Panel;
 import View.Op18Panel;
@@ -39,6 +40,7 @@ public class Controller {
     private final Op10Panel Op10Panel = new Op10Panel();
     private final Op12Panel Op12Panel = new Op12Panel();
     private final Op13Panel Op13Panel = new Op13Panel();
+    private final Op15Panel Op15Panel = new Op15Panel();
     private final Op16Panel Op16Panel = new Op16Panel();
     private final Op17Panel Op17Panel = new Op17Panel();
     private final Op18Panel Op18Panel = new Op18Panel();
@@ -125,6 +127,12 @@ public class Controller {
         this.Op13Panel.addSubmitListener(e -> {
             final Dati.Op13Data data = this.Op13Panel.getData();
             this.model.OP13_TrackAnalysis(data.codBrano(), data.linkImage());
+        });
+
+        this.adminPanel.addOp15Listener(e -> adminPanel.updateCenterPanel(Op15Panel));
+        this.Op15Panel.addSearchListener(e -> {
+            final String data = this.Op15Panel.getData();
+            this.Op15Panel.updateTable(this.model.Op15_artistSongs(data));
         });
 
         this.adminPanel.addOp16Listener(e -> {
