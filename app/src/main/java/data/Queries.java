@@ -79,10 +79,10 @@ public final class Queries {
     """;
     public static final String OP6_GET_PLAYLIST = """
     SELECT P.nome AS PlaylistSeguiti,  A.nickname
-    FROM Playlist P, Follow_Playlist FP, Account A
-    WHERE P.codPlaylist = FP.codPlaylist
-    AND P.accountCreatore = A.email
-    AND FP.codAccount = ?    
+    FROM Playlist P LEFT OUTER JOIN Follow_Playlist FP ON (P.codPlaylist = FP.codPlaylist), Account A
+    WHERE P.accountCreatore = A.email
+    AND (FP.codAccount = ?
+    OR P.accountCreatore = ?);  
     """;
     public static final String OP7_SEARCH_SONG = """
     SELECT B.titolo, ROUND(B.durata/60000) AS DurataMinuti, ROUND(B.durata/1000)%60 AS DurataSecondi, B.esplicito, B.numRiproduzioni

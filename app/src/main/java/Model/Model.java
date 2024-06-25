@@ -300,7 +300,7 @@ public class Model {
             result.put("Album", albumList);
 
             // getPlaylist
-            psGetPlaylist = DAOUtils.prepare(connection, Queries.OP6_GET_PLAYLIST, account);
+            psGetPlaylist = DAOUtils.prepare(connection, Queries.OP6_GET_PLAYLIST, account, account);
             rsPlaylist = psGetPlaylist.executeQuery();
             final List<Dati.Op6Data> playlistList = new ArrayList<>();
             while (rsPlaylist.next()) {
