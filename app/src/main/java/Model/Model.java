@@ -193,6 +193,7 @@ public class Model {
             final String accountCreatore, final String accountCollaboratore) {
         PreparedStatement psCreatePlaylist = null;
         PreparedStatement psInsertCollaborator = null;
+        PreparedStatement psCollabFollowPlay = null;
         ResultSet rs = null;
         try {
             connection.setAutoCommit(false);
@@ -217,6 +218,9 @@ public class Model {
                     playlistId);
             psInsertCollaborator.executeUpdate();
 
+            psCollabFollowPlay = DAOUtils.prepare(connection, Queries.OP4_FOLLOW_PLAYLIST, playlistId, accountCollaboratore);
+            psCollabFollowPlay.executeUpdate();
+
             connection.commit();
             JOptionPane.showMessageDialog(null, "Operation Succeed!", "Success", JOptionPane.INFORMATION_MESSAGE);
         } catch (final SQLException e) {
@@ -230,6 +234,8 @@ public class Model {
             closeResultSet(rs);
             closePreparedStatement(psCreatePlaylist);
             closePreparedStatement(psInsertCollaborator);
+            closePreparedStatement(psCollabFollowPlay);
+
         }
     }
 

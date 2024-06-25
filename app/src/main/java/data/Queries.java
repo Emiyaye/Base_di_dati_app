@@ -46,6 +46,10 @@ public final class Queries {
     INSERT INTO Collaborazione_Playlist (CodAccount, CodPlaylist)
     VALUES (?, ?)
     """;
+    public static final String OP4_FOLLOW_PLAYLIST = """
+    INSERT INTO Follow_Playlist
+    VALUES (?, ?)        
+    """;
     public static final String OP5_DELETE_SONG =
     """
     DELETE FROM Dettaglio_Playlist
