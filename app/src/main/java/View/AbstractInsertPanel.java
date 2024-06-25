@@ -67,6 +67,10 @@ public abstract class AbstractInsertPanel<T> extends JPanel {
             throw new IllegalArgumentException(e);
         }
     }
+    
+    protected JButton getCancelButton() {
+        return cancelButton;
+    }
 
     protected void addComponent(final Component component, final GridBagConstraints gbc,
             final int gridx, final int gridy, final int anchor) {
@@ -76,7 +80,7 @@ public abstract class AbstractInsertPanel<T> extends JPanel {
         add(component, gbc);
     }
 
-    private void clearFields() {
+    protected void clearFields() {
         textFieldMap.values().forEach(e -> e.setText(""));
     }
 }

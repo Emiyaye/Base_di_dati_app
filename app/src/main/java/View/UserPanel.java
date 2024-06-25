@@ -21,7 +21,8 @@ public class UserPanel extends JPanel {
     private final JButton OP8_ViewAlbum;
     private final JButton OP9_SubHistory;
     private final JButton OP10_ReproduceTrack;
-    private final JButton Op15_artistSongs;
+    private final JButton OP11_AddTextSong;
+    private final JButton OP15_ArtistSongs;
     private JPanel LastPanel;
 
     public UserPanel() {
@@ -37,7 +38,7 @@ public class UserPanel extends JPanel {
         OP1_CreateAccount = new JButton("OP1 Create Account");
         buttonPanel.add(OP1_CreateAccount);
 
-        OP2_InviteAccount = new JButton("OP2 Invite Account");
+        OP2_InviteAccount = new JButton("OP2 Invite Account to a Abbonamento");
         buttonPanel.add(OP2_InviteAccount);
 
         OP3_FollowArtist = new JButton("OP3 Follow Artist");
@@ -46,7 +47,7 @@ public class UserPanel extends JPanel {
         OP4_CreatePlaylist = new JButton("Op4 Create Playlist and add a Collaborator");
         buttonPanel.add(OP4_CreatePlaylist);
         
-        OP5_DeleteSong = new JButton("Op5 Delete Song");
+        OP5_DeleteSong = new JButton("Op5 Delete Song from a Playlist");
         buttonPanel.add(OP5_DeleteSong);
         
         OP6_ViewUserLibrary = new JButton("Op6 View User Library");
@@ -55,7 +56,7 @@ public class UserPanel extends JPanel {
         OP7_SearchSongs = new JButton("OP7 Search Songs");
         buttonPanel.add(OP7_SearchSongs);
 
-        OP8_ViewAlbum = new JButton("OP8_ViewAlbum");
+        OP8_ViewAlbum = new JButton("OP8 ViewAlbum");
         buttonPanel.add(OP8_ViewAlbum);
 
         OP9_SubHistory = new JButton("OP9 Sub History");
@@ -64,8 +65,11 @@ public class UserPanel extends JPanel {
         OP10_ReproduceTrack = new JButton("OP10 Reproduce Track");
         buttonPanel.add(OP10_ReproduceTrack);
 
-        Op15_artistSongs = new JButton("Op15_artistSongs");
-        buttonPanel.add(Op15_artistSongs);
+        OP11_AddTextSong = new JButton("OP11 Add text to a song");
+        buttonPanel.add(OP11_AddTextSong);
+
+        OP15_ArtistSongs = new JButton("OP 15 Top 5 most popular songs by artis");
+        buttonPanel.add(OP15_ArtistSongs);
 
         westPanel.add(buttonPanel, BorderLayout.CENTER);
         add(westPanel, BorderLayout.WEST);
@@ -116,9 +120,14 @@ public class UserPanel extends JPanel {
         OP10_ReproduceTrack.addActionListener(ac);
     }
 
-    public void addOp15Listener(final ActionListener ac){
-        Op15_artistSongs.addActionListener(ac);
+    public void addOp11Listener(final ActionListener ac){
+        OP11_AddTextSong.addActionListener(ac);
     }
+
+    public void addOp15Listener(final ActionListener ac){
+        OP15_ArtistSongs.addActionListener(ac);
+    }
+
 
     public void updateCenterPanel(final JPanel panel) {
             remove(LastPanel);
@@ -128,5 +137,4 @@ public class UserPanel extends JPanel {
         revalidate();
         repaint();
     }
-
 }

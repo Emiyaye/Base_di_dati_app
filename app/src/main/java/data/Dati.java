@@ -23,16 +23,14 @@ public class Dati {
                         boolean privato) {
         }
 
-        public record Op5Data(Integer codPlaylist, Integer numero) {
+        public record Op5Data(int codPlaylist, int numero) {
         }
 
         public record Op6Data(String NomeArtista, String NomeAlbum, String NomeAutore, String NomePlaylist,
                         String AutorePlaylist) {
         }
 
-        public record Op7Data(int codiceBrano, int numero, String titolo, int numRiproduzioni, int durata,
-                        boolean esplicito, String fonteCrediti,
-                        String fileAudio, int codicePubblicazione) {
+        public record Op7Data( String titolo, int durataMin, int durataSec, boolean esplicito, int numRiproduzionis) {
         }
 
         public record Op8Data(String nome, String artista, int durataMin, int durataSec, int numBrani, int numFollowers,
@@ -46,16 +44,20 @@ public class Dati {
         public record Op10Data(int codBrano, String email, int msRiprodotti) {
         }
 
+        public record  Op11Data(int codBrano, String testo) {
+        }
+
         public record Op12Data(boolean disable, String account) {
         }
 
         public record Op13Data(int codBrano, String linkImage) {
         }
 
-        public record Op15Data(String nickname, boolean verificato, String titolo, int numRiproduzioni) {
+        public record Op14Data(String titolo, String artista, int numRiproduzioni, int durataMinuti, int durataSecondi, boolean esplicito){
+
         }
 
-        public record Op14Data(String titolo, String artista, int numRiproduzioni, int durataMinuti, int durataSecondi, boolean esplicito){
+        public record Op15Data(String nickname, boolean verificato, String titolo, int numRiproduzioni) {
         }
 
         public record Op16Data(String nome, int durataMesi, int NumAbbonamentiAttivi) {

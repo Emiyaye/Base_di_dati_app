@@ -70,7 +70,7 @@ public final class Queries {
     AND FP.codAccount = ?    
     """;
     public static final String OP7_SEARCH_SONG = """
-    SELECT *
+    SELECT B.titolo, ROUND(B.durata/60000) AS DurataMinuti, ROUND(B.durata/1000)%60 AS DurataSecondi, B.esplicito, B.numRiproduzioni
     FROM Brano B
     WHERE B.titolo LIKE ?
     """;
@@ -132,6 +132,11 @@ public final class Queries {
     (SELECT A.nazione
     FROM Account A
     WHERE A.email = ?))
+    """;
+
+    public static final String OP11_ADD_TEXT_SONG = """
+    INSERT INTO Riga_Testo (codBrano, numero, testo, msHighlight)
+    VALUES (?, ?, ?, ?)        
     """;
 
     public static final String OP12_DISABLE_OR_ENABLE_ACCOUNT = """
