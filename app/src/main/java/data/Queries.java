@@ -200,6 +200,34 @@ public final class Queries {
     VALUES(?,?)   
     """;
 
+    public static final String OP_14_CREATE_TOP_50 = """
+    INSERT INTO Playlist (nome, descrizione, immagine, admin, privato, radio, accountCreatore)
+    VALUES (?, ?, ?, True, False, False, "admin@spotify.com")
+    """;
+
+    public static final String OP_14_INSERT_TOP_50 = """
+    INSERT INTO Dettaglio_Playlist (codPlaylist, numero, codBrano, codAccount)
+    SELECT ?, ROW_NUMBER() OVER (), R.codBrano, ?
+    FROM Riproduzione R
+    WHERE R.nazione = ?
+    GROUP BY R.codBrano
+    ORDER BY COUNT (R.codBrano) DESC
+    LIMIT 50 
+    """;
+
+    public static final String OP_14_PLAYLIST_ADVISE = OP_13_PLAYLIST_ADVISE;
+
+    public static final String OP_14_SHOW_TOP50 = """
+    SELECT B.titolo, B.numRiproduzioni, B.durata, B.esplicito, AC.nickname
+    FROM Brano B, Account AC, Artista AR, Esecuzione_brano E, Dettaglio_playlist D
+    WHERE AC.email = AR.email
+    AND E.codArtista = AR.email
+    AND E.codBrano = B.codBrano
+    AND B.codBrano = D.codBrano
+    AND D.codPlaylist = ?
+    ORDER BY B.numero
+    """;
+
     public static final String OP16_VIEW_ACTIVE_ABBONAMENTO = """
     SELECT T.nome, T.durataMesi, COUNT(AB.tipoAbbonamento) AS NumAbbonamentiAttivi
     FROM Account AC, Abbonamento AB, Tipo_abbonamento T
@@ -209,13 +237,18 @@ public final class Queries {
     """;
     public static final String OP17_MOST_POPULAR_ARTIST = """
     SELECT AC.nickname, SUM(IF (P.album = True, 1, 0)) AS NumAlbum, SUM(IF (P.album = True, 0, 1)) AS NumSingoli
-    FROM Artista AR, Account AC, Pubblicazione P, Brano B
+    FROM Artista AR, Account AC, Pubblicazione P
     WHERE AR.email = AC.email
     AND P.codArtista = AR.email
-    AND B.codPubblicazione = P.codPubblicazione
+    AND AR.email IN (
+	    SELECT AR1.email
+        FROM artista AR1, Pubblicazione P, Brano B
+        WHERE P.codArtista = AR.email
+        AND B.codPubblicazione = P.codPubblicazione
+        GROUP BY AR1.email
+        ORDER BY SUM(B.numRiproduzioni) DESC)
     GROUP BY AC.email, AC.nickname
-    ORDER BY SUM(B.numRiproduzioni) DESC
-    LIMIT 5
+    LIMIT 5;
     """;
     public static final String OP18_SERVICE_TURNOVER = """
     SELECT SUM(TA.prezzo) AS Fatturato_Annuo
