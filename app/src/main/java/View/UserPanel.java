@@ -37,7 +37,7 @@ public class UserPanel extends JPanel {
         OP1_CreateAccount = new JButton("OP1 Create Account");
         buttonPanel.add(OP1_CreateAccount);
 
-        OP2_InviteAccount = new JButton("OP2 Invite Account");
+        OP2_InviteAccount = new JButton("OP2 Invite Account to a Abbonamento");
         buttonPanel.add(OP2_InviteAccount);
 
         OP3_FollowArtist = new JButton("OP3 Follow Artist");
@@ -46,7 +46,7 @@ public class UserPanel extends JPanel {
         OP4_CreatePlaylist = new JButton("Op4 Create Playlist and add a Collaborator");
         buttonPanel.add(OP4_CreatePlaylist);
         
-        OP5_DeleteSong = new JButton("Op5 Delete Song");
+        OP5_DeleteSong = new JButton("Op5 Delete Song from a Playlist");
         buttonPanel.add(OP5_DeleteSong);
         
         OP6_ViewUserLibrary = new JButton("Op6 View User Library");
@@ -55,7 +55,7 @@ public class UserPanel extends JPanel {
         OP7_SearchSongs = new JButton("OP7 Search Songs");
         buttonPanel.add(OP7_SearchSongs);
 
-        OP8_ViewAlbum = new JButton("OP8_ViewAlbum");
+        OP8_ViewAlbum = new JButton("OP8 ViewAlbum");
         buttonPanel.add(OP8_ViewAlbum);
 
         OP9_SubHistory = new JButton("OP9 Sub History");

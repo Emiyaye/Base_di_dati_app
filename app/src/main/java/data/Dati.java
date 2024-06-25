@@ -30,9 +30,7 @@ public class Dati {
                         String AutorePlaylist) {
         }
 
-        public record Op7Data(int codiceBrano, int numero, String titolo, int numRiproduzioni, int durata,
-                        boolean esplicito, String fonteCrediti,
-                        String fileAudio, int codicePubblicazione) {
+        public record Op7Data( String titolo, int durataMin, int durataSec, boolean esplicito, int numRiproduzionis) {
         }
 
         public record Op8Data(String nome, String artista, int durataMin, int durataSec, int numBrani, int numFollowers,

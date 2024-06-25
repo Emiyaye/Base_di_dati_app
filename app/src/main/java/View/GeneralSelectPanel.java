@@ -1,6 +1,7 @@
 package View;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -33,8 +34,9 @@ public class GeneralSelectPanel<T> extends JPanel {
         tablesPanel = new JPanel(new GridLayout(1, 0)); // rows adj 
         this.tables = tables;
         for (final var table : this.tables) {
-            final DefaultTableModel tableModel = new DefaultTableModel(table.getAttributeNames(), 0);
+            final DefaultTableModel tableModel = new UnmodifiableTableModel(table.getAttributeNames(), 0);
             final JTable jtable = new JTable(tableModel);
+            jtable.getTableHeader().setReorderingAllowed(false);
             final JScrollPane scrollPane = new JScrollPane(jtable);
             tablesPanel.add(scrollPane);
             table.setTableModel(tableModel);
@@ -76,6 +78,18 @@ public class GeneralSelectPanel<T> extends JPanel {
                     tableModel.addRow(table.getFunction().apply(row));
                 }
             }
+        }
+    }
+
+    // makes the cell unmodifiable
+    static class UnmodifiableTableModel extends DefaultTableModel {
+        public UnmodifiableTableModel(String[] columnNames, int rowCount) {
+            super(columnNames, rowCount);
+        }
+
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false;
         }
     }
 }

@@ -73,6 +73,7 @@ public class Model {
             psCreateAbbonamento.setObject(3, LocalDate.now()); // TODO: Datascadenza da prendere in tipo abbonamento
             psCreateAbbonamento.setInt(4, tipoAbbonamento);
             psCreateAbbonamento.executeUpdate();
+                
 
             rsAbbonamento = psCreateAbbonamento.getGeneratedKeys();
             int codAbbonamento = -1;
@@ -303,18 +304,12 @@ public class Model {
             final List<Dati.Op7Data> list = new ArrayList<>();
             while (rs.next()) {
                 // get data from the database
-                final int codiceBrano = rs.getInt("codBrano");
-                final int numero = rs.getInt("numero");
                 final String titolo = rs.getString("titolo");
-                final int numRiproduzioni = rs.getInt("numRiproduzioni");
-                final int durata = rs.getInt("durata");
+                final int durataMin = rs.getInt("DurataMinuti");
+                final int durataSec = rs.getInt("DurataSecondi");
                 final boolean esplicito = rs.getBoolean("esplicito");
-                final String fonteCrediti = rs.getString("fonteCrediti");
-                final String fileAudio = rs.getString("fileAudio");
-                final int codicePubblicazione = rs.getInt("codPubblicazione");
-                list.add(new Dati.Op7Data(codiceBrano, numero, titolo, numRiproduzioni, durata, esplicito, fonteCrediti,
-                        fileAudio,
-                        codicePubblicazione));
+                final int numRiproduzioni = rs.getInt("numRiproduzioni");
+                list.add(new Dati.Op7Data(titolo, durataMin, durataSec, esplicito, numRiproduzioni));
             }
             result.put("Songs", new ArrayList<>(list));
         } catch (final SQLException e) {
