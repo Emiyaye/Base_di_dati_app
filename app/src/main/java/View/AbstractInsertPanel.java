@@ -15,13 +15,15 @@ import javax.swing.JTextField;
 
 public abstract class AbstractInsertPanel<T> extends JPanel {
     private final Map<String, JTextField> textFieldMap;
+    private final GridBagConstraints gbc;
     private final JButton cancelButton;
     private final JButton submitButton;
 
-    public AbstractInsertPanel(final String[] fieldLabels, final String submitButtonText, final String cancelButtonText) {
+    public AbstractInsertPanel(final String[] fieldLabels, final String submitButtonText,
+            final String cancelButtonText) {
         textFieldMap = new HashMap<>();
         setLayout(new GridBagLayout());
-        final GridBagConstraints gbc = new GridBagConstraints();
+        this.gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
 
         int row = 0;
@@ -46,13 +48,21 @@ public abstract class AbstractInsertPanel<T> extends JPanel {
         submitButton.addActionListener(ac);
     }
 
-    protected Map<String, JTextField> getTextFieldMap(){
+    public void modCancelListener(final ActionListener ac) {
+        cancelButton.addActionListener(ac);
+    }
+
+    protected Map<String, JTextField> getTextFieldMap() {
         return new HashMap<>(textFieldMap);
+    }
+
+    protected GridBagConstraints getGbc() {
+        return gbc;
     }
 
     public abstract T getData();
 
-    private void addComponent(final Component component, final GridBagConstraints gbc,
+    protected void addComponent(final Component component, final GridBagConstraints gbc,
             final int gridx, final int gridy, final int anchor) {
         gbc.gridx = gridx;
         gbc.gridy = gridy;
@@ -64,4 +74,3 @@ public abstract class AbstractInsertPanel<T> extends JPanel {
         textFieldMap.values().forEach(e -> e.setText(""));
     }
 }
-

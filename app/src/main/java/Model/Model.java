@@ -611,7 +611,6 @@ public class Model {
         return result;
     }
 
-
     public Map<String, List<Dati.Op16Data>> Op16_viewActiveAbbonamento() {
         PreparedStatement ps = null;
         ResultSet rs = null;
