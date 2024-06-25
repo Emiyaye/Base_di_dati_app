@@ -46,6 +46,9 @@ public class Dati {
         public record Op10Data(int codBrano, String email, int msRiprodotti) {
         }
 
+        public record  Op11Data(int codBrano, String testo) {
+        }
+
         public record Op12Data(boolean disable, String account) {
         }
 

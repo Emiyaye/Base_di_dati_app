@@ -21,6 +21,7 @@ public class UserPanel extends JPanel {
     private final JButton OP8_ViewAlbum;
     private final JButton OP9_SubHistory;
     private final JButton OP10_ReproduceTrack;
+    private final JButton OP11_AddTextSong;
     private JPanel LastPanel;
 
     public UserPanel() {
@@ -62,6 +63,9 @@ public class UserPanel extends JPanel {
 
         OP10_ReproduceTrack = new JButton("OP10 Reproduce Track");
         buttonPanel.add(OP10_ReproduceTrack);
+
+        OP11_AddTextSong = new JButton("OP11 Add Text to a song");
+        buttonPanel.add(OP11_AddTextSong);
 
         westPanel.add(buttonPanel, BorderLayout.CENTER);
         add(westPanel, BorderLayout.WEST);
@@ -110,6 +114,10 @@ public class UserPanel extends JPanel {
 
     public void addOp10Listener(final ActionListener ac){
         OP10_ReproduceTrack.addActionListener(ac);
+    }
+
+    public void addOp11Listener(final ActionListener ac){
+        OP11_AddTextSong.addActionListener(ac);
     }
 
     public void updateCenterPanel(final JPanel panel) {

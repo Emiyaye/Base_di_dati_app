@@ -134,6 +134,11 @@ public final class Queries {
     WHERE A.email = ?))
     """;
 
+    public static final String OP11_ADD_TEXT_SONG = """
+    INSERT INTO Riga_Testo (codiceBrano, numero, testo, msHighlight)
+    VALUES (?, ?, ?, ?)        
+    """;
+
     public static final String OP12_DISABLE_OR_ENABLE_ACCOUNT = """
     UPDATE Account
     SET sospeso = ?

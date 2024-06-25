@@ -443,6 +443,38 @@ public class Model {
         }
     }
 
+    public void Op11_insertText(final Integer codiceBrano, final String testo) {
+        PreparedStatement ps = null;
+        try {
+            connection.setAutoCommit(false);
+            ps = DAOUtils.prepare(connection, Queries.OP11_ADD_TEXT_SONG);
+
+            // Split testo
+            final String[] lines = testo.split("\n");
+            int numero = 1;
+
+            for (final String line : lines) {
+                ps.setInt(1, codiceBrano);
+                ps.setInt(2, numero);
+                numero++;
+                ps.setString(3, line);
+                ps.setNull(4, java.sql.Types.INTEGER);
+                ps.executeUpdate();
+            }
+            connection.commit();
+        } catch (final SQLException e) {
+            rollBack(connection, e);
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (final SQLException e) {
+                e.printStackTrace();
+            }
+            closePreparedStatement(ps);
+        }
+    }
+
+
     public void OP12_DisableEnableAccount(final boolean sospensione, final String account) {
         PreparedStatement psEnableDisable = null;
 

@@ -56,6 +56,10 @@ public abstract class AbstractInsertPanel<T> extends JPanel {
         return gbc;
     }
 
+    protected JButton getCancelButton() {
+        return cancelButton;
+    }
+
     public abstract T getData();
 
     protected void addComponent(final Component component, final GridBagConstraints gbc,
@@ -66,7 +70,7 @@ public abstract class AbstractInsertPanel<T> extends JPanel {
         add(component, gbc);
     }
 
-    private void clearFields() {
+    protected void clearFields() {
         textFieldMap.values().forEach(e -> e.setText(""));
     }
 }
