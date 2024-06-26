@@ -1,3 +1,6 @@
+Per avviare L'applicazione si può usare il comando './gradlew run' oppure
+si può avviare andando il src/main/java/App.java runnando il main
+
 L’applicazione gestisce due tipologie di utenti: amministratori e utenti; 
 perciò la schermata iniziale richiede di specificare se si è utenti o amministratori. 
 Nel caso di accesso come amministratore, è necessario inserire un'email e una password, 
