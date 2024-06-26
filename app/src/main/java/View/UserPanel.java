@@ -62,13 +62,13 @@ public class UserPanel extends JPanel {
         OP9_SubHistory = new JButton("OP9 Sub History");
         buttonPanel.add(OP9_SubHistory);
 
-        OP10_ReproduceTrack = new JButton("OP10 Reproduce Track");
+        OP10_ReproduceTrack = new JButton("OP10 Reproduce song");
         buttonPanel.add(OP10_ReproduceTrack);
 
         OP11_AddTextSong = new JButton("OP11 Add text to a song");
         buttonPanel.add(OP11_AddTextSong);
 
-        OP15_ArtistSongs = new JButton("OP 15 Top 5 most popular songs by artis");
+        OP15_ArtistSongs = new JButton("OP15 Top 5 most popular songs by artist");
         buttonPanel.add(OP15_ArtistSongs);
 
         westPanel.add(buttonPanel, BorderLayout.CENTER);

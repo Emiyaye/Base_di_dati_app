@@ -2,6 +2,13 @@ package data;
 
 public final class Queries {
 
+    public static final String CHECK_ADMIN = """
+    SELECT email
+    FROM account
+    WHERE admin = true
+    AND email = ?        
+    """;
+
     public static final String OP1_CREATE_ACCOUNT = """
     INSERT INTO Account (nickname, email, password, dataNascita, genere, link, DataCreazione, sospeso, nazione, admin)
     VALUES (?, ?, ?, ?, ?, ?, ?, False, ?, False)

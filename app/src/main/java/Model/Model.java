@@ -74,7 +74,7 @@ public class Model {
             rsGetSubLength = psGetSubLength.executeQuery();
 
             int durataMesi = -1;
-            if(rsGetSubLength.next()) {
+            if (rsGetSubLength.next()) {
                 durataMesi = rsGetSubLength.getInt(1);
             }
 
@@ -85,7 +85,6 @@ public class Model {
             psCreateAbbonamento.setObject(3, LocalDate.now().plusMonths(durataMesi));
             psCreateAbbonamento.setInt(4, tipoAbbonamento);
             psCreateAbbonamento.executeUpdate();
-
 
             rsAbbonamento = psCreateAbbonamento.getGeneratedKeys();
             int codAbbonamento = -1;
@@ -129,6 +128,11 @@ public class Model {
         try {
             connection.setAutoCommit(false);
 
+            if (checkAdmin(accountInvitante) || checkAdmin(accountInvitato)) {
+                rollBackWithCustomMessage("Cannot operate as admin");
+                return;
+            }
+
             // Get codAbbonamento
             psGetCodAbbonamento = DAOUtils.prepare(connection, Queries.OP2_GET_CODABBONAMENTO, accountInvitante);
             rsCodAbbonamento = psGetCodAbbonamento.executeQuery();
@@ -151,7 +155,7 @@ public class Model {
             rsGetNumGuests = psGetNumGuests.executeQuery();
 
             int accountInvitati = -1;
-            if(rsGetNumGuests.next()) {
+            if (rsGetNumGuests.next()) {
                 accountInvitati = rsGetNumGuests.getInt(1);
             }
 
@@ -159,11 +163,11 @@ public class Model {
             rsGetMaxGuests = psGetMaxGuests.executeQuery();
 
             int maxPersoneAccount = -1;
-            if(rsGetMaxGuests.next()) {
+            if (rsGetMaxGuests.next()) {
                 maxPersoneAccount = rsGetMaxGuests.getInt(1);
             }
 
-            if (accountInvitati+1 >= maxPersoneAccount) {
+            if (accountInvitati + 1 >= maxPersoneAccount) {
                 rollBackWithCustomMessage("Non puoi invitare altri account");
                 return;
             }
@@ -205,6 +209,11 @@ public class Model {
         PreparedStatement ps = null;
         try {
 
+            if (checkAdmin(accountSeguente)) {
+                rollBackWithCustomMessage("Cannot operate as admin");
+                return;
+            }
+
             // Insert into Follow account
             ps = DAOUtils.prepare(connection, Queries.OP3_FOLLOW_ARTIST, accountSeguito, accountSeguente);
             ps.executeUpdate();
@@ -227,6 +236,11 @@ public class Model {
         try {
             connection.setAutoCommit(false);
 
+            if (checkAdmin(accountCreatore) || checkAdmin(accountCollaboratore)) {
+                rollBackWithCustomMessage("Cannot operate as admin");
+                return;
+            }
+
             // Create a new Playlist
             psCreatePlaylist = DAOUtils.prepare(connection, Queries.OP4_CREATE_PLAYLIST);
             psCreatePlaylist.setString(1, nome);
@@ -247,7 +261,8 @@ public class Model {
                     playlistId);
             psInsertCollaborator.executeUpdate();
 
-            psCollabFollowPlay = DAOUtils.prepare(connection, Queries.OP4_FOLLOW_PLAYLIST, playlistId, accountCollaboratore);
+            psCollabFollowPlay = DAOUtils.prepare(connection, Queries.OP4_FOLLOW_PLAYLIST, playlistId,
+                    accountCollaboratore);
             psCollabFollowPlay.executeUpdate();
 
             connection.commit();
@@ -277,7 +292,7 @@ public class Model {
             psCheck = DAOUtils.prepare(connection, Queries.OP5_CHECK_UTENTE, codPlaylist);
             rsCheck = psCheck.executeQuery();
 
-            if(rsCheck.next() && rsCheck.getInt(1) != 0) {
+            if (rsCheck.next() && rsCheck.getInt(1) != 0) {
                 rollBackWithCustomMessage("Cannot modify, admin Playlist!");
                 return;
             }
@@ -288,7 +303,8 @@ public class Model {
             if (rows > 0) {
                 JOptionPane.showMessageDialog(null, "Operation Succeed!", "Success", JOptionPane.INFORMATION_MESSAGE);
             } else {
-                JOptionPane.showMessageDialog(null, "Could not find the Song or Playlist", "Fail", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Could not find the Song or Playlist", "Fail",
+                        JOptionPane.ERROR_MESSAGE);
             }
         } catch (final SQLException e) {
             rollBack(connection, e);
@@ -356,7 +372,7 @@ public class Model {
         PreparedStatement ps = null;
         ResultSet rs = null;
         final Map<String, List<Dati.Op7Data>> result = new HashMap<>();
-        
+
         try {
             ps = DAOUtils.prepare(connection, Queries.OP7_SEARCH_SONG, name + '%');
             rs = ps.executeQuery();
@@ -380,7 +396,7 @@ public class Model {
         return result;
     }
 
-    public Map<String, List<Dati.Op8Data>> Op8_viewAlbum (final int codPubblicazione) {
+    public Map<String, List<Dati.Op8Data>> Op8_viewAlbum(final int codPubblicazione) {
         PreparedStatement psViewAlbum = null;
         ResultSet rsAlbum = null;
         PreparedStatement psViewDetail = null;
@@ -388,30 +404,31 @@ public class Model {
         final Map<String, List<Dati.Op8Data>> result = new HashMap<>();
         try {
 
-            //view Album
+            // view Album
             psViewAlbum = DAOUtils.prepare(connection, Queries.OP_8_VIEW_ALBUM, codPubblicazione);
             rsAlbum = psViewAlbum.executeQuery();
             final List<Dati.Op8Data> albumList = new ArrayList<>();
-            while(rsAlbum.next()) {
+            while (rsAlbum.next()) {
                 final String nome = rsAlbum.getString("nome");
                 final String artista = rsAlbum.getString("Artista");
                 final int durataMin = rsAlbum.getInt("DurataMinuti");
                 final int durataSecondi = rsAlbum.getInt("DurataSecondi");
                 final int numeroBrani = rsAlbum.getInt("NumeroBrani");
                 final int numFollowers = rsAlbum.getInt("numFollowers");
-                albumList.add(new Dati.Op8Data(nome, artista, durataMin, durataSecondi, numeroBrani, numFollowers, "", 0, ""));
+                albumList.add(new Dati.Op8Data(nome, artista, durataMin, durataSecondi, numeroBrani, numFollowers, "",
+                        0, ""));
             }
             result.put("Visualizza album", albumList);
 
-            //view details album
+            // view details album
             psViewDetail = DAOUtils.prepare(connection, Queries.OP_8_VIEW_ALBUM_DETAILS, codPubblicazione);
             rsDetail = psViewDetail.executeQuery();
             final List<Dati.Op8Data> detailList = new ArrayList<>();
-            while(rsDetail.next()) {
+            while (rsDetail.next()) {
                 final String titolo = rsDetail.getString("titolo");
                 final int numRiproduzioni = rsDetail.getInt("NumRiproduzioni");
                 final String cantante = rsDetail.getString("Cantante");
-                detailList.add(new Dati.Op8Data("","",0,0,0,0,titolo,numRiproduzioni,cantante));
+                detailList.add(new Dati.Op8Data("", "", 0, 0, 0, 0, titolo, numRiproduzioni, cantante));
             }
             result.put("Visualizza brani", detailList);
         } catch (final SQLException e) {
@@ -431,6 +448,10 @@ public class Model {
         ResultSet rs = null;
         final Map<String, List<Dati.Op9Data>> result = new HashMap<>();
         try {
+            if (checkAdmin(email)) {
+                rollBackWithCustomMessage("Cannot operate as admin");
+                return result;
+            }
             ps = DAOUtils.prepare(connection, Queries.OP_9_VIEW_SUB_HISTORY, email, email);
             rs = ps.executeQuery();
             final List<Dati.Op9Data> list = new ArrayList<>();
@@ -462,21 +483,27 @@ public class Model {
         try {
             connection.setAutoCommit(false);
 
-            //CHECK
+            if (checkAdmin(account)) {
+                rollBackWithCustomMessage("Cannot operate as admin");
+                return;
+            }
+
+            // CHECK
             psCheckLength = DAOUtils.prepare(connection, Queries.OP_10_GET_LENGTH, brano);
             rsCheckLength = psCheckLength.executeQuery();
-            
-            if(!rsCheckLength.next() || rsCheckLength.getInt(1) < msRiprodotti) {
+
+            if (!rsCheckLength.next() || rsCheckLength.getInt(1) < msRiprodotti) {
                 rollBackWithCustomMessage("Errore nella riproduzione");
                 return;
             }
 
             // Insert in Riproduzione
-            psInsertRip = DAOUtils.prepare(connection, Queries.OP_10_INSERT_RIP, account, account, msRiprodotti, brano, account);
+            psInsertRip = DAOUtils.prepare(connection, Queries.OP_10_INSERT_RIP, account, account, msRiprodotti, brano,
+                    account);
             psInsertRip.executeUpdate();
 
             // Update brano numRiproduzioni
-            if(msRiprodotti >= 30000) {
+            if (msRiprodotti >= 30000) {
                 psUpdateNumRip = DAOUtils.prepare(connection, Queries.OP_10_UPDATE_NUM_RIP, brano);
                 psUpdateNumRip.executeUpdate();
             }
@@ -532,18 +559,19 @@ public class Model {
         }
     }
 
-
     public void OP12_DisableEnableAccount(final boolean sospensione, final String account) {
         PreparedStatement psEnableDisable = null;
 
         try {
             connection.setAutoCommit(false);
 
-            psEnableDisable = DAOUtils.prepare(connection, Queries.OP12_DISABLE_OR_ENABLE_ACCOUNT, sospensione, account);
+            psEnableDisable = DAOUtils.prepare(connection, Queries.OP12_DISABLE_OR_ENABLE_ACCOUNT, sospensione,
+                    account);
             psEnableDisable.executeUpdate();
 
             connection.commit();
-            JOptionPane.showMessageDialog(null, "Operation Succeed! Set ACCOUNT.sospeso to "+ sospensione, "Success", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Operation Succeed! Set ACCOUNT.sospeso to " + sospensione, "Success",
+                    JOptionPane.INFORMATION_MESSAGE);
 
         } catch (final SQLException e) {
             rollBack(connection, e);
@@ -578,10 +606,10 @@ public class Model {
         try {
             connection.setAutoCommit(false);
 
-            //CHECK
+            // CHECK
             psCheckAnalysis = DAOUtils.prepare(connection, Queries.OP_13_CHECK_ANALISYS, brano);
             rsCheckAnalysis = psCheckAnalysis.executeQuery();
-            if(rsCheckAnalysis.next()) {
+            if (rsCheckAnalysis.next()) {
                 rollBackWithCustomMessage("Il brano è già stato analizzato");
                 return;
             }
@@ -590,12 +618,12 @@ public class Model {
             rsGetTrackName = psGetTrackName.executeQuery();
 
             String trackTitle = "";
-            if(rsGetTrackName.next()){
+            if (rsGetTrackName.next()) {
                 trackTitle = rsGetTrackName.getString(1);
             }
 
             psCreateAdminPlaylist = DAOUtils.prepare(connection, Queries.OP_13_CREATE_PLAYLIST_ADMIN,
-                    "Radio di "+trackTitle, "", radioImage);
+                    "Radio di " + trackTitle, "", radioImage);
             psCreateAdminPlaylist.executeUpdate();
 
             rsCreateAdminPlaylist = psCreateAdminPlaylist.getGeneratedKeys();
@@ -607,10 +635,10 @@ public class Model {
             final Object[] analysisValues = new Object[12];
             final Random random = new Random();
 
-            analysisValues[0]=brano;
-            analysisValues[1]=codRadio;
+            analysisValues[0] = brano;
+            analysisValues[1] = codRadio;
 
-            for (int i=2; i<analysisValues.length; i++) {
+            for (int i = 2; i < analysisValues.length; i++) {
                 analysisValues[i] = random.nextInt(256);
             }
 
@@ -621,25 +649,27 @@ public class Model {
             rsGetRadioTracks = psGetRadioTracks.executeQuery();
 
             int i = 1;
-            while(rsGetRadioTracks.next()) {
+            while (rsGetRadioTracks.next()) {
                 final int codBrano = rsGetRadioTracks.getInt(1);
                 psFillPlaylist = DAOUtils.prepare(connection, Queries.OP_13_FILL_PLAYLIST, codRadio, i++, codBrano);
                 psFillPlaylist.executeUpdate();
             }
 
-            psGetAdvisedPlaylists = DAOUtils.prepare(connection, Queries.OP_13_GET_ADVISED_PLAYLISTS, codRadio, N_ADVISED_PLAYLISTS);
+            psGetAdvisedPlaylists = DAOUtils.prepare(connection, Queries.OP_13_GET_ADVISED_PLAYLISTS, codRadio,
+                    N_ADVISED_PLAYLISTS);
             rsGetAdvisedPlaylists = psGetAdvisedPlaylists.executeQuery();
 
-            while(rsGetAdvisedPlaylists.next()) {
+            while (rsGetAdvisedPlaylists.next()) {
                 final int codPlaylist = rsGetAdvisedPlaylists.getInt(1);
-                psInsertAdvisedPlaylists = DAOUtils.prepare(connection, Queries.OP_13_PLAYLIST_ADVISE, codPlaylist, codRadio);
+                psInsertAdvisedPlaylists = DAOUtils.prepare(connection, Queries.OP_13_PLAYLIST_ADVISE, codPlaylist,
+                        codRadio);
                 psInsertAdvisedPlaylists.executeUpdate();
             }
 
             psGetTrackGenre = DAOUtils.prepare(connection, Queries.OP_13_GET_GENRES);
             rsGetTrackGenre = psGetTrackGenre.executeQuery();
 
-            while(rsGetTrackGenre.next()) {
+            while (rsGetTrackGenre.next()) {
                 final int codSottogenere = rsGetTrackGenre.getInt(1);
                 psInsertTrackGenre = DAOUtils.prepare(connection, Queries.OP_13_TRACK_GENRE, brano, codSottogenere);
                 psInsertTrackGenre.executeUpdate();
@@ -696,35 +726,37 @@ public class Model {
             rsGetCountry = psgetCountry.executeQuery();
 
             String nomeNazione = "";
-            if(rsGetCountry.next()) {
+            if (rsGetCountry.next()) {
                 nomeNazione = rsGetCountry.getString(1);
             }
 
-            psCreatePlaylist = DAOUtils.prepare(connection, Queries.OP_14_CREATE_TOP_50, "Top 50 "+ nomeNazione,
-                        "I brani più ascoltati in "+nomeNazione, "image/"+nomeNazione+".jpg");
+            psCreatePlaylist = DAOUtils.prepare(connection, Queries.OP_14_CREATE_TOP_50, "Top 50 " + nomeNazione,
+                    "I brani più ascoltati in " + nomeNazione, "image/" + nomeNazione + ".jpg");
             psCreatePlaylist.executeUpdate();
             rsCreatePlaylist = psCreatePlaylist.getGeneratedKeys();
 
             int codTop50 = -1;
-            if(rsCreatePlaylist.next()){
+            if (rsCreatePlaylist.next()) {
                 codTop50 = rsCreatePlaylist.getInt(1);
             }
 
             psPopulatePlaylist = DAOUtils.prepare(connection, Queries.OP_14_INSERT_TOP_50, codTop50, nazione);
             psPopulatePlaylist.executeUpdate();
 
-            psGetAdvisedPlaylists = DAOUtils.prepare(connection, Queries.OP_14_GET_ADVISED_PLAYLISTS, codTop50, N_ADVISED_PLAYLISTS);
+            psGetAdvisedPlaylists = DAOUtils.prepare(connection, Queries.OP_14_GET_ADVISED_PLAYLISTS, codTop50,
+                    N_ADVISED_PLAYLISTS);
             rsGetAdvisedPlaylists = psGetAdvisedPlaylists.executeQuery();
 
-            while(rsGetAdvisedPlaylists.next()) {
+            while (rsGetAdvisedPlaylists.next()) {
                 final int codPlaylist = rsGetAdvisedPlaylists.getInt(1);
-                psInsertAdvisedPlaylists = DAOUtils.prepare(connection, Queries.OP_14_PLAYLIST_ADVISE, codPlaylist, codTop50);
+                psInsertAdvisedPlaylists = DAOUtils.prepare(connection, Queries.OP_14_PLAYLIST_ADVISE, codPlaylist,
+                        codTop50);
                 psInsertAdvisedPlaylists.executeUpdate();
             }
 
             psShow = DAOUtils.prepare(connection, Queries.OP_14_SHOW_TOP50, codTop50);
             rsShow = psShow.executeQuery();
-            while(rsShow.next()) {
+            while (rsShow.next()) {
                 final String titolo = rsShow.getString(1);
                 final String artista = rsShow.getString(2);
                 final int numRiproduzioni = rsShow.getInt(3);
@@ -751,7 +783,7 @@ public class Model {
         }
         return result;
     }
-    
+
     public Map<String, List<Dati.Op15Data>> Op15_artistSongs(final String artistId) {
         PreparedStatement psGetArtist = null;
         PreparedStatement psGetTracks = null;
@@ -759,13 +791,13 @@ public class Model {
         ResultSet rsGetArtist = null;
         final Map<String, List<Dati.Op15Data>> result = new HashMap<>();
         try {
-            
+
             psGetArtist = DAOUtils.prepare(connection, Queries.OP15_GET_ARTIST, artistId);
             rsGetArtist = psGetArtist.executeQuery();
-            
+
             final List<Dati.Op15Data> listArtistInfo = new ArrayList<>();
 
-            if(rsGetArtist.next()) {
+            if (rsGetArtist.next()) {
                 final String nickname = rsGetArtist.getString("nickname");
                 final boolean verificato = rsGetArtist.getBoolean("verificato");
                 listArtistInfo.add(new Dati.Op15Data(nickname, verificato, "", 0));
@@ -776,11 +808,11 @@ public class Model {
 
             final List<Dati.Op15Data> listSongsInfo = new ArrayList<>();
 
-                while (rsGetTracks.next()) {
-                    final String titolo = rsGetTracks.getString("titolo");
-                    final int numRiproduzioni = rsGetTracks.getInt("numRiproduzioni");
-                    listSongsInfo.add(new Dati.Op15Data("", false, titolo, numRiproduzioni));
-                }
+            while (rsGetTracks.next()) {
+                final String titolo = rsGetTracks.getString("titolo");
+                final int numRiproduzioni = rsGetTracks.getInt("numRiproduzioni");
+                listSongsInfo.add(new Dati.Op15Data("", false, titolo, numRiproduzioni));
+            }
 
             result.put("Artist", listArtistInfo);
             result.put("Songs", listSongsInfo);
@@ -934,4 +966,26 @@ public class Model {
             }
         }
     }
+
+    private final boolean checkAdmin(final String email) {
+        PreparedStatement psCheckAdmin = null;
+        ResultSet rsCheckAdmin = null;
+
+        try {
+            psCheckAdmin = DAOUtils.prepare(connection, Queries.CHECK_ADMIN, email);
+            rsCheckAdmin = psCheckAdmin.executeQuery();
+
+            if (rsCheckAdmin.next()) {
+                return true;
+            }
+
+        } catch (final SQLException e) {
+            rollBack(connection, e);
+        } finally {
+            closePreparedStatement(psCheckAdmin);
+            closeResultSet(rsCheckAdmin);
+        }
+        return false;
+    }
+
 }
