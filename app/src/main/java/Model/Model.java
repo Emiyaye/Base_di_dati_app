@@ -490,6 +490,7 @@ public class Model {
                 ps.executeUpdate();
             }
             connection.commit();
+            JOptionPane.showMessageDialog(null, "Operation Succeed!", "Success", JOptionPane.INFORMATION_MESSAGE);
         } catch (final SQLException e) {
             rollBack(connection, e);
         } finally {

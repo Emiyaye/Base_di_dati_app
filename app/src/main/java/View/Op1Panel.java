@@ -15,7 +15,7 @@ public class Op1Panel extends AbstractInsertPanel<Dati.Op1Data> {
     private static final String FIELD6 = "Nazione (Ex: IT)";
     private static final String FIELD7 = "TipoPagamento (1 - 3)";
     private static final String FIELD8 = "NumeroCarta (Optional)";
-    private static final String FIELD9 = "ScadenzaCarta (Optional)";
+    private static final String FIELD9 = "ScadenzaCarta (Optional, YYYY-MM-DD)";
     private static final String FIELD10 = "TipoAbbonamento (1 - 6)";
 
     public Op1Panel() {

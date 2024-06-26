@@ -11,7 +11,7 @@ public class Op6Panel extends GeneralSelectPanel<Dati.Op6Data> {
                 List.of(
                         new Table<>("Artist", new String[] { "ArtistiSeguiti" }, Op6Panel::artistFunction),
                         new Table<>("Album", new String[] { "AlbumSeguiti", "AutoreAlbum" }, Op6Panel::albumFunction),
-                        new Table<>("Playlist", new String[] { "PlaylistSeguiti", "AutorePlaylist" },
+                        new Table<>("Playlist", new String[] { "PlaylistSeguite", "AutorePlaylist" },
                                 Op6Panel::playlistFunction)));
     }
 

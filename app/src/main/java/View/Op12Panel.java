@@ -4,7 +4,7 @@ import data.Dati;
 
 public class Op12Panel extends AbstractInsertPanel<Dati.Op12Data> {
 
-    public static final String FIELD1 = "true/false (true = sospendi, false = riabilita)";
+    public static final String FIELD1 = "true/false (true = sospendi, false = riabilita, Default: false)";
     public static final String FIELD2 = "email account";
 
     public Op12Panel() {

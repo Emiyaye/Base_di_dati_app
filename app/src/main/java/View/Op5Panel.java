@@ -5,7 +5,7 @@ import data.Dati;
 public class Op5Panel extends AbstractInsertPanel<Dati.Op5Data> {
 
     private static final String FIELD1 = "Codice Playlist";
-    private static final String FIELD2 = "nunmero";
+    private static final String FIELD2 = "numero";
 
     public Op5Panel() {
         super(new String[] { FIELD1, FIELD2 }, "Confirm", "Cancel");
