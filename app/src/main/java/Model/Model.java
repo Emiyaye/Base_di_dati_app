@@ -565,7 +565,8 @@ public class Model {
                 trackTitle = rsGetTrackName.getString(1);
             }
 
-            psCreateAdminPlaylist = DAOUtils.prepare(connection, Queries.OP_13_CREATE_PLAYLIST_ADMIN, "Radio di "+trackTitle, "", radioImage);
+            psCreateAdminPlaylist = DAOUtils.prepare(connection, Queries.OP_13_CREATE_PLAYLIST_ADMIN,
+                    "Radio di "+trackTitle, "", radioImage);
             psCreateAdminPlaylist.executeUpdate();
 
             rsCreateAdminPlaylist = psCreateAdminPlaylist.getGeneratedKeys();
@@ -587,7 +588,7 @@ public class Model {
             psAnalysis = DAOUtils.prepare(connection, Queries.OP_13_ANALISYS, analysisValues);
             psAnalysis.executeUpdate();
 
-            psGetRadioTracks = DAOUtils.prepare(connection, Queries.OP_13_GET_RADIO_TRACKS, PLAYLIST_LENGTH);
+            psGetRadioTracks = DAOUtils.prepare(connection, Queries.OP_13_GET_RADIO_TRACKS, brano, PLAYLIST_LENGTH);
             rsGetRadioTracks = psGetRadioTracks.executeQuery();
 
             int i = 1;

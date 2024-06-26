@@ -185,6 +185,7 @@ public final class Queries {
     public static final String OP_13_GET_RADIO_TRACKS = """
     SELECT B.codBrano
     FROM brano B
+    WHERE B.codBrano <> ?
     ORDER BY RAND()
     LIMIT ?        
     """;
@@ -274,7 +275,7 @@ public final class Queries {
     """;
 
     public static final String OP16_VIEW_ACTIVE_ABBONAMENTO = """
-    SELECT T.nome, T.durataMesi, COUNT(AB.tipoAbbonamento) AS NumAbbonamentiAttivi
+    SELECT T.nome, T.durataMesi, COUNT(DISTINCT AB.codAbbonamento) AS NumAbbonamentiAttivi
     FROM Account AC, Abbonamento AB, Tipo_abbonamento T
     WHERE AC.codAbbonamentoattivo = AB.codAbbonamento
     AND AB.tipoAbbonamento = T.codTipoAbbonamento
