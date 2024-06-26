@@ -118,6 +118,10 @@ public class Model {
     public void Op2_inviteAbbonamento(final String accountInvitato, final String accountInvitante) {
         PreparedStatement psGetCodAbbonamento = null;
         PreparedStatement psGetCodAbbonamentoInvitato = null;
+        PreparedStatement psGetNumGuests = null;
+        PreparedStatement psGetMaxGuests = null;
+        ResultSet rsGetNumGuests = null;
+        ResultSet rsGetMaxGuests = null;
         ResultSet rsCodAbbonamento = null;
         ResultSet rsCodAbbonamentoInvitato = null;
         PreparedStatement psCreateInvitoAbbonamento = null;
@@ -138,8 +142,29 @@ public class Model {
             rsCodAbbonamentoInvitato = psGetCodAbbonamentoInvitato.executeQuery();
             // If i can find any result that mean that the account has already an
             // abbonamento
-            if (rsCodAbbonamentoInvitato.next() && rsCodAbbonamentoInvitato.getInt(1) != 0) {
+            if (rsCodAbbonamentoInvitato.next() && rsCodAbbonamentoInvitato.getInt("codAbbonamentoAttivo") != 0) {
                 rollBackWithCustomMessage("L'account invitato ha gia' un abbonanamento");
+                return;
+            }
+
+            psGetNumGuests = DAOUtils.prepare(connection, Queries.OP2_NUM_GUESTS, codAbbonamento);
+            rsGetNumGuests = psGetNumGuests.executeQuery();
+
+            int accountInvitati = -1;
+            if(rsGetNumGuests.next()) {
+                accountInvitati = rsGetNumGuests.getInt(1);
+            }
+
+            psGetMaxGuests = DAOUtils.prepare(connection, Queries.OP2_MAX_GUESTS, codAbbonamento);
+            rsGetMaxGuests = psGetMaxGuests.executeQuery();
+
+            int maxPersoneAccount = -1;
+            if(rsGetMaxGuests.next()) {
+                maxPersoneAccount = rsGetMaxGuests.getInt(1);
+            }
+
+            if (accountInvitati+1 >= maxPersoneAccount) {
+                rollBackWithCustomMessage("Non puoi invitare altri account");
                 return;
             }
 
@@ -166,6 +191,10 @@ public class Model {
             }
             closeResultSet(rsCodAbbonamento);
             closeResultSet(rsCodAbbonamentoInvitato);
+            closeResultSet(rsGetMaxGuests);
+            closeResultSet(rsGetNumGuests);
+            closePreparedStatement(psGetMaxGuests);
+            closePreparedStatement(psGetNumGuests);
             closePreparedStatement(psGetCodAbbonamento);
             closePreparedStatement(psGetCodAbbonamento);
             closePreparedStatement(psUpdateCodAbbonamento);

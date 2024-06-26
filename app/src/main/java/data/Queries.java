@@ -29,6 +29,17 @@ public final class Queries {
     FROM Account A
     WHERE A.email = ?
     """;
+    public static final String OP2_MAX_GUESTS = """
+    SELECT T.maxPersoneAccount
+    FROM Abbonamento A, Tipo_abbonamento T
+    WHERE A.tipoAbbonamento = T.codTipoAbbonamento
+    AND codAbbonamento = ?    
+    """;
+    public static final String OP2_NUM_GUESTS = """
+    SELECT COUNT(*)
+    FROM Invito_Abbonamento
+    WHERE codAbbonamento = ?    
+    """;
     public static final String OP2_INVITE_ABBONAMENTO = """
     INSERT INTO Invito_abbonamento (codAccount, codAbbonamento)
     VALUES (?, ?)
