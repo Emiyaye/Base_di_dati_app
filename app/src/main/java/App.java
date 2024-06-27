@@ -21,8 +21,7 @@ public final class App {
         });
         mainFrame.display();
         final Model model = new Model(connection);
-        final Controller controller = new Controller(model, mainFrame.getUserPanel(), mainFrame.getAdminPanel());
-        model.Op7_searchSong("test");
+        new Controller(model, mainFrame.getUserPanel(), mainFrame.getAdminPanel());
     }
 
 }

@@ -610,7 +610,7 @@ public class Model {
             psCheckAnalysis = DAOUtils.prepare(connection, Queries.OP_13_CHECK_ANALISYS, brano);
             rsCheckAnalysis = psCheckAnalysis.executeQuery();
             if (rsCheckAnalysis.next()) {
-                rollBackWithCustomMessage("Il brano è già stato analizzato");
+                rollBackWithCustomMessage("Il brano e' gia' stato analizzato");
                 return;
             }
 
